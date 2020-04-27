@@ -34,3 +34,9 @@ eventually it'll become stable, and I will bother providing a proper API
 documentation, and a proper 1.0.0 release will be made.
 
 For now **THIS IS ALL WORK IN PROGRESS IN MASTER** by design. 
+
+### How To Clone 🙂
+
+`git clone --recurse-submodules` instead of the standard git 
+clone, since [libmaxminddb](https://github.com/maxmind/libmaxminddb) is 
+introduced as a git submodule.
