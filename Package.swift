@@ -21,8 +21,8 @@ let package = Package(
     .target(
       name: "GeoIP2",
       dependencies: [
-        .target(name: "libmaxminddb"),
-        .target(name: "libmaxminddb_helper")
+        .target(name: "libmaxminddb_helper"),
+        .target(name: "libmaxminddb")
       ],
       path: "Sources/Swift"
     ),
