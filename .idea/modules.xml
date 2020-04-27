@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../.idea/..iml" filepath="$PROJECT_DIR$/../../.idea/..iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/GeoIP2-swift.iml" filepath="$PROJECT_DIR$/.idea/GeoIP2-swift.iml" />
     </modules>
   </component>

@@ -36,8 +36,16 @@ let package = Package(
     ),
 
     .target(
-      name: "libmaxminddb",
+      name: "libmaxminddb_config",
       dependencies: [],
+      path: "Sources/libmaxminddb_config",
+      sources: ["./src/"],
+      publicHeadersPath: "./include/"
+    ),
+
+    .target(
+      name: "libmaxminddb",
+      dependencies: ["libmaxminddb_config"],
       path: "Sources/libmaxminddb",
       exclude: [
         "./autom4te.cache/",
@@ -50,7 +58,7 @@ let package = Package(
       ],
       sources: ["./src/"],
       publicHeadersPath: "./include/",
-      cSettings: [CSetting.define("PACKAGE_VERSION", to: "\"1.4.2\"")]
+      cSettings: [CSetting.define("PACKAGE_VERSION", to: "\"1.3.2\"")]
     ),
 
     .testTarget(

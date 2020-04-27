@@ -8,6 +8,13 @@ Inspiration, and initial state of repository from
 [lexrus's](https://github.com/lexrus) [MMDB-Swift](https://github.com/lexrus/MMDB-Swift) 
 repository.
 
+## Disclaimers
+
+1. I'm no C guru.
+2. I'm no Swift guru.
+3. I have no idea what I'm doing.
+4. For my purposes the lib' works as is, but be super cautious because of items 1-3.
+
 ## Version Infos
 
 ### 1. [libmaxminddb](https://github.com/maxmind/libmaxminddb) : [1.3.2](https://github.com/maxmind/libmaxminddb/releases/tag/1.3.2)

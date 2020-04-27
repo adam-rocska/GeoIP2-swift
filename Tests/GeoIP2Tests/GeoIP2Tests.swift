@@ -24,11 +24,12 @@ class GeoIP2Tests: XCTestCase {
     XCTAssertEqual(database.lookup("8.8.8.8")?.isoCode, "US")
     XCTAssertEqual(database.lookup("8.8.4.4")?.isoCode, "US")
 
-    XCTAssertNotNil(database.lookup(IPOfHost("youtube.com")!))
-    XCTAssertNotNil(database.lookup(IPOfHost("facebook.com")!))
-    XCTAssertNotNil(database.lookup(IPOfHost("twitter.com")!))
-    XCTAssertNotNil(database.lookup(IPOfHost("instagram.com")!))
-    XCTAssertNotNil(database.lookup(IPOfHost("google.com")!))
+    XCTAssertNotNil(database.lookup("80.99.18.166"))
+    XCTAssertNotNil(database.lookup("172.217.18.78"))
+    XCTAssertNotNil(database.lookup("31.13.84.36"))
+    XCTAssertNotNil(database.lookup("104.244.42.129"))
+    XCTAssertNotNil(database.lookup("52.86.229.116"))
+    XCTAssertNotNil(database.lookup("172.217.19.110"))
   }
 
   func testCloudFlare() {
