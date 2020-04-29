@@ -18,24 +18,15 @@ class IndexOfData: XCTestCase {
   }
 
   func testIndex_ofData() {
-    let testDefinitions = [
-      (sequence: "Hello World".asciiData, subsequence: "World".asciiData, expectedIndex: 6),
-      (sequence: "Hello world".asciiData, subsequence: "World".asciiData, expectedIndex: nil),
-      (sequence: "Hello World SOME World".asciiData, subsequence: "World".asciiData, expectedIndex: 6),
-      (sequence: "Hello world SOME World".asciiData, subsequence: "World".asciiData, expectedIndex: 17),
-      (sequence: "Hello World".asciiData, subsequence: "Hello".asciiData, expectedIndex: 0),
-      (sequence: "hello World".asciiData, subsequence: "hello".asciiData, expectedIndex: 0),
-      (sequence: "hello world".asciiData, subsequence: "Hello".asciiData, expectedIndex: nil),
-      (sequence: "hello World SOME World".asciiData, subsequence: "Hello".asciiData, expectedIndex: nil),
-      (sequence: "hello world SOME World".asciiData, subsequence: "Hello".asciiData, expectedIndex: nil)
-    ]
-
-    for testDefinition in testDefinitions.compactMap({ $0 }) {
-      XCTAssertEqual(
-        testDefinition.expectedIndex,
-        testDefinition.sequence.index(of: testDefinition.subsequence)
-      )
-    }
+    XCTAssertEqual(6, "Hello World".asciiData.index(of: "World".asciiData))
+    XCTAssertNil("Hello world".asciiData.index(of: "World".asciiData))
+    XCTAssertEqual(6, "Hello World SOME World".asciiData.index(of: "World".asciiData))
+    XCTAssertEqual(17, "Hello world SOME World".asciiData.index(of: "World".asciiData))
+    XCTAssertEqual(0, "Hello World".asciiData.index(of: "Hello".asciiData))
+    XCTAssertEqual(0, "hello World".asciiData.index(of: "hello".asciiData))
+    XCTAssertNil("hello world".asciiData.index(of: "Hello".asciiData))
+    XCTAssertNil("hello World SOME World".asciiData.index(of: "Hello".asciiData))
+    XCTAssertNil("hello world SOME World".asciiData.index(of: "Hello".asciiData))
   }
 
   func testIndex_ofData_fromIndex() {
