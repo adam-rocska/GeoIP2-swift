@@ -37,6 +37,16 @@ class MetadataStructTest: XCTestCase {
   }
 
   func testCalculatedValues() {
+    var literal = Int32(-269)
+    let data    = Data(bytes: &literal, count: MemoryLayout.size(ofValue: literal))
+    print(data)
+    let val: Int32 = Data([243, 254, 255, 255]).withUnsafeBytes {
+      (pointer: UnsafePointer<Int32>) -> Int32 in
+      precondition(MemoryLayout<Int32>.size == data.count)
+      return pointer.pointee
+    }
+    print(val)
+
     assertCalculatedValues(nodeCount: 3, recordSize: 3)
     assertCalculatedValues(nodeCount: 3, recordSize: 10)
     assertCalculatedValues(nodeCount: 3, recordSize: 100)
