@@ -23,19 +23,17 @@ class IndexOfData: XCTestCase {
 
   func testIndexOfData() {
     let testDefinitions = [
-//      testDefinition(sequence: "Hello World", subsequence: "World", expectedIndex: 6),
-//      testDefinition(sequence: "Hello world", subsequence: "World", expectedIndex: nil),
-//      testDefinition(sequence: "Hello World SOME World", subsequence: "World", expectedIndex: 6),
-//      testDefinition(sequence: "Hello world SOME World", subsequence: "World", expectedIndex: 17),
-//
-//      testDefinition(sequence: "Hello World", subsequence: "Hello", expectedIndex: 0),
-//      testDefinition(sequence: "hello World", subsequence: "hello", expectedIndex: 0),
-      testDefinition(sequence: "hello world", subsequence: "Hello", expectedIndex: nil),
-//      testDefinition(sequence: "hello World SOME World", subsequence: "Hello", expectedIndex: nil),
-//      testDefinition(sequence: "hello world SOME World", subsequence: "Hello", expectedIndex: nil)
-    ]
+      testDefinition(sequence: "Hello World", subsequence: "World", expectedIndex: 6),
+      testDefinition(sequence: "Hello world", subsequence: "World", expectedIndex: nil),
+      testDefinition(sequence: "Hello World SOME World", subsequence: "World", expectedIndex: 6),
+      testDefinition(sequence: "Hello world SOME World", subsequence: "World", expectedIndex: 17),
 
-    print("\(testDefinition(sequence: "hello world", subsequence: "Hello", expectedIndex: nil))")
+      testDefinition(sequence: "Hello World", subsequence: "Hello", expectedIndex: 0),
+      testDefinition(sequence: "hello World", subsequence: "hello", expectedIndex: 0),
+      testDefinition(sequence: "hello world", subsequence: "Hello", expectedIndex: nil),
+      testDefinition(sequence: "hello World SOME World", subsequence: "Hello", expectedIndex: nil),
+      testDefinition(sequence: "hello world SOME World", subsequence: "Hello", expectedIndex: nil)
+    ]
 
     for testDefinition in testDefinitions.compactMap({ $0 }) {
       XCTAssertEqual(
