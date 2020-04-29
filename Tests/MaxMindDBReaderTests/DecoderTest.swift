@@ -11,8 +11,11 @@ class DecoderTest: XCTestCase {
       return
     }
 
+    let start = CFAbsoluteTimeGetCurrent()
     let data   = Data(inputStream: inputStream)
     let idx    = data.index(of: Reader.metadataStartMarker)
     print(idx)
+    let diff = CFAbsoluteTimeGetCurrent() - start
+    print("Took \(diff) seconds")
   }
 }
