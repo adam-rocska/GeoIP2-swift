@@ -4,5 +4,9 @@
 
 import Foundation
 
-protocol City {
+public protocol City {
+  var confidence: UInt8 { get }
+  var geonameId:  UInt { get }
+  var name:       String { get }
+  var names:      [String: String] { get }
 }
