@@ -2,37 +2,32 @@ import Foundation
 import XCTest
 @testable import MaxMindDBReader
 
+fileprivate extension String {
+  var asciiData: Data { get { return self.data(using: .ascii) ?? Data() } }
+}
+
 class IndexOfData: XCTestCase {
   private typealias TestDefinition = (sequence: Data, subsequence: Data, expectedIndex: Data.Index?)
 
   private func testDefinition(sequence: String, subsequence: String, expectedIndex: Int?) -> TestDefinition? {
-    guard let dataSequence = sequence.data(using: .ascii) else {
-      XCTFail("Could not represent sequence String as Data using ASCII encoding.")
-      return nil
-    }
-    guard let dataSubsequence = subsequence.data(using: .ascii) else {
-      XCTFail("Could not represent subsequence String as Data using ASCII encoding.")
-      return nil
-    }
     return (
-      sequence: dataSequence,
-      subsequence: dataSubsequence,
+      sequence: sequence.asciiData,
+      subsequence: subsequence.asciiData,
       expectedIndex: expectedIndex
     )
   }
 
-  func testIndexOfData() {
+  func testIndex_ofData() {
     let testDefinitions = [
-      testDefinition(sequence: "Hello World", subsequence: "World", expectedIndex: 6),
-      testDefinition(sequence: "Hello world", subsequence: "World", expectedIndex: nil),
-      testDefinition(sequence: "Hello World SOME World", subsequence: "World", expectedIndex: 6),
-      testDefinition(sequence: "Hello world SOME World", subsequence: "World", expectedIndex: 17),
-
-      testDefinition(sequence: "Hello World", subsequence: "Hello", expectedIndex: 0),
-      testDefinition(sequence: "hello World", subsequence: "hello", expectedIndex: 0),
-      testDefinition(sequence: "hello world", subsequence: "Hello", expectedIndex: nil),
-      testDefinition(sequence: "hello World SOME World", subsequence: "Hello", expectedIndex: nil),
-      testDefinition(sequence: "hello world SOME World", subsequence: "Hello", expectedIndex: nil)
+      (sequence: "Hello World".asciiData, subsequence: "World".asciiData, expectedIndex: 6),
+      (sequence: "Hello world".asciiData, subsequence: "World".asciiData, expectedIndex: nil),
+      (sequence: "Hello World SOME World".asciiData, subsequence: "World".asciiData, expectedIndex: 6),
+      (sequence: "Hello world SOME World".asciiData, subsequence: "World".asciiData, expectedIndex: 17),
+      (sequence: "Hello World".asciiData, subsequence: "Hello".asciiData, expectedIndex: 0),
+      (sequence: "hello World".asciiData, subsequence: "hello".asciiData, expectedIndex: 0),
+      (sequence: "hello world".asciiData, subsequence: "Hello".asciiData, expectedIndex: nil),
+      (sequence: "hello World SOME World".asciiData, subsequence: "Hello".asciiData, expectedIndex: nil),
+      (sequence: "hello world SOME World".asciiData, subsequence: "Hello".asciiData, expectedIndex: nil)
     ]
 
     for testDefinition in testDefinitions.compactMap({ $0 }) {
@@ -41,5 +36,9 @@ class IndexOfData: XCTestCase {
         testDefinition.sequence.index(of: testDefinition.subsequence)
       )
     }
+  }
+
+  func testIndex_ofData_fromIndex() {
+    XCTAssertEqual(12, "Hello World Hello World".asciiData.index(of: "Hello World".asciiData, from: 3))
   }
 }

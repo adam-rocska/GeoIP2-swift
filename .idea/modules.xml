@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../../.idea/..iml" filepath="$PROJECT_DIR$/../../.idea/..iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/GeoIP2-swift.iml" filepath="$PROJECT_DIR$/.idea/GeoIP2-swift.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../.idea/GeoIP2-swift...iml" filepath="$PROJECT_DIR$/../.idea/GeoIP2-swift...iml" />
     </modules>
   </component>
 </project>
