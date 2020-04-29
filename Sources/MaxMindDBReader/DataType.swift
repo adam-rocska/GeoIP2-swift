@@ -1,7 +1,3 @@
-//
-// Created by Rocska Ádám on 2020. 04. 29..
-//
-
 import Foundation
 
 /**
