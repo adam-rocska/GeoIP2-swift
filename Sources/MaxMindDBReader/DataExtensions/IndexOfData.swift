@@ -3,9 +3,8 @@ import Foundation
 extension Data {
   func index(of data: Data) -> Index? {
     let patternLength = data.count
-    let selfLength    = self.count
     precondition(patternLength > 0)
-    precondition(selfLength >= patternLength)
+    precondition(self.count >= patternLength)
 
     var skipTable = [UInt8: Int]()
     for (i, byte) in data.enumerated() {
@@ -14,7 +13,8 @@ extension Data {
 
     let lastByteIndexOfData = data.index(before: data.endIndex)
     let lastByteOfData      = data.last
-    var i                   = self.index(self.startIndex, offsetBy: patternLength - 1)
+    self.indices
+    var i = self.index(self.startIndex, offsetBy: patternLength - 1)
 
     func reverseMatch() -> Index? {
       var dataIndex = lastByteIndexOfData
@@ -36,10 +36,13 @@ extension Data {
         }
         i = self.index(after: i)
       } else {
-        i = self.index(i, offsetBy: skipTable[byte] ?? patternLength)
+        i = self.index(
+          i,
+          offsetBy: skipTable[byte] ?? patternLength,
+          limitedBy: self.endIndex
+        ) ?? self.endIndex
       }
     }
-
     return nil
   }
 }
