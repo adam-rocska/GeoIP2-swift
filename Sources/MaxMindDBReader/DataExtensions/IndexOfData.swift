@@ -13,8 +13,7 @@ extension Data {
 
     let lastByteIndexOfData = data.index(before: data.endIndex)
     let lastByteOfData      = data.last
-    self.indices
-    var i = self.index(self.startIndex, offsetBy: patternLength - 1)
+    var i                   = self.index(self.startIndex, offsetBy: patternLength - 1)
 
     func reverseMatch() -> Index? {
       var dataIndex = lastByteIndexOfData
