@@ -6,7 +6,7 @@ fileprivate extension String {
   var asciiData: Data { get { return self.data(using: .ascii) ?? Data() } }
 }
 
-class IndexOfData: XCTestCase {
+class IndexOfDataTest: XCTestCase {
   func testIndex_ofData() {
     XCTAssertEqual(6, "Hello World".asciiData.index(of: "World".asciiData))
     XCTAssertNil("Hello world".asciiData.index(of: "World".asciiData))
