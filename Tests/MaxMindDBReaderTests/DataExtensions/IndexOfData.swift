@@ -7,16 +7,6 @@ fileprivate extension String {
 }
 
 class IndexOfData: XCTestCase {
-  private typealias TestDefinition = (sequence: Data, subsequence: Data, expectedIndex: Data.Index?)
-
-  private func testDefinition(sequence: String, subsequence: String, expectedIndex: Int?) -> TestDefinition? {
-    return (
-      sequence: sequence.asciiData,
-      subsequence: subsequence.asciiData,
-      expectedIndex: expectedIndex
-    )
-  }
-
   func testIndex_ofData() {
     XCTAssertEqual(6, "Hello World".asciiData.index(of: "World".asciiData))
     XCTAssertNil("Hello world".asciiData.index(of: "World".asciiData))
