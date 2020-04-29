@@ -6,7 +6,7 @@ extension Data {
     let patternLength = data.count
     precondition(patternLength > 0, "Pattern can't be empty.")
     precondition(self.count >= patternLength, "Pattern can't be >= than the Data to search in.")
-    precondition(data.indices.contains(from), "Index from which to start the lookup must be contained in the Data.")
+    precondition(self.indices.contains(from), "Index from which to start the lookup must be contained in the Data.")
 
     var skipTable = [UInt8: Int]()
     for (i, byte) in data.enumerated() {
