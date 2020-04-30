@@ -19,22 +19,27 @@ struct ControlByte {
       return nil
     }
 
-    let sliceFrom = bytes.index(
-      bytes.startIndex,
-      offsetBy: isExtendedType ? 2 : 1,
-      limitedBy: bytes.endIndex
-    ) ?? bytes.startIndex
-
-    let bytesAfterTypeSpecifyingBytes = bytes[sliceFrom...]
-
     let payloadSizeDefinition = firstByte & 0b0001_1111
-    switch payloadSizeDefinition {
-      case _ where payloadSizeDefinition < 29:
-        payloadSize = UInt32(payloadSizeDefinition)
-      case 29:
-        payloadSize = 29 + UInt32(bytesAfterTypeSpecifyingBytes.first ?? 0)
-      default:
-        return nil
+    if payloadSizeDefinition < 29 {
+      payloadSize = UInt32(payloadSizeDefinition)
+    } else {
+      let numberOfAdditionalBytesToRead = Int(payloadSizeDefinition & 0b0000_0011)
+      let lastIndexOfBytes              = bytes.index(before: bytes.endIndex)
+      let sliceFrom                     = bytes.index(
+        bytes.startIndex,
+        offsetBy: isExtendedType ? 2 : 1,
+        limitedBy: lastIndexOfBytes
+      ) ?? lastIndexOfBytes
+      let sliceTo                       = bytes.index(
+        sliceFrom,
+        offsetBy: numberOfAdditionalBytesToRead,
+        limitedBy: lastIndexOfBytes
+      ) ?? lastIndexOfBytes
+      let bytesAfterTypeSpecifyingBytes = bytes[sliceFrom...sliceTo]
+      let payloadSizeWholeBytes: Data   = bytesAfterTypeSpecifyingBytes + Data(
+        count: 4 - bytesAfterTypeSpecifyingBytes.count
+      )
+      payloadSize = 29 + payloadSizeWholeBytes.withUnsafeBytes { $0.load(as: UInt32.self) }
     }
 
     self.type = type
