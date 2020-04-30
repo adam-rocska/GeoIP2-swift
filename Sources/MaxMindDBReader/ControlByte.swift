@@ -2,7 +2,8 @@ import Foundation
 
 struct ControlByte {
 
-  let type: DataType
+  let type:        DataType
+  let payloadSize: UInt32
 
   init?(bytes: Data) {
     if bytes.count == 0 || bytes.count > 5 { return nil }
@@ -16,6 +17,15 @@ struct ControlByte {
       else {
       return nil
     }
+
+    let payloadSizeDefinition = firstByte & 0b0001_1111
+    switch payloadSizeDefinition {
+      case _ where payloadSizeDefinition < 29:
+        payloadSize = UInt32(payloadSizeDefinition)
+      default:
+        return nil
+    }
+
     self.type = type
   }
 

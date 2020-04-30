@@ -51,4 +51,25 @@ class ControlByteTest: XCTestCase {
     }
   }
 
+  func testInit_nilIfDataTypeNotRecognized() {
+    XCTAssertNil(ControlByte(bytes: Data([0b0000_1111, 0b0000_1111, 0b0000_0000])))
+  }
+
+  func testInit_payloadSizeDefinition_lessThan29() {
+    let testInput: [(expectedPayloadSize: UInt32, byte: UInt8)] = ControlByteTest
+      .nonExtendedRawValues
+      .reduce([]) { byteSequence, typeDefinition in
+      byteSequence + (0..<29).map({
+        (expectedPayloadSize: UInt32($0), byte: $0 | (typeDefinition << 5))
+      })
+    }
+
+    for (expectedPayloadSize, byte) in testInput {
+      XCTAssertEqual(
+        expectedPayloadSize,
+        ControlByte(bytes: Data([byte]))?.payloadSize
+      )
+    }
+
+  }
 }
