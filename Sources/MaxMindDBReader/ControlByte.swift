@@ -19,9 +19,11 @@ struct ControlByte {
       return nil
     }
 
-    let sliceFrom = isExtendedType
-                    ? bytes.index(bytes.startIndex, offsetBy: 2, limitedBy: bytes.endIndex) ?? bytes.startIndex
-                    : bytes.index(bytes.startIndex, offsetBy: 1, limitedBy: bytes.endIndex) ?? bytes.startIndex
+    let sliceFrom = bytes.index(
+      bytes.startIndex,
+      offsetBy: isExtendedType ? 2 : 1,
+      limitedBy: bytes.endIndex
+    ) ?? bytes.startIndex
 
     let bytesAfterTypeSpecifyingBytes = bytes[sliceFrom...]
 
