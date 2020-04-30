@@ -55,21 +55,62 @@ class ControlByteTest: XCTestCase {
     XCTAssertNil(ControlByte(bytes: Data([0b0000_1111, 0b0000_1111, 0b0000_0000])))
   }
 
+  fileprivate typealias PayloadSizeTestDefinition = (expectedPayloadSize: UInt32, bytes: Data)
+
   func testInit_payloadSizeDefinition_lessThan29() {
-    let testInput: [(expectedPayloadSize: UInt32, byte: UInt8)] = ControlByteTest
+    let nonExtendedRawValues: [PayloadSizeTestDefinition] = ControlByteTest
       .nonExtendedRawValues
       .reduce([]) { byteSequence, typeDefinition in
       byteSequence + (0..<29).map({
-        (expectedPayloadSize: UInt32($0), byte: $0 | (typeDefinition << 5))
+        (expectedPayloadSize: UInt32($0), bytes: Data([$0 | (typeDefinition << 5)]))
+      })
+    }
+    let extendedRawValues: [PayloadSizeTestDefinition] = ControlByteTest
+      .extendedRawValues
+      .reduce([]) { byteSequence, typeDefinition in
+      byteSequence + (0..<29).map({
+        (expectedPayloadSize: UInt32($0), bytes: Data([$0, typeDefinition - 7]))
       })
     }
 
-    for (expectedPayloadSize, byte) in testInput {
+    for (expectedPayloadSize, bytes) in (nonExtendedRawValues + extendedRawValues) {
       XCTAssertEqual(
         expectedPayloadSize,
-        ControlByte(bytes: Data([byte]))?.payloadSize
+        ControlByte(bytes: bytes)?.payloadSize
       )
     }
 
   }
+
+  func testInit_payloadSizeDefinition_exactly29() {
+    let nonExtendedRawValues: [PayloadSizeTestDefinition] = ControlByteTest
+      .nonExtendedRawValues
+      .reduce([]) { byteSequence, typeDefinition in
+      byteSequence + (29..<285).map({
+        (
+          expectedPayloadSize: UInt32($0),
+          bytes: Data([UInt8(29) | (typeDefinition << 5), UInt8($0 - 29)])
+        )
+      })
+    }
+    let extendedRawValues: [PayloadSizeTestDefinition] = ControlByteTest
+      .extendedRawValues
+      .reduce([]) { byteSequence, typeDefinition in
+      byteSequence + (29..<285).map({
+        (
+          expectedPayloadSize: UInt32($0),
+          bytes: Data([UInt8(29), typeDefinition - 7, UInt8($0 - 29)])
+        )
+      })
+    }
+
+    for (expectedPayloadSize, bytes) in (nonExtendedRawValues + extendedRawValues) {
+      XCTAssertEqual(
+        expectedPayloadSize,
+        ControlByte(bytes: bytes)?.payloadSize,
+        "Expected a payload size of \(expectedPayloadSize), but instead got \(ControlByte(bytes: bytes)?.payloadSize)"
+      )
+    }
+  }
+
 }

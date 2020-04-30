@@ -10,18 +10,27 @@ struct ControlByte {
 
     let firstByte                 = bytes.first!
     let typeDefinitionOnFirstByte = firstByte &>> 5
+    let isExtendedType            = typeDefinitionOnFirstByte == 0b0000_0000
 
-    guard let type = typeDefinitionOnFirstByte != 0b0000_0000
-                     ? DataType(rawValue: typeDefinitionOnFirstByte)
-                     : DataType(rawValue: bytes[bytes.index(after: bytes.startIndex)] + 7)
+    guard let type = isExtendedType
+                     ? DataType(rawValue: bytes[bytes.index(after: bytes.startIndex)] + 7)
+                     : DataType(rawValue: typeDefinitionOnFirstByte)
       else {
       return nil
     }
+
+    let sliceFrom = isExtendedType
+                    ? bytes.index(bytes.startIndex, offsetBy: 2, limitedBy: bytes.endIndex) ?? bytes.startIndex
+                    : bytes.index(bytes.startIndex, offsetBy: 1, limitedBy: bytes.endIndex) ?? bytes.startIndex
+
+    let bytesAfterTypeSpecifyingBytes = bytes[sliceFrom...]
 
     let payloadSizeDefinition = firstByte & 0b0001_1111
     switch payloadSizeDefinition {
       case _ where payloadSizeDefinition < 29:
         payloadSize = UInt32(payloadSizeDefinition)
+      case 29:
+        payloadSize = 29 + UInt32(bytesAfterTypeSpecifyingBytes.first ?? 0)
       default:
         return nil
     }
