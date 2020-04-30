@@ -39,7 +39,28 @@ struct ControlByte {
       let payloadSizeWholeBytes: Data   = bytesAfterTypeSpecifyingBytes + Data(
         count: 4 - bytesAfterTypeSpecifyingBytes.count
       )
-      payloadSize = 29 + payloadSizeWholeBytes.withUnsafeBytes { $0.load(as: UInt32.self) }
+
+      /// (n=0;00) : 28    | 28
+      /// (n=1;01) : 29    |
+      /// (n=2;10) : 285   | 255 + 30
+      /// (n=3;11) : 65821 | 65535 + 286
+      /// ——————————————————————————————————————————————————
+      /// (n=0;00) : 28    | 28
+      /// (n=1;01) : 29    | 0     + f(n-1) + 1
+      /// (n=2;10) : 285   | 255   + f(n-1) + 1
+      /// (n=3;11) : 65821 | 65535 + f(n-1) + 1
+      /// ——————————————————————————————————————————————————
+
+      let val = (0..<numberOfAdditionalBytesToRead)
+        .map({ Int($0) })
+        .reduce(UInt32(28)) { previous, byteCount in
+          precondition(byteCount <= 4)
+          let payloadSizeBase = Data(repeating: 0b1111_1111, count: byteCount) +
+                                Data(count: 4 - byteCount)
+          return (previous + 1) + payloadSizeBase.withUnsafeBytes { $0.load(as: UInt32.self) }
+        }
+
+      payloadSize = UInt32(val) + payloadSizeWholeBytes.withUnsafeBytes { $0.load(as: UInt32.self) }
     }
 
     self.type = type
