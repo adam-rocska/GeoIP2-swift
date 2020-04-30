@@ -12,6 +12,11 @@ class ControlByteTest: XCTestCase {
     .filter({ $0.rawValue > 7 })
     .map({ $0.rawValue })
 
+  override func setUp() {
+    super.setUp()
+    continueAfterFailure = false
+  }
+
   override class func setUp() {
     super.setUp()
     precondition(nonExtendedRawValues.count > 0, "nonExtendedRawValues can't be empty.")
@@ -100,6 +105,45 @@ class ControlByteTest: XCTestCase {
         (
           expectedPayloadSize: UInt32($0),
           bytes: Data([UInt8(29), typeDefinition - 7, UInt8($0 - 29)])
+        )
+      })
+    }
+
+    for (expectedPayloadSize, bytes) in (nonExtendedRawValues + extendedRawValues) {
+      XCTAssertEqual(
+        expectedPayloadSize,
+        ControlByte(bytes: bytes)?.payloadSize,
+        "Expected a payload size of \(expectedPayloadSize), but instead got \(ControlByte(bytes: bytes)?.payloadSize)"
+      )
+    }
+  }
+
+  func testInit_payloadSizeDefinition_exactly30() {
+    let nonExtendedRawValues: [PayloadSizeTestDefinition] = ControlByteTest
+      .nonExtendedRawValues
+      .reduce([]) { byteSequence, typeDefinition in
+      byteSequence + (285..<65_821).map({ expectedByteCount in
+        var byteCountDefinition = expectedByteCount - 285
+        return (
+          expectedPayloadSize: UInt32(expectedByteCount),
+          bytes: Data([UInt8(30) | (typeDefinition << 5)]) + Data(
+            bytes: &byteCountDefinition,
+            count: 2
+          )
+        )
+      })
+    }
+    let extendedRawValues: [PayloadSizeTestDefinition] = ControlByteTest
+      .extendedRawValues
+      .reduce([]) { byteSequence, typeDefinition in
+      byteSequence + (285..<65_821).map({ expectedByteCount in
+        var byteCountDefinition = expectedByteCount - 285
+        return (
+          expectedPayloadSize: UInt32(expectedByteCount),
+          bytes: Data([UInt8(30), typeDefinition - 7]) + Data(
+            bytes: &byteCountDefinition,
+            count: 2
+          )
         )
       })
     }
