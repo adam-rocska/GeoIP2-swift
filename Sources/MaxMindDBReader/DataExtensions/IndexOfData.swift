@@ -57,28 +57,17 @@ extension Data {
   }
 
   func lastIndex(of data: Data) -> Index? {
-    var lastIndexOfData: Index? = index(of: data)
-    while lastIndexOfData != nil {
-      guard let currentIndexOfData = index(
-        of: data,
-        from: self.index(after: lastIndexOfData!)
-      ) else {
-        return lastIndexOfData
-      }
-      lastIndexOfData = currentIndexOfData
-    }
-    return lastIndexOfData
+    return lastIndex(of: data, from: self.startIndex)
   }
 
   func lastIndex(of data: Data, from: Index) -> Index? {
     var lastIndexOfData: Index? = from
     while lastIndexOfData != nil {
-      if !self.indices.contains(self.index(after: lastIndexOfData!)) {
-        return nil
-      }
+      let upcomingIndex = self.index(after: lastIndexOfData!)
+      if !self.indices.contains(upcomingIndex) { return lastIndexOfData == from ? nil : lastIndexOfData }
       guard let currentIndexOfData = index(
         of: data,
-        from: self.index(after: lastIndexOfData!)
+        from: upcomingIndex
       ) else {
         break
       }
