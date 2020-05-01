@@ -56,4 +56,15 @@ extension Data {
     return boyerMoore(data: data, from: from)
   }
 
+  func lastIndex(of data: Data) -> Index? {
+    var lastIndexOfData:Index? = index(of: data)
+    while lastIndexOfData != nil {
+      lastIndexOfData = index(
+        of: data,
+        from: self.index(after: lastIndexOfData!)
+      )
+    }
+    return lastIndexOfData
+  }
+
 }

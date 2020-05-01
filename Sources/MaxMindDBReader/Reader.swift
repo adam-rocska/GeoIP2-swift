@@ -2,12 +2,13 @@ import Foundation
 
 public class Reader {
 
-  private let dataSectionSeparatorSize = 16
-  static let  metadataStartMarker      = Data([
+  static let dataSectionSeparator      = Data(count: 16)
+  static let metadataStartMarker: Data = Data([
                                                 UInt8(0xAB),
                                                 UInt8(0xCD),
                                                 UInt8(0xEF)
-                                              ]) + Data("MaxMind.com".utf8)
+                                              ]) +
+                                         Data("MaxMind.com".utf8)
 
   private let metadataMaxSize = 128 * 1024; // 128KiB
   private let databaseContent: Data
