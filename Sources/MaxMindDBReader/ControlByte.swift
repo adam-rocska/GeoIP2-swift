@@ -80,8 +80,9 @@ bytes.
  */
 struct ControlByte {
 
-  let type:        DataType
-  let payloadSize: UInt32
+  let type:           DataType
+  let payloadSize:    UInt32
+  let definitionSize: UInt8
 
   init?(bytes: Data) {
     if bytes.count == 0 || bytes.count > 5 { return nil }
@@ -100,6 +101,7 @@ struct ControlByte {
     let payloadSizeDefinition = firstByte & 0b0001_1111
     if payloadSizeDefinition < 29 {
       payloadSize = UInt32(payloadSizeDefinition)
+      definitionSize = isExtendedType ? 2 : 1
     } else {
       let numberOfAdditionalBytesToRead = Int(payloadSizeDefinition & 0b0000_0011)
       let lastIndexOfBytes              = bytes.index(before: bytes.endIndex)
@@ -128,6 +130,7 @@ struct ControlByte {
         }
 
       payloadSize = UInt32(val) + payloadSizeWholeBytes.withUnsafeBytes { $0.load(as: UInt32.self) }
+      definitionSize = (isExtendedType ? 2 : 1) + payloadSizeDefinition & 0b0000_0011
     }
 
     self.type = type

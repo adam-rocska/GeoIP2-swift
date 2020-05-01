@@ -53,34 +53,42 @@ class ControlByteTest: XCTestCase {
   }
 
   func testInit_payloadSizeDefinition_lessThan29() {
-    let nonExtended: [PayloadSizeTestDefinition] = nonExtendedRawValues
+    let nonExtended: [ByteSizesTestDefinition] = nonExtendedRawValues
       .reduce([]) { byteSequence, typeDefinition in
       byteSequence + (0..<29).map({
-        (expectedPayloadSize: UInt32($0), bytes: Data([$0 | (typeDefinition << 5)]))
+        (
+          payloadSize: UInt32($0),
+          definitionSize: 1,
+          input: Data([$0 | (typeDefinition << 5)]))
       })
     }
-    let extended: [PayloadSizeTestDefinition] = extendedRawValues
+    let extended: [ByteSizesTestDefinition] = extendedRawValues
       .reduce([]) { byteSequence, typeDefinition in
       byteSequence + (0..<29).map({
-        (expectedPayloadSize: UInt32($0), bytes: Data([$0, typeDefinition - 7]))
+        (
+          payloadSize: UInt32($0),
+          definitionSize: 2,
+          input: Data([$0, typeDefinition - 7])
+        )
       })
     }
 
-    for (expectedPayloadSize, bytes) in (nonExtended + extended) {
-      XCTAssertEqual(
-        expectedPayloadSize,
-        ControlByte(bytes: bytes)?.payloadSize
-      )
+    for (payloadSize, definitionSize, input) in (nonExtended + extended) {
+      let controlByte = ControlByte(bytes: input)
+      XCTAssertEqual(payloadSize, controlByte?.payloadSize)
+      XCTAssertEqual(definitionSize, controlByte?.definitionSize)
     }
   }
 
   func testInit_payloadSizeDefinition_greaterThan28() {
-    for (expectedPayloadSize, bytes) in payloadSizeTestDefinitions {
+    for (payloadSize, definitionSize, input) in payloadSizeTestDefinitions {
+      let controlByte = ControlByte(bytes: input)
       XCTAssertEqual(
-        expectedPayloadSize,
-        ControlByte(bytes: bytes)?.payloadSize,
-        "Expected a payload size of \(expectedPayloadSize), but instead got \(String(describing: ControlByte(bytes: bytes)?.payloadSize))"
+        payloadSize,
+        controlByte?.payloadSize,
+        "Expected a payload size of \(payloadSize), but instead got \(String(describing: controlByte?.payloadSize))"
       )
+      XCTAssertEqual(definitionSize, controlByte?.definitionSize)
     }
   }
 
@@ -99,33 +107,36 @@ fileprivate let extendedRawValues: [DataType.RawValue] = dataTypes
 fileprivate typealias PayloadSpec = (
   validValueRange: Range<Int>,
   addedValue: Int,
-  payloadSizeDefinition: UInt8
+  sizeDefinition: UInt8
 )
 
-fileprivate typealias PayloadSizeTestDefinition = (
-  expectedPayloadSize: UInt32,
-  bytes: Data
+fileprivate typealias ByteSizesTestDefinition = (
+  payloadSize: UInt32,
+  definitionSize: UInt8,
+  input: Data
 )
 
-/// TODO: Ugly piece of code, but it works. I could revisit in the future to
-/// refactor it.
+/// TODO: Ugly piece of code, but it works. I could revisit in the future to refactor it.
 fileprivate func payloadSizeTestDefiner(
   rawValues: [DataType.RawValue],
+  baseDefinitionSize: UInt8,
   createLeadingBytes: @escaping (UInt8, UInt8) -> Data
-) -> (PayloadSpec) -> [PayloadSizeTestDefinition] {
+) -> (PayloadSpec) -> [ByteSizesTestDefinition] {
   return { payloadSpec in
     rawValues
       .reduce([]) { byteSequence, typeDefinition in
       byteSequence + payloadSpec.validValueRange.map({ expectedByteCount in
         var byteCountDefinition = expectedByteCount - payloadSpec.addedValue
+        let addedSizeDefinition = payloadSpec.sizeDefinition & 0b0000_0011
         return (
-          expectedPayloadSize: UInt32(expectedByteCount),
-          bytes: createLeadingBytes(
-            payloadSpec.payloadSizeDefinition,
+          payloadSize: UInt32(expectedByteCount),
+          definitionSize: addedSizeDefinition + baseDefinitionSize,
+          input: createLeadingBytes(
+            payloadSpec.sizeDefinition,
             typeDefinition
           ) + Data(
             bytes: &byteCountDefinition,
-            count: Int(payloadSpec.payloadSizeDefinition & 0b0000_0011)
+            count: Int(addedSizeDefinition)
           )
         )
       })
@@ -135,25 +146,27 @@ fileprivate func payloadSizeTestDefiner(
 
 fileprivate let createNonExtended = payloadSizeTestDefiner(
   rawValues: nonExtendedRawValues,
+  baseDefinitionSize: 1,
   createLeadingBytes: { Data([UInt8($0) | ($1 << 5)]) }
 )
 
 fileprivate let createExtended = payloadSizeTestDefiner(
   rawValues: extendedRawValues,
+  baseDefinitionSize: 2,
   createLeadingBytes: { Data([UInt8($0), $1 - 7]) }
 )
 
 fileprivate let payloadSpecs: [PayloadSpec] = [
-  (validValueRange: 29..<285, addedValue: 29, payloadSizeDefinition: 29),
-  (validValueRange: 285..<1000, addedValue: 285, payloadSizeDefinition: 30),
-  (validValueRange: 25_000..<30_000, addedValue: 285, payloadSizeDefinition: 30),
-  (validValueRange: 64_000..<65_821, addedValue: 285, payloadSizeDefinition: 30),
-  (validValueRange: 65_821..<66_000, addedValue: 65_821, payloadSizeDefinition: 31),
-  (validValueRange: 2_000_000..<2_000_500, addedValue: 65_821, payloadSizeDefinition: 31),
-  (validValueRange: 16_843_000..<16_843_037, addedValue: 65_821, payloadSizeDefinition: 31)
+  (validValueRange: 29..<285, addedValue: 29, sizeDefinition: 29),
+  (validValueRange: 285..<1000, addedValue: 285, sizeDefinition: 30),
+  (validValueRange: 25_000..<30_000, addedValue: 285, sizeDefinition: 30),
+  (validValueRange: 64_000..<65_821, addedValue: 285, sizeDefinition: 30),
+  (validValueRange: 65_821..<66_000, addedValue: 65_821, sizeDefinition: 31),
+  (validValueRange: 2_000_000..<2_000_500, addedValue: 65_821, sizeDefinition: 31),
+  (validValueRange: 16_843_000..<16_843_037, addedValue: 65_821, sizeDefinition: 31)
 ]
 
-fileprivate let payloadSizeTestDefinitions: [PayloadSizeTestDefinition] =
+fileprivate let payloadSizeTestDefinitions: [ByteSizesTestDefinition] =
   payloadSpecs
     .map({ (extended: createExtended($0), nonExtended: createNonExtended($0)) })
     .reduce([]) { result, testDefinitions in
