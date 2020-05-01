@@ -5,25 +5,25 @@ extension Data {
   fileprivate func boyerMoore(data: Data, from: Index) -> Index? {
     let patternLength = data.count
     precondition(patternLength > 0, "Pattern can't be empty.")
-    precondition(self.count >= patternLength, "Pattern can't be >= than the Data to search in.")
-    precondition(self.indices.contains(from), "Index from which to start the lookup must be contained in the Data.")
+    precondition(count >= patternLength, "Pattern can't be >= than the Data to search in.")
+    precondition(indices.contains(from), "Index from which to start the lookup must be contained in the Data.")
 
     var skipTable = [UInt8: Int]()
     for (i, byte) in data.enumerated() {
       skipTable[byte] = patternLength - i - 1
     }
 
-    let lastIndexOfSelf = self.endIndex
+    let lastIndexOfSelf = endIndex
     let lastIndexOfData = data.index(before: data.endIndex)
     let lastByteOfData  = data.last
-    var i               = self.index(from, offsetBy: patternLength - 1, limitedBy: lastIndexOfSelf) ?? lastIndexOfSelf
+    var i               = index(from, offsetBy: patternLength - 1, limitedBy: lastIndexOfSelf) ?? lastIndexOfSelf
 
     func reverseMatch() -> Index? {
       var dataIndex = lastIndexOfData
       var selfIndex = i
       while dataIndex > data.startIndex {
-        selfIndex = self.index(before: selfIndex)
-        dataIndex = self.index(before: dataIndex)
+        selfIndex = index(before: selfIndex)
+        dataIndex = index(before: dataIndex)
         if self[selfIndex] != data[dataIndex] { return nil }
       }
       return selfIndex
@@ -36,9 +36,9 @@ extension Data {
         if let foundIndex = reverseMatch() {
           return foundIndex
         }
-        i = self.index(after: i)
+        i = index(after: i)
       } else {
-        i = self.index(
+        i = index(
           i,
           offsetBy: skipTable[byte] ?? patternLength,
           limitedBy: lastIndexOfSelf
@@ -49,7 +49,7 @@ extension Data {
   }
 
   func index(of data: Data) -> Index? {
-    return boyerMoore(data: data, from: self.startIndex)
+    return boyerMoore(data: data, from: startIndex)
   }
 
   func index(of data: Data, from: Index) -> Index? {
@@ -57,23 +57,18 @@ extension Data {
   }
 
   func lastIndex(of data: Data) -> Index? {
-    return lastIndex(of: data, from: self.startIndex)
+    return lastIndex(of: data, from: startIndex)
   }
 
   func lastIndex(of data: Data, from: Index) -> Index? {
-    var lastIndexOfData: Index? = from
-    while lastIndexOfData != nil {
-      let upcomingIndex = self.index(after: lastIndexOfData!)
-      if !self.indices.contains(upcomingIndex) { return lastIndexOfData == from ? nil : lastIndexOfData }
-      guard let currentIndexOfData = index(
-        of: data,
-        from: upcomingIndex
-      ) else {
-        break
-      }
-      lastIndexOfData = currentIndexOfData
+    var last: Index? = from
+    while last != nil {
+      let next = index(after: last!)
+      if !indices.contains(next) { break }
+      guard let current = index(of: data, from: next) else { break }
+      last = current
     }
-    return lastIndexOfData == from ? nil : lastIndexOfData
+    return last == from ? nil : last
   }
 
 }
