@@ -107,21 +107,25 @@ fileprivate typealias PayloadSizeTestDefinition = (
   bytes: Data
 )
 
+/// TODO: Ugly piece of code, but it works. I could revisit in the future to
+/// refactor it.
 fileprivate func payloadSizeTestDefiner(
   rawValues: [DataType.RawValue],
   createLeadingBytes: @escaping (UInt8, UInt8) -> Data
 ) -> (PayloadSpec) -> [PayloadSizeTestDefinition] {
   return { payloadSpec in
-    let (validValueRange, addedValue, payloadSizeDefinition) = payloadSpec
-    return rawValues
+    rawValues
       .reduce([]) { byteSequence, typeDefinition in
-      byteSequence + validValueRange.map({ expectedByteCount in
-        var byteCountDefinition = expectedByteCount - addedValue
+      byteSequence + payloadSpec.validValueRange.map({ expectedByteCount in
+        var byteCountDefinition = expectedByteCount - payloadSpec.addedValue
         return (
           expectedPayloadSize: UInt32(expectedByteCount),
-          bytes: createLeadingBytes(payloadSizeDefinition, typeDefinition) + Data(
+          bytes: createLeadingBytes(
+            payloadSpec.payloadSizeDefinition,
+            typeDefinition
+          ) + Data(
             bytes: &byteCountDefinition,
-            count: Int(payloadSizeDefinition & 0b0000_0011)
+            count: Int(payloadSpec.payloadSizeDefinition & 0b0000_0011)
           )
         )
       })
