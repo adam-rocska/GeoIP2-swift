@@ -2,6 +2,17 @@ import Foundation
 import XCTest
 @testable import MaxMindDBReader
 
+fileprivate typealias PayloadSpec = (
+  validValueRange: Range<Int>,
+  addedValue: Int,
+  payloadSizeDefinition: UInt8
+)
+
+fileprivate typealias PayloadSizeTestDefinition = (
+  expectedPayloadSize: UInt32,
+  bytes: Data
+)
+
 class ControlByteTest: XCTestCase {
 
   private static let dataTypes: [DataType] = (1...255).compactMap({ DataType(rawValue: $0) })
@@ -12,11 +23,6 @@ class ControlByteTest: XCTestCase {
     .filter({ $0.rawValue > 7 })
     .map({ $0.rawValue })
 
-  private typealias PayloadSpec = (
-    validValueRange: Range<Int>,
-    addedValue: Int,
-    payloadSizeDefinition: UInt8
-  )
   private static func createNonExtended(
     _ payloadSpec: PayloadSpec
   ) -> [PayloadSizeTestDefinition] {
@@ -104,8 +110,6 @@ class ControlByteTest: XCTestCase {
   func testInit_nilIfDataTypeNotRecognized() {
     XCTAssertNil(ControlByte(bytes: Data([0b0000_1111, 0b0000_1111, 0b0000_0000])))
   }
-
-  fileprivate typealias PayloadSizeTestDefinition = (expectedPayloadSize: UInt32, bytes: Data)
 
   func testInit_payloadSizeDefinition_lessThan29() {
     let nonExtendedRawValues: [PayloadSizeTestDefinition] = ControlByteTest
