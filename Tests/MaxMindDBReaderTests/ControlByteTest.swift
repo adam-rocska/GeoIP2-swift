@@ -79,7 +79,7 @@ class ControlByteTest: XCTestCase {
       XCTAssertEqual(
         expectedPayloadSize,
         ControlByte(bytes: bytes)?.payloadSize,
-        "Expected a payload size of \(expectedPayloadSize), but instead got \(ControlByte(bytes: bytes)?.payloadSize)"
+        "Expected a payload size of \(expectedPayloadSize), but instead got \(String(describing: ControlByte(bytes: bytes)?.payloadSize))"
       )
     }
   }
