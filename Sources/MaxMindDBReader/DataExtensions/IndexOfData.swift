@@ -3,22 +3,20 @@ import Foundation
 extension Data {
 
   fileprivate func boyerMoore(data: Data, from: Index) -> Index? {
-    let patternLength = data.count
-    precondition(patternLength > 0, "Pattern can't be empty.")
-    precondition(count >= patternLength, "Pattern can't be >= than the Data to search in.")
+    let patternCount = data.count
+    precondition(patternCount > 0, "Pattern can't be empty.")
+    precondition(count >= patternCount, "Pattern can't be >= than the Data to search in.")
     precondition(indices.contains(from), "Index from which to start the lookup must be contained in the Data.")
 
     var skipTable = [UInt8: Int]()
-    for (i, byte) in data.enumerated() {
-      skipTable[byte] = patternLength - i - 1
-    }
+    for (i, byte) in data.enumerated() { skipTable[byte] = patternCount - i - 1 }
 
     let lastIndexOfSelf = endIndex
     let lastIndexOfData = data.index(before: data.endIndex)
     let lastByteOfData  = data.last
     var i               = index(
       from,
-      offsetBy: patternLength - 1,
+      offsetBy: patternCount - 1,
       limitedBy: lastIndexOfSelf
     ) ?? lastIndexOfSelf
 
@@ -44,7 +42,7 @@ extension Data {
       } else {
         i = index(
           i,
-          offsetBy: skipTable[byte] ?? patternLength,
+          offsetBy: skipTable[byte] ?? patternCount,
           limitedBy: lastIndexOfSelf
         ) ?? lastIndexOfSelf
       }
