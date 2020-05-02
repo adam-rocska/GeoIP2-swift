@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 @testable import MaxMindDBReader
 
-class SafeIndexOffsetTest: XCTestCase {
+class LimitedIndexTest: XCTestCase {
 
   func testLimitedIndex_afterIndex() {
     let data = Data(count: 3)
