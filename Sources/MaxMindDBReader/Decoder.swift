@@ -38,9 +38,17 @@ class Decoder {
     }
   }
 
-  func decode(_ data: Data) -> UInt16 {
-    var wellSizedData = unpack(data, toBytesLength: 2)
-    let value         = UnsafeRawPointer(&wellSizedData).load(as: UInt16.self)
+  func decode<T>(_ data: Data) -> T where T: FixedWidthInteger, T: UnsignedInteger {
+    var wellSizedData = unpack(data, toBytesLength: MemoryLayout<T>.size)
+    let value         = UnsafeRawPointer(&wellSizedData).load(as: T.self)
     return input == .big ? value.bigEndian : value.littleEndian
   }
+
+  func decode<T>(_ data: Data) -> T where T: FixedWidthInteger, T: SignedInteger {
+    var wellSizedData = unpack(data, toBytesLength: MemoryLayout<T>.size)
+    let value = UnsafeRawPointer(&wellSizedData).load(as: T.self)
+    return input == .big ? value.bigEndian : value.littleEndian
+  }
+
 }
+
