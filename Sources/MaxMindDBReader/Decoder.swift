@@ -44,11 +44,5 @@ class Decoder {
     return input == .big ? value.bigEndian : value.littleEndian
   }
 
-  func decode<T>(_ data: Data) -> T where T: FixedWidthInteger, T: SignedInteger {
-    var wellSizedData = unpack(data, toBytesLength: MemoryLayout<T>.size)
-    let value = UnsafeRawPointer(&wellSizedData).load(as: T.self)
-    return input == .big ? value.bigEndian : value.littleEndian
-  }
-
 }
 

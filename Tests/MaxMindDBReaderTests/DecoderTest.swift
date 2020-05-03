@@ -112,18 +112,18 @@ class DecoderTest: XCTestCase {
     }
   }
 
-  func testDecode_int32() {
-    for (expected, input) in testSpecs_int32 {
-      assertDecodedValue(expected, bigEndianDecoder.decode, data: input)
-    }
-    for (expected, input) in testSpecs_int32 {
-      assertDecodedValue(
-        expected,
-        littleEndianDecoder.decode,
-        data: Data(input.reversed())
-      )
-    }
-  }
+//  func testDecode_int32() {
+//    for (expected, input) in testSpecs_int32 {
+//      assertDecodedValue(expected, bigEndianDecoder.decode, data: input)
+//    }
+//    for (expected, input) in testSpecs_int32 {
+//      assertDecodedValue(
+//        expected,
+//        littleEndianDecoder.decode,
+//        data: Data(input.reversed())
+//      )
+//    }
+//  }
 }
 
 fileprivate func assertDecodedValue<T>(
