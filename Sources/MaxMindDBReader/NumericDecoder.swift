@@ -14,40 +14,34 @@ class NumericDecoder {
   init(inputEndianness: Endianness) { self.input = inputEndianness }
 
   private func padded<T>(_ data: Data) -> T where T: FixedWidthInteger {
-    let byteCount           = MemoryLayout<T>.size - data.count
-    let padBytes            = Data(count: byteCount)
+    let padBytes            = Data(count: MemoryLayout<T>.size - data.count)
     var wellSizedData: Data = input == .big ? padBytes + data : data + padBytes
     return UnsafeRawPointer(&wellSizedData).load(as: T.self)
   }
 
   private func truncated<T>(_ data: Data) -> T where T: FixedWidthInteger {
-    let byteCount = MemoryLayout<T>.size
-
-    let bounds = input == .big
-                 ? (
-                   lower: data.limitedIndex(data.endIndex, offsetBy: -byteCount),
-                   upper: data.endIndex
-                 )
-                 : (
-                   lower: data.startIndex,
-                   upper: data.limitedIndex(data.startIndex, offsetBy: byteCount)
-                 )
-
+    let bounds: (lower: Range<Data.Index>.Bound, upper: Range<Data.Index>.Bound)
+    if input == .big {
+      bounds = (
+        lower: data.limitedIndex(data.endIndex, offsetBy: -MemoryLayout<T>.size),
+        upper: data.endIndex
+      )
+    } else {
+      bounds = (
+        lower: data.startIndex,
+        upper: data.limitedIndex(data.startIndex, offsetBy: MemoryLayout<T>.size)
+      )
+    }
     var wellSizedData: Data = data.subdata(in: Range(uncheckedBounds: bounds))
     return UnsafeRawPointer(&wellSizedData).load(as: T.self)
   }
 
   private func unpack<T>(_ data: Data) -> T where T: FixedWidthInteger {
     let strayBytes = MemoryLayout<T>.size - data.count
-    switch strayBytes {
-      case _ where strayBytes > 0:
-        return padded(data)
-      case _ where strayBytes < 0:
-        return truncated(data)
-      default:
-        var wellSizedData: Data = data
-        return UnsafeRawPointer(&wellSizedData).load(as: T.self)
-    }
+    if strayBytes > 0 { return padded(data) }
+    if strayBytes < 0 { return truncated(data) }
+    var wellSizedData: Data = data
+    return UnsafeRawPointer(&wellSizedData).load(as: T.self)
   }
 
   func decode<T>(_ data: Data) -> T where T: FixedWidthInteger {
