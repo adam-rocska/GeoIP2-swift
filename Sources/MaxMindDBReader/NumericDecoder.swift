@@ -13,12 +13,16 @@ class NumericDecoder {
 
   init(inputEndianness: Endianness) { self.input = inputEndianness }
 
-  private func pad(_ data: Data, byteCount: Int) -> Data {
-    let padBytes = Data(count: byteCount)
-    return input == .big ? padBytes + data : data + padBytes
+  private func padded<T>(_ data: Data) -> T where T: FixedWidthInteger {
+    let byteCount           = MemoryLayout<T>.size - data.count
+    let padBytes            = Data(count: byteCount)
+    var wellSizedData: Data = input == .big ? padBytes + data : data + padBytes
+    return UnsafeRawPointer(&wellSizedData).load(as: T.self)
   }
 
-  private func truncate(_ data: Data, byteCount: Int) -> Data {
+  private func truncated<T>(_ data: Data) -> T where T: FixedWidthInteger {
+    let byteCount = MemoryLayout<T>.size
+
     let bounds = input == .big
                  ? (
                    lower: data.limitedIndex(data.endIndex, offsetBy: -byteCount),
@@ -28,22 +32,22 @@ class NumericDecoder {
                    lower: data.startIndex,
                    upper: data.limitedIndex(data.startIndex, offsetBy: byteCount)
                  )
-    return data.subdata(in: Range(uncheckedBounds: bounds))
+
+    var wellSizedData: Data = data.subdata(in: Range(uncheckedBounds: bounds))
+    return UnsafeRawPointer(&wellSizedData).load(as: T.self)
   }
 
   private func unpack<T>(_ data: Data) -> T where T: FixedWidthInteger {
     let strayBytes = MemoryLayout<T>.size - data.count
-    var wellSizedData: Data
-    /// TODO : Move the unsafe raw pointer based type creation into truncate & pad. That way we can handle the php monkeys' integer signing problem
     switch strayBytes {
       case _ where strayBytes > 0:
-        wellSizedData = pad(data, byteCount: strayBytes)
+        return padded(data)
       case _ where strayBytes < 0:
-        wellSizedData = truncate(data, byteCount: MemoryLayout<T>.size)
+        return truncated(data)
       default:
-        wellSizedData = data
+        var wellSizedData: Data = data
+        return UnsafeRawPointer(&wellSizedData).load(as: T.self)
     }
-    return UnsafeRawPointer(&wellSizedData).load(as: T.self)
   }
 
   func decode<T>(_ data: Data) -> T where T: FixedWidthInteger {
