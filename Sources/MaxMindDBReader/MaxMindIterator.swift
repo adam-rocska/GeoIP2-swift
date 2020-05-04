@@ -14,12 +14,33 @@ class MaxMindIterator {
     self.pointer = data.startIndex
   }
 
-  func nextControlByte() -> ControlByte? {
+  func next() -> ControlByte? {
+    while pointer != data.limitedIndex(before: data.endIndex) {
+      let range = Range(uncheckedBounds: (
+        lower: pointer,
+        upper: data.limitedIndex(pointer, offsetBy: 5)
+      ))
+      pointer = data.index(after: pointer)
+      if range.lowerBound == range.upperBound {
+        break
+      }
+
+      if let controlByte = ControlByte(bytes: data.subdata(in: range)) {
+        return controlByte
+      }
+    }
     return nil
   }
 
-  func nextValue() -> Any? {
-    return nil
+  func next(_ controlByte: ControlByte) -> Data? {
+    if controlByte.payloadSize == 0 { return Data() }
+    let range = Range(uncheckedBounds: (
+      lower: pointer,
+      upper: data.limitedIndex(pointer, offsetBy: Int(controlByte.payloadSize))
+    ))
+    pointer = range.upperBound
+    if range.lowerBound == range.upperBound { return Data() }
+    return data.subdata(in: range)
   }
 
 }
