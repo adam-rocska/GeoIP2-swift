@@ -9,10 +9,19 @@ class MaxMindIteratorTest: XCTestCase {
   }
 
   func testNextControlByte_noneDefined() {
-    let iterator = MaxMindIterator(Data(count: 150))
-    for _ in 0..<200 {
-      XCTAssertNil(iterator?.nextControlByte())
+    guard let iterator = MaxMindIterator(Data(count: 150)) else {
+      XCTFail("Iterator should have been created.")
+      return
     }
+    for _ in 0..<200 { XCTAssertNil(iterator.nextControlByte()) }
+  }
+
+  func testNextValue_noneDefined() {
+    guard let iterator = MaxMindIterator(Data(count: 150)) else {
+      XCTFail("Iterator should have been created.")
+      return
+    }
+    for _ in 0..<200 { XCTAssertNil(iterator.nextValue()) }
   }
 
 }

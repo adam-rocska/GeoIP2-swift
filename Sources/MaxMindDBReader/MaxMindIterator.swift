@@ -18,4 +18,8 @@ class MaxMindIterator {
     return nil
   }
 
+  func nextValue() -> Any? {
+    return nil
+  }
+
 }
