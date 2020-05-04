@@ -98,19 +98,17 @@ fileprivate let testSpecs_int32: [TestSpec<Int32>] = [
   (expected: 0, input: Data(count: 4)),
   (expected: 0, input: Data(count: 5)),
   (expected: 127, input: Data([0b0111_1111])),
-  (expected: -127, input: Data([0b1111_1111])),
+  (expected: -127, input: Data([0b1111_1111, 0b1111_1111, 0b1000_0001])),
   (expected: 32767, input: Data([0b0111_1111, 0b1111_1111])),
-  (expected: -32767, input: Data([0b1111_1111, 0b1111_1111])),
-  (expected: -2147483647, input: Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
-  (expected: -2147483647, input: Data([0b1000_0000]) + Data(count: 1) + Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
-  (expected: 2147483647, input: Data([0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
-  (expected: 2147483647, input: Data(count: 1) + Data([0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
+  (expected: -32767, input: Data([0b1111_1111, 0b1000_0000, 0b0000_0001])),
+  (expected: -2147483647, input: Data([0x80, 0x00, 0x00, 0x01])),
+  (expected: 2147483647, input: Data([0x7F, 0xFF, 0xFF, 0xFF])),
+  (expected: 2147483647, input: Data(count: 1) + Data([0x00, 0xFF, 0xFF, 0xFF, 0x7F, 0xFF, 0xFF, 0xFF])),
   (expected: 14200, input: Data([0b0011_0111, 0b0111_1000])),
   (expected: 14200, input: Data(count: 14) + Data([0b0011_0111, 0b0111_1000])),
-  (expected: -14200, input: Data([0b1011_0111, 0b0111_1000])),
-  (expected: -14200, input: Data([0b1000_0000]) + Data(count: 13) + Data([0b0011_0111, 0b0111_1000])),
-  (expected: 16702650, input: Data([0xFE, 0xDC, 0xBA])),
-  (expected: 16702650, input: Data(count: 14) + Data([0xFE, 0xDC, 0xBA]))
+  (expected: -14200, input: Data([0b1111_1111, 0b1100_1000, 0b1000_1000])),
+  (expected: 16702650, input: Data([0x00, 0xFE, 0xDC, 0xBA])),
+  (expected: 16702650, input: Data(count: 14) + Data([0x00, 0xFE, 0xDC, 0xBA]))
 ]
 
 fileprivate let testSpecs_uInt64: [TestSpec<UInt64>] = [

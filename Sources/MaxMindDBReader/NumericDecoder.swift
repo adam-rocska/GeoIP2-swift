@@ -13,8 +13,20 @@ class NumericDecoder {
 
   init(inputEndianness: Endianness) { self.input = inputEndianness }
 
+  private func getLeadingByte(_ data: Data) -> Data.Element? {
+    return input == .big ? data.first : data.last
+  }
+
+  private func isNegative(_ data: Data) -> Bool {
+    guard let leadingByte = getLeadingByte(data) else { return false }
+    return (leadingByte & 0b1000_0000) == 0b1000_0000
+  }
+
   private func padded<T>(_ data: Data) -> T where T: FixedWidthInteger {
-    let padBytes            = Data(count: MemoryLayout<T>.size - data.count)
+    let padBytes            = Data(
+      repeating: T.isSigned && isNegative(data) ? 0b1111_1111 : 0b0000_0000,
+      count: MemoryLayout<T>.size - data.count
+    )
     var wellSizedData: Data = input == .big ? padBytes + data : data + padBytes
     return UnsafeRawPointer(&wellSizedData).load(as: T.self)
   }
