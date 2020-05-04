@@ -1,6 +1,11 @@
 import Foundation
 
-class Decoder {
+/**
+# NumericDecoder
+Unit capable of decoding MaxMind DB's specific unorthodox way of storing data.
+It's able to unpack the php style random byte sized "strongly typed" values.
+ */
+class NumericDecoder {
 
   enum Endianness { case big, little }
 
@@ -26,22 +31,26 @@ class Decoder {
     return data.subdata(in: Range(uncheckedBounds: bounds))
   }
 
-  private func unpack(_ data: Data, toBytesLength to: Int) -> Data {
-    let strayBytes = to - data.count
+  private func unpack<T>(_ data: Data) -> T where T: FixedWidthInteger {
+    let strayBytes = MemoryLayout<T>.size - data.count
+    var wellSizedData: Data
+    /// TODO : Move the unsafe raw pointer based type creation into truncate & pad. That way we can handle the php monkeys' integer signing problem
     switch strayBytes {
       case _ where strayBytes > 0:
-        return pad(data, byteCount: strayBytes)
+        wellSizedData = pad(data, byteCount: strayBytes)
       case _ where strayBytes < 0:
-        return truncate(data, byteCount: to)
+        wellSizedData = truncate(data, byteCount: MemoryLayout<T>.size)
       default:
-        return data
+        wellSizedData = data
     }
+    return UnsafeRawPointer(&wellSizedData).load(as: T.self)
   }
 
-  func decode<T>(_ data: Data) -> T where T: FixedWidthInteger, T: UnsignedInteger {
-    var wellSizedData = unpack(data, toBytesLength: MemoryLayout<T>.size)
-    let value         = UnsafeRawPointer(&wellSizedData).load(as: T.self)
-    return input == .big ? value.bigEndian : value.littleEndian
+  func decode<T>(_ data: Data) -> T where T: FixedWidthInteger {
+    let unpacked: T = unpack(data)
+    return input == .big
+           ? unpacked.bigEndian
+           : unpacked.littleEndian
   }
 
 }

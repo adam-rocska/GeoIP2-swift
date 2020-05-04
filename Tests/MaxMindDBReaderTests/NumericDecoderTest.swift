@@ -2,76 +2,10 @@ import Foundation
 import XCTest
 @testable import MaxMindDBReader
 
-fileprivate typealias TestSpec<T> = (expected: T, input: Data)
+class NumericDecoderTest: XCTestCase {
 
-fileprivate let testSpecs_uInt16: [TestSpec<UInt16>] = [
-  (expected: 0, input: Data()),
-  (expected: 0, input: Data(count: 1)),
-  (expected: 0, input: Data(count: 2)),
-  (expected: 0, input: Data(count: 3)),
-  (expected: 0, input: Data(count: 4)),
-  (expected: 0, input: Data(count: 5)),
-  (expected: 255, input: Data([0b1111_1111])),
-  (expected: 255, input: Data(count: 1) + Data([0b1111_1111])),
-  (expected: 14200, input: Data([0b0011_0111, 0b0111_1000])),
-  (expected: 14200, input: Data(count: 14) + Data([0b0011_0111, 0b0111_1000]))
-]
-
-fileprivate let testSpecs_uInt32: [TestSpec<UInt32>] = [
-  (expected: 0, input: Data()),
-  (expected: 0, input: Data(count: 1)),
-  (expected: 0, input: Data(count: 2)),
-  (expected: 0, input: Data(count: 3)),
-  (expected: 0, input: Data(count: 4)),
-  (expected: 0, input: Data(count: 5)),
-  (expected: 4294967295, input: Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
-  (expected: 4294967295, input: Data(count: 1) + Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
-  (expected: 14200, input: Data([0b0011_0111, 0b0111_1000])),
-  (expected: 14200, input: Data(count: 14) + Data([0b0011_0111, 0b0111_1000])),
-  (expected: 16702650, input: Data([0xFE, 0xDC, 0xBA])),
-  (expected: 16702650, input: Data(count: 14) + Data([0xFE, 0xDC, 0xBA]))
-]
-
-fileprivate let testSpecs_int32: [TestSpec<Int32>] = [
-  (expected: 0, input: Data()),
-  (expected: 0, input: Data(count: 1)),
-  (expected: 0, input: Data(count: 2)),
-  (expected: 0, input: Data(count: 3)),
-  (expected: 0, input: Data(count: 4)),
-  (expected: 0, input: Data(count: 5)),
-  (expected: -2147483647, input: Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
-  (expected: -2147483647, input: Data(count: 1) + Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
-  (expected: 2147483647, input: Data([0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
-  (expected: 2147483647, input: Data(count: 1) + Data([0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
-  (expected: 14200, input: Data([0b0011_0111, 0b0111_1000])),
-  (expected: 14200, input: Data(count: 14) + Data([0b0011_0111, 0b0111_1000])),
-  (expected: -14200, input: Data([0b1011_0111, 0b0111_1000])),
-  (expected: -14200, input: Data([0b1000_0000]) + Data(count: 13) + Data([0b0011_0111, 0b0111_1000])),
-  (expected: 16702650, input: Data([0xFE, 0xDC, 0xBA])),
-  (expected: 16702650, input: Data(count: 14) + Data([0xFE, 0xDC, 0xBA]))
-]
-
-fileprivate let testSpecs_uInt64: [TestSpec<UInt64>] = [
-  (expected: 0, input: Data()),
-  (expected: 0, input: Data(count: 1)),
-  (expected: 0, input: Data(count: 2)),
-  (expected: 0, input: Data(count: 3)),
-  (expected: 0, input: Data(count: 4)),
-  (expected: 0, input: Data(count: 5)),
-  (expected: 255, input: Data([0b1111_1111])),
-  (expected: 255, input: Data(count: 1) + Data([0b1111_1111])),
-  (expected: 14200, input: Data([0b0011_0111, 0b0111_1000])),
-  (expected: 14200, input: Data(count: 14) + Data([0b0011_0111, 0b0111_1000])),
-  (expected: 16702650, input: Data([0xFE, 0xDC, 0xBA])),
-  (expected: 16702650, input: Data(count: 14) + Data([0xFE, 0xDC, 0xBA])),
-  (expected: 280223976814164, input: Data([0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54])),
-  (expected: 280223976814164, input: Data(count: 14) + Data([0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54]))
-]
-
-class DecoderTest: XCTestCase {
-
-  private let bigEndianDecoder    = Decoder(inputEndianness: .big)
-  private let littleEndianDecoder = Decoder(inputEndianness: .little)
+  private let bigEndianDecoder    = NumericDecoder(inputEndianness: .big)
+  private let littleEndianDecoder = NumericDecoder(inputEndianness: .little)
 
   func testDecode_uInt16() {
     for (expected, input) in testSpecs_uInt16 {
@@ -112,19 +46,89 @@ class DecoderTest: XCTestCase {
     }
   }
 
-//  func testDecode_int32() {
-//    for (expected, input) in testSpecs_int32 {
-//      assertDecodedValue(expected, bigEndianDecoder.decode, data: input)
-//    }
-//    for (expected, input) in testSpecs_int32 {
-//      assertDecodedValue(
-//        expected,
-//        littleEndianDecoder.decode,
-//        data: Data(input.reversed())
-//      )
-//    }
-//  }
+  func testDecode_int32() {
+    for (expected, input) in testSpecs_int32 {
+      assertDecodedValue(expected, bigEndianDecoder.decode, data: input)
+    }
+    for (expected, input) in testSpecs_int32 {
+      assertDecodedValue(
+        expected,
+        littleEndianDecoder.decode,
+        data: Data(input.reversed())
+      )
+    }
+  }
 }
+
+fileprivate typealias TestSpec<T> = (expected: T, input: Data)
+
+fileprivate let testSpecs_uInt16: [TestSpec<UInt16>] = [
+  (expected: 0, input: Data()),
+  (expected: 0, input: Data(count: 1)),
+  (expected: 0, input: Data(count: 2)),
+  (expected: 0, input: Data(count: 3)),
+  (expected: 0, input: Data(count: 4)),
+  (expected: 0, input: Data(count: 5)),
+  (expected: 255, input: Data([0b1111_1111])),
+  (expected: 255, input: Data(count: 1) + Data([0b1111_1111])),
+  (expected: 14200, input: Data([0b0011_0111, 0b0111_1000])),
+  (expected: 14200, input: Data(count: 14) + Data([0b0011_0111, 0b0111_1000]))
+]
+
+fileprivate let testSpecs_uInt32: [TestSpec<UInt32>] = [
+  (expected: 0, input: Data()),
+  (expected: 0, input: Data(count: 1)),
+  (expected: 0, input: Data(count: 2)),
+  (expected: 0, input: Data(count: 3)),
+  (expected: 0, input: Data(count: 4)),
+  (expected: 0, input: Data(count: 5)),
+  (expected: 4294967295, input: Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
+  (expected: 4294967295, input: Data(count: 1) + Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
+  (expected: 14200, input: Data([0b0011_0111, 0b0111_1000])),
+  (expected: 14200, input: Data(count: 14) + Data([0b0011_0111, 0b0111_1000])),
+  (expected: 16702650, input: Data([0xFE, 0xDC, 0xBA])),
+  (expected: 16702650, input: Data(count: 14) + Data([0xFE, 0xDC, 0xBA]))
+]
+
+fileprivate let testSpecs_int32: [TestSpec<Int32>] = [
+  (expected: 0, input: Data()),
+  (expected: 0, input: Data(count: 1)),
+  (expected: 0, input: Data(count: 2)),
+  (expected: 0, input: Data(count: 3)),
+  (expected: 0, input: Data(count: 4)),
+  (expected: 0, input: Data(count: 5)),
+  (expected: 127, input: Data([0b0111_1111])),
+  (expected: -127, input: Data([0b1111_1111])),
+  (expected: 32767, input: Data([0b0111_1111, 0b1111_1111])),
+  (expected: -32767, input: Data([0b1111_1111, 0b1111_1111])),
+  (expected: -2147483647, input: Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
+  (expected: -2147483647, input: Data([0b1000_0000]) + Data(count: 1) + Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
+  (expected: 2147483647, input: Data([0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
+  (expected: 2147483647, input: Data(count: 1) + Data([0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])),
+  (expected: 14200, input: Data([0b0011_0111, 0b0111_1000])),
+  (expected: 14200, input: Data(count: 14) + Data([0b0011_0111, 0b0111_1000])),
+  (expected: -14200, input: Data([0b1011_0111, 0b0111_1000])),
+  (expected: -14200, input: Data([0b1000_0000]) + Data(count: 13) + Data([0b0011_0111, 0b0111_1000])),
+  (expected: 16702650, input: Data([0xFE, 0xDC, 0xBA])),
+  (expected: 16702650, input: Data(count: 14) + Data([0xFE, 0xDC, 0xBA]))
+]
+
+fileprivate let testSpecs_uInt64: [TestSpec<UInt64>] = [
+  (expected: 0, input: Data()),
+  (expected: 0, input: Data(count: 1)),
+  (expected: 0, input: Data(count: 2)),
+  (expected: 0, input: Data(count: 3)),
+  (expected: 0, input: Data(count: 4)),
+  (expected: 0, input: Data(count: 5)),
+  (expected: 255, input: Data([0b1111_1111])),
+  (expected: 255, input: Data(count: 1) + Data([0b1111_1111])),
+  (expected: 14200, input: Data([0b0011_0111, 0b0111_1000])),
+  (expected: 14200, input: Data(count: 14) + Data([0b0011_0111, 0b0111_1000])),
+  (expected: 16702650, input: Data([0xFE, 0xDC, 0xBA])),
+  (expected: 16702650, input: Data(count: 14) + Data([0xFE, 0xDC, 0xBA])),
+  (expected: 280223976814164, input: Data([0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54])),
+  (expected: 280223976814164, input: Data(count: 14) + Data([0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54]))
+]
 
 fileprivate func assertDecodedValue<T>(
   _ expected: T,
