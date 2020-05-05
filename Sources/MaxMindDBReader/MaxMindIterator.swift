@@ -6,7 +6,7 @@ import Foundation
 
 class MaxMindIterator {
   private let data:    Data
-  private var pointer: Data.Index
+  private(set) var pointer: Data.Index
   var isExhausted: Bool { get { return data.endIndex == pointer } }
 
   init?(_ data: Data) {
