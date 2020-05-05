@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 @testable import MaxMindDBReader
 
-class NumericDecoderTest: XCTestCase {
+class MaxMindDecoderNumericTest: XCTestCase {
 
   private let bigEndianDecoder    = MaxMindDecoder(inputEndianness: .big)
   private let littleEndianDecoder = MaxMindDecoder(inputEndianness: .little)
