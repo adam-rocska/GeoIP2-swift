@@ -1,17 +1,6 @@
 import Foundation
 
-/**
-# NumericDecoder
-Unit capable of decoding MaxMind DB's specific unorthodox way of storing data.
-It's able to unpack the php style random byte sized "strongly typed" values.
- */
-class NumericDecoder {
-
-  enum Endianness { case big, little }
-
-  private let input: Endianness
-
-  init(inputEndianness: Endianness) { self.input = inputEndianness }
+extension MaxMindDecoder {
 
   private func getLeadingByte(_ data: Data) -> Data.Element? {
     return input == .big ? data.first : data.last
@@ -64,4 +53,3 @@ class NumericDecoder {
   }
 
 }
-

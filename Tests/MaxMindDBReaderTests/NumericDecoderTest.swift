@@ -4,8 +4,8 @@ import XCTest
 
 class NumericDecoderTest: XCTestCase {
 
-  private let bigEndianDecoder    = NumericDecoder(inputEndianness: .big)
-  private let littleEndianDecoder = NumericDecoder(inputEndianness: .little)
+  private let bigEndianDecoder    = MaxMindDecoder(inputEndianness: .big)
+  private let littleEndianDecoder = MaxMindDecoder(inputEndianness: .little)
 
   func testDecode_uInt16() {
     for (expected, input) in testSpecs_uInt16 {
