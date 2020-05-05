@@ -16,7 +16,6 @@ class MaxMindIterator {
   }
 
   func next() -> ControlByte? {
-//    while pointer != data.limitedIndex(before: data.endIndex) {
     while !isExhausted {
       let range = Range(uncheckedBounds: (
         lower: pointer,
