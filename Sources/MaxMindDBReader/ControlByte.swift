@@ -135,7 +135,6 @@ struct ControlByte {
     }
 
     self.type = type
-    // TODO !!TEST!!
     let definitionRange = Range(uncheckedBounds: (
       lower: bytes.startIndex,
       upper: bytes.index(bytes.startIndex, offsetBy: Int(definitionSize))
