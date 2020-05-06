@@ -83,6 +83,7 @@ struct ControlByte {
   let type:           DataType
   let payloadSize:    UInt32
   let definitionSize: UInt8
+  let definition:     Data
 
   init?(bytes: Data) {
     if bytes.count == 0 || bytes.count > 5 { return nil }
@@ -134,6 +135,12 @@ struct ControlByte {
     }
 
     self.type = type
+    // TODO !!TEST!!
+    let definitionRange = Range(uncheckedBounds: (
+      lower: bytes.startIndex,
+      upper: bytes.index(bytes.startIndex, offsetBy: Int(definitionSize))
+    ))
+    self.definition = bytes.subdata(in: definitionRange)
   }
 
 }
