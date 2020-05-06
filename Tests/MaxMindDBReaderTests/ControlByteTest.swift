@@ -77,7 +77,7 @@ class ControlByteTest: XCTestCase {
       let controlByte = ControlByte(bytes: input)
       XCTAssertEqual(payloadSize, controlByte?.payloadSize)
       XCTAssertEqual(definitionSize, controlByte?.definitionSize)
-      XCTAssertEqual(input[...definitionSize], controlByte?.definition)
+      XCTAssertEqual(input[..<definitionSize], controlByte?.definition)
     }
   }
 
@@ -90,7 +90,7 @@ class ControlByteTest: XCTestCase {
         "Expected a payload size of \(payloadSize), but instead got \(String(describing: controlByte?.payloadSize))"
       )
       XCTAssertEqual(definitionSize, controlByte?.definitionSize)
-      XCTAssertEqual(input[...definitionSize], controlByte?.definition)
+      XCTAssertEqual(input[..<definitionSize], controlByte?.definition)
     }
   }
 
