@@ -2,6 +2,19 @@ import Foundation
 
 extension MaxMindDecoder {
 
+  // TODO : Create tests for this piece of 💩
+  func decode(_ iterator: MaxMindIterator, as controlByte: ControlByte) -> Any {
+    switch controlByte.type {
+      case .map:
+        return decode(iterator, size: Int(controlByte.payloadSize)) as [String:Any]
+      case .array:
+        return decode(iterator, size: Int(controlByte.payloadSize)) as [Any]
+      default:
+        preconditionFailure("Iterator based control byte decoding can only be done on sequential types.")
+    }
+  }
+
+  // TODO : Finish the implementation & test of this piece of 💩
   func decode(_ data: Data, as controlByte: ControlByte) -> Any {
     switch controlByte.type {
       case .pointer:
@@ -19,7 +32,7 @@ extension MaxMindDecoder {
       case .uInt32:
         return decode(data) as UInt32
       case .map:
-        return 0
+        return decode(data, size: Int(controlByte.payloadSize)) as [String: Any]
       case .int32:
         return decode(data) as Int32
       case .uInt64:
@@ -28,8 +41,7 @@ extension MaxMindDecoder {
         // TODO
         return 0
       case .array:
-        // TODO
-        return 0
+        return decode(data, size: Int(controlByte.payloadSize)) as [Any]
       case .dataCacheContainer:
         // TODO
         return 0

@@ -1,13 +1,12 @@
-//
-// Created by Rocska Ádám on 2020. 05. 04..
-//
-
 import Foundation
 
 class MaxMindIterator {
-  private let data:    Data
-  private(set) var pointer: Data.Index
+  public typealias Pointer = Data.Index
+  private let      data:    Data
+  private(set) var pointer: Pointer
   var isExhausted: Bool { get { return data.endIndex == pointer } }
+
+  func rewind() { pointer = data.startIndex }
 
   init?(_ data: Data) {
     if data.isEmpty { return nil }
@@ -31,8 +30,6 @@ class MaxMindIterator {
     }
     return nil
   }
-
-  func rewind() { pointer = data.startIndex }
 
   func next(_ controlByte: ControlByte) -> Data? {
     let range = Range(uncheckedBounds: (
