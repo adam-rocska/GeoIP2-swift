@@ -11,8 +11,7 @@ struct MetadataStruct: Metadata {
   let buildEpoch:               UInt64
   let description:              LanguageToDescription
 
-  init?(data: Data) {
-    guard let iterator = MaxMindIterator(data) else { return nil }
+  init?(_ iterator: MaxMindIterator) {
     guard let mapControlByte = iterator.next() else { return nil }
     if mapControlByte.type != .map { return nil }
     let decoder = MaxMindDecoder(inputEndianness: .big)
@@ -38,5 +37,10 @@ struct MetadataStruct: Metadata {
     self.binaryFormatMinorVersion = minorVersion
     self.buildEpoch = buildEpoch
     self.description = description
+  }
+
+  init?(_ data: Data) {
+    guard let iterator = MaxMindIterator(data) else { return nil }
+    self.init(iterator)
   }
 }
