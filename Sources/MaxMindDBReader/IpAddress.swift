@@ -44,6 +44,18 @@ public enum IpAddress: Equatable {
     return v4(bytes[0], bytes[1], bytes[2], bytes[3])
   }
 
+  static func v6(_ ip: IpAddress) -> IpAddress {
+    switch ip {
+      case .v6: return ip
+      case let .v4(bytes): return v6(
+        0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0xFF, 0xFF,
+        bytes.0, bytes.1, bytes.2, bytes.3
+      )
+    }
+  }
+
   static func v6(_ string: String) -> IpAddress {
     let inputRawChunks = string.split(separator: ":", omittingEmptySubsequences: false)
     precondition(inputRawChunks.count <= 8, "IPv6 strings must have at most 8 bytes defined.")

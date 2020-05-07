@@ -133,8 +133,8 @@ class IpAddressTest: XCTestCase {
   }
 
   func testInit_fromData() {
-    let v4Direct         = IpAddress.v4(Data([80, 99, 18, 166]))
-    let v6LoopbackDirect = IpAddress.v6(
+    let v4Direct          = IpAddress.v4(Data([80, 99, 18, 166]))
+    let v6LoopbackDirect  = IpAddress.v6(
       Data([
              0x00, 0x00, 0x00, 0x00,
              0x00, 0x00, 0x00, 0x00,
@@ -142,7 +142,7 @@ class IpAddressTest: XCTestCase {
              0x00, 0x00, 0x00, 0x01
            ])
     )
-    let v6Direct         = IpAddress.v6(
+    let v6Direct          = IpAddress.v6(
       Data([
              0x20, 0x01, 0x0d, 0xb8,
              0x00, 0x00, 0x00, 0x00,
@@ -166,6 +166,22 @@ class IpAddressTest: XCTestCase {
              0x00, 0x00, 0xff, 0x00,
              0x00, 0x42, 0x83, 0x29
            ])
+    )
+  }
+
+  func testV6_fromV4() {
+    let asV4     = IpAddress("80.99.18.166")
+    let v6FromV4 = IpAddress.v6(asV4)
+    XCTAssertEqual(
+      IpAddress(
+        Data([
+               0x00, 0x00, 0x00, 0x00,
+               0x00, 0x00, 0x00, 0x00,
+               0x00, 0x00, 0xFF, 0xFF,
+               80, 99, 18, 166
+             ])
+      ),
+      v6FromV4
     )
   }
 }
