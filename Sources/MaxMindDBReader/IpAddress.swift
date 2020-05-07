@@ -45,17 +45,21 @@ public enum IpAddress: Equatable {
   }
 
   static func v6(_ string: String) -> IpAddress {
-    let inputRawChunks = string.split(separator: ":")
+    if string == "::1" {
+      print(string)
+    }
+    let inputRawChunks = string.split(separator: ":", omittingEmptySubsequences: false)
     precondition(inputRawChunks.count <= 8, "IPv6 strings must have at most 8 bytes defined.")
     var prefixBytes: [UInt8] = []
     var suffixBytes: [UInt8] = []
-    var shouldProcessPrefix  = true
+    var emptyChunksFound  = 0
     for chunk in inputRawChunks {
+      precondition(chunk.count <= 4, "Invalid hexadectet provided : \"\(chunk)\".")
       if chunk.isEmpty {
-        if !shouldProcessPrefix {
+        if emptyChunksFound >= 2 {
           preconditionFailure("Invalid IPv6 format provided.")
         }
-        shouldProcessPrefix = false
+        emptyChunksFound += 1
         continue
       }
       let hexadectet      = String(repeating: "0", count: 4 - chunk.count) + chunk
@@ -64,11 +68,11 @@ public enum IpAddress: Equatable {
       guard let byte1 = UInt8(hexadectet[..<separationIndex], radix: 16) else {
         preconditionFailure("Invalid hexadectet defined: \(hexadectet)")
       }
-      guard let byte2 = UInt8(hexadectet[..<separationIndex], radix: 16) else {
+      guard let byte2 = UInt8(hexadectet[separationIndex...], radix: 16) else {
         preconditionFailure("Invalid hexadectet defined: \(hexadectet)")
       }
 
-      if shouldProcessPrefix {
+      if emptyChunksFound == 0 {
         prefixBytes.append(byte1)
         prefixBytes.append(byte2)
       } else {
