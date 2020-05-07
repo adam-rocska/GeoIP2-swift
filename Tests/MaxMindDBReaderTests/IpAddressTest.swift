@@ -184,4 +184,18 @@ class IpAddressTest: XCTestCase {
       v6FromV4
     )
   }
+
+  func testV4EqualityWithV6() {
+    XCTAssertEqual(
+      IpAddress(
+        Data([
+               0x00, 0x00, 0x00, 0x00,
+               0x00, 0x00, 0x00, 0x00,
+               0x00, 0x00, 0xFF, 0xFF,
+               80, 99, 18, 166
+             ])
+      ),
+      IpAddress("80.99.18.166")
+    )
+  }
 }

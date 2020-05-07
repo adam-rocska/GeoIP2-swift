@@ -147,6 +147,7 @@ public func ==(lhs: IpAddress, rhs: IpAddress) -> Bool {
   switch (lhs, rhs) {
     case let (.v6(a), .v6(b)): return a == b
     case let (.v4(a), .v4(b)): return a == b
-    default: return false
+    case (.v4, .v6): return IpAddress.v6(lhs) == rhs
+    case (.v6, .v4): return IpAddress.v6(rhs) == lhs
   }
 }
