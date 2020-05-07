@@ -105,6 +105,13 @@ class IpAddressTest: XCTestCase {
     )
   }
 
+  func testV6_v4Transformed() {
+    XCTAssertEqual(
+      IpAddress("::ffff:80.99.18.166"),
+      IpAddress("80.99.18.166")
+    )
+  }
+
   func testInit_fromString() {
     XCTAssertEqual(
       IpAddress.v4("80.99.18.166"),

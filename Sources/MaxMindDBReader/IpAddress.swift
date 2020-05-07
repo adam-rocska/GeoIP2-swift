@@ -63,7 +63,24 @@ public enum IpAddress: Equatable {
     var suffixBytes: [UInt8] = []
     var emptyChunksFound     = 0
     for chunk in inputRawChunks {
-      precondition(chunk.count <= 4, "Invalid hexadectet provided : \"\(chunk)\".")
+      if chunk.count > 4 {
+        if chunk.filter({ $0 == "." }).count != 3 {
+          precondition(chunk.count <= 4, "Invalid hexadectet provided : \"\(chunk)\".")
+        }
+        let ipv4 = v4(String(chunk)).data
+        if emptyChunksFound == 0 {
+          prefixBytes.append(ipv4[0])
+          prefixBytes.append(ipv4[1])
+          prefixBytes.append(ipv4[2])
+          prefixBytes.append(ipv4[3])
+        } else {
+          suffixBytes.append(ipv4[0])
+          suffixBytes.append(ipv4[1])
+          suffixBytes.append(ipv4[2])
+          suffixBytes.append(ipv4[3])
+        }
+        continue
+      }
       if chunk.isEmpty {
         if emptyChunksFound >= 2 {
           preconditionFailure("Invalid IPv6 format provided.")
@@ -118,10 +135,10 @@ public enum IpAddress: Equatable {
 
 public extension IpAddress {
   init(_ string: String) {
-    if string.contains(".") {
-      self = IpAddress.v4(string)
-    } else if string.contains(":") {
+    if string.contains(":") {
       self = IpAddress.v6(string)
+    } else if string.contains(".") {
+      self = IpAddress.v4(string)
     } else {
       preconditionFailure("Unrecognized IP Address specification.")
     }
