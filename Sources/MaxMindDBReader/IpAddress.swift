@@ -45,14 +45,11 @@ public enum IpAddress: Equatable {
   }
 
   static func v6(_ string: String) -> IpAddress {
-    if string == "::1" {
-      print(string)
-    }
     let inputRawChunks = string.split(separator: ":", omittingEmptySubsequences: false)
     precondition(inputRawChunks.count <= 8, "IPv6 strings must have at most 8 bytes defined.")
     var prefixBytes: [UInt8] = []
     var suffixBytes: [UInt8] = []
-    var emptyChunksFound  = 0
+    var emptyChunksFound     = 0
     for chunk in inputRawChunks {
       precondition(chunk.count <= 4, "Invalid hexadectet provided : \"\(chunk)\".")
       if chunk.isEmpty {
@@ -107,11 +104,23 @@ public enum IpAddress: Equatable {
 
 }
 
+public extension IpAddress {
+  init(_ string: String) {
+    if string.contains(".") {
+      self = IpAddress.v4(string)
+    } else if string.contains(":") {
+      self = IpAddress.v6(string)
+    } else {
+      preconditionFailure("Unrecognized IP Address specification.")
+    }
+  }
+}
+
 func ==(lhs: IpV6Tuple, rhs: IpV6Tuple) -> Bool {
   return lhs.0 == rhs.0 && lhs.1 == rhs.1 && lhs.2 == rhs.2 && lhs.3 == rhs.3 &&
          lhs.4 == rhs.4 && lhs.5 == rhs.5 && lhs.6 == rhs.6 && lhs.7 == rhs.7 &&
-         lhs.8 == rhs.8 && lhs.9 == rhs.9 && lhs.10 == rhs.1 && lhs.11 == rhs.11 &&
-         lhs.12 == rhs.12 && lhs.13 == rhs.13 && lhs.14 == rhs.1 && lhs.15 == rhs.15
+         lhs.8 == rhs.8 && lhs.9 == rhs.9 && lhs.10 == rhs.10 && lhs.11 == rhs.11 &&
+         lhs.12 == rhs.12 && lhs.13 == rhs.13 && lhs.14 == rhs.14 && lhs.15 == rhs.15
 }
 
 public func ==(lhs: IpAddress, rhs: IpAddress) -> Bool {

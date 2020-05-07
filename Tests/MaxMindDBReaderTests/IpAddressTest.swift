@@ -104,4 +104,31 @@ class IpAddressTest: XCTestCase {
            ])
     )
   }
+
+  func testInit_fromString() {
+    XCTAssertEqual(
+      IpAddress.v4("80.99.18.166"),
+      IpAddress("80.99.18.166")
+    )
+    XCTAssertEqual(
+      IpAddress.v6("0000:0000:0000:0000:0000:0000:0000:0001"),
+      IpAddress("0000:0000:0000:0000:0000:0000:0000:0001")
+    )
+    XCTAssertEqual(
+      IpAddress.v6("::1"),
+      IpAddress("::1")
+    )
+    XCTAssertEqual(
+      IpAddress.v6("2001:0db8:0000:0000:0000:ff00:0042:8329"),
+      IpAddress("2001:0db8:0000:0000:0000:ff00:0042:8329")
+    )
+    XCTAssertEqual(
+      IpAddress.v6("2001:db8:0:0:0:ff00:42:8329"),
+      IpAddress("2001:db8:0:0:0:ff00:42:8329")
+    )
+    XCTAssertEqual(
+      IpAddress.v6("2001:db8::ff00:42:8329"),
+      IpAddress("2001:db8::ff00:42:8329")
+    )
+  }
 }
