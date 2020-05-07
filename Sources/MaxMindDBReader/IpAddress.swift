@@ -8,7 +8,14 @@ typealias IpV6Tuple = (
   UInt8, UInt8, UInt8, UInt8
 )
 
-public enum IpAddress: Equatable {
+public enum IpAddress: Equatable, CustomStringConvertible {
+  public var description: String {
+    switch self {
+      case .v4: return self.data.map({ String($0, radix: 10) }).joined(separator: ".")
+      case .v6: return self.data.map({ String($0, radix: 16) }).joined(separator: ":")
+    }
+  }
+
   case v4(UInt8, UInt8, UInt8, UInt8)
   case v6(
     UInt8, UInt8, UInt8, UInt8,
@@ -130,6 +137,7 @@ public enum IpAddress: Equatable {
       data[12], data[13], data[14], data[15]
     )
   }
+
 
 }
 
