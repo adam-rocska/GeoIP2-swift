@@ -114,6 +114,14 @@ public extension IpAddress {
       preconditionFailure("Unrecognized IP Address specification.")
     }
   }
+
+  init(_ data: Data) {
+    switch data.count {
+      case 4: self = IpAddress.v4(data)
+      case 16: self = IpAddress.v6(data)
+      default: preconditionFailure("Unrecognized IP Address binary.")
+    }
+  }
 }
 
 func ==(lhs: IpV6Tuple, rhs: IpV6Tuple) -> Bool {
