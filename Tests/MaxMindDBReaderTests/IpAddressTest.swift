@@ -35,7 +35,6 @@ class IpAddressTest: XCTestCase {
 
     XCTAssertEqual(fromString, fromBytes)
     XCTAssertEqual(fromString, fromData)
-    XCTAssertEqual(fromString, fromBytes)
     XCTAssertEqual(fromBytes, fromData)
 
     assertV4EqualsTuple((80, 99, 18, 166), fromString)
@@ -46,4 +45,63 @@ class IpAddressTest: XCTestCase {
     XCTAssertEqual(Data([80, 99, 18, 166]), fromData.data)
   }
 
+  func testV6_loopback() {
+    let fromFullString  = IpAddress.v6("0000:0000:0000:0000:0000:0000:0000:0001")
+    let fromShortString = IpAddress.v6("::1")
+    let fromBytes       = IpAddress.v6(
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x01
+    )
+    let expectedData    = Data([
+                                 0x00, 0x00, 0x00, 0x00,
+                                 0x00, 0x00, 0x00, 0x00,
+                                 0x00, 0x00, 0x00, 0x00,
+                                 0x00, 0x00, 0x00, 0x01
+                               ])
+    let fromData        = IpAddress.v6(expectedData)
+
+    XCTAssertEqual(fromFullString, fromShortString)
+    XCTAssertEqual(fromFullString, fromBytes)
+    XCTAssertEqual(fromFullString, fromData)
+    XCTAssertEqual(fromShortString, fromBytes)
+    XCTAssertEqual(fromShortString, fromData)
+    XCTAssertEqual(fromBytes, fromData)
+
+    let expectedTuple: IpV6Tuple = (
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x01
+    )
+    assertV6EqualsTuple(expectedTuple, fromFullString)
+    assertV6EqualsTuple(expectedTuple, fromShortString)
+    assertV6EqualsTuple(expectedTuple, fromBytes)
+    assertV6EqualsTuple(expectedTuple, fromData)
+    XCTAssertEqual(expectedData, fromFullString.data)
+    XCTAssertEqual(expectedData, fromShortString.data)
+    XCTAssertEqual(expectedData, fromBytes.data)
+    XCTAssertEqual(expectedData, fromData.data)
+  }
+
+  func testV6() {
+    let fromFullString      = IpAddress.v6("2001:0db8:0000:0000:0000:ff00:0042:8329")
+    let fromShortenedString = IpAddress.v6("2001:db8:0:0:0:ff00:42:8329")
+    let fromShortestString  = IpAddress.v6("2001:db8::ff00:42:8329")
+    let fromBytes           = IpAddress.v6(
+      0x20, 0x01, 0x0d, 0xb8,
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0xff, 0x00,
+      0x00, 0x42, 0x83, 0x29
+    )
+    let fromData            = IpAddress.v6(
+      Data([
+             0x20, 0x01, 0x0d, 0xb8,
+             0x00, 0x00, 0x00, 0x00,
+             0x00, 0x00, 0xff, 0x00,
+             0x00, 0x42, 0x83, 0x29
+           ])
+    )
+  }
 }
