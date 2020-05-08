@@ -1,9 +1,8 @@
 import Foundation
 
 class MaxMindIterator {
-  public typealias Pointer = Data.Index
-  private let      data:    Data
-  private(set) var pointer: Pointer
+  private let data:    Data
+  private var pointer: Data.Index
   var isExhausted: Bool { get { return data.endIndex == pointer } }
 
   func rewind() { pointer = data.startIndex }
