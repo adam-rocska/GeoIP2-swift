@@ -46,22 +46,11 @@ class MaxMindIteratorTest: XCTestCase {
     XCTAssertEqual(expectedValue, decode(valueBytes), file: file, line: line)
   }
 
-  private func assertRemaining(
-    expectedPointer pointer: MaxMindIterator.Pointer,
-    iterator: MaxMindIterator,
-    of data: Data,
-    file: StaticString = #file,
-    line: UInt = #line
-  ) {
-    XCTAssertEqual(pointer, iterator.pointer, file: file, line: line)
-  }
-
   private func assertMaxMindMetaData(_ iterator: MaxMindIterator, of data: Data) {
     let mainMapByte = iterator.next()
     XCTAssertEqual(DataType.map, mainMapByte?.type)
     XCTAssertEqual(1, mainMapByte?.definitionSize)
     XCTAssertEqual(9, mainMapByte?.payloadSize)
-    assertRemaining(expectedPointer: 1, iterator: iterator, of: data)
 
     assertNext(
       iterator,
@@ -71,7 +60,6 @@ class MaxMindIteratorTest: XCTestCase {
       expectedValue: "binary_format_major_version",
       decoder: decoder.decode
     )
-    assertRemaining(expectedPointer: 29, iterator: iterator, of: data)
 
     assertNext(
       iterator,
@@ -81,7 +69,6 @@ class MaxMindIteratorTest: XCTestCase {
       expectedValue: 2,
       decoder: decoder.decode
     )
-    assertRemaining(expectedPointer: 31, iterator: iterator, of: data)
 
     assertNext(
       iterator,
@@ -91,7 +78,6 @@ class MaxMindIteratorTest: XCTestCase {
       expectedValue: "binary_format_minor_version",
       decoder: decoder.decode
     )
-    assertRemaining(expectedPointer: 59, iterator: iterator, of: data)
 
     assertNext(
       iterator,
@@ -101,7 +87,6 @@ class MaxMindIteratorTest: XCTestCase {
       expectedValue: 0,
       decoder: decoder.decode
     )
-    assertRemaining(expectedPointer: 60, iterator: iterator, of: data)
 
     assertNext(
       iterator,
@@ -111,7 +96,6 @@ class MaxMindIteratorTest: XCTestCase {
       expectedValue: "build_epoch",
       decoder: decoder.decode
     )
-    assertRemaining(expectedPointer: 72, iterator: iterator, of: data)
 
     assertNext(
       iterator,
@@ -121,7 +105,6 @@ class MaxMindIteratorTest: XCTestCase {
       expectedValue: UInt64(1587472614),
       decoder: decoder.decode
     )
-    assertRemaining(expectedPointer: 78, iterator: iterator, of: data)
 
     assertNext(
       iterator,
@@ -131,7 +114,6 @@ class MaxMindIteratorTest: XCTestCase {
       expectedValue: "database_type",
       decoder: decoder.decode
     )
-    assertRemaining(expectedPointer: 92, iterator: iterator, of: data)
 
     assertNext(
       iterator,
@@ -141,7 +123,6 @@ class MaxMindIteratorTest: XCTestCase {
       expectedValue: "GeoLite2-Country",
       decoder: decoder.decode
     )
-    assertRemaining(expectedPointer: 109, iterator: iterator, of: data)
 
     assertNext(
       iterator,
