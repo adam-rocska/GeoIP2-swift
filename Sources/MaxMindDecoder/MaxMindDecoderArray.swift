@@ -1,6 +1,6 @@
 import Foundation
 
-extension MaxMindDecoder {
+public extension MaxMindDecoder {
 
   func decode(_ data: Data, size: Int) -> [Any] {
     guard let iterator = MaxMindIterator(data) else { return [] }

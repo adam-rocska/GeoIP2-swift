@@ -78,10 +78,10 @@ total size is (65,821 + 3,355,443) = 3,421,264.
 This means that the maximum payload size for a single field is 16,843,036
 bytes.
  */
-struct ControlByte {
+public struct ControlByte {
 
-  let type:           DataType
-  let payloadSize:    UInt32
+  public let type:           DataType
+  public let payloadSize:    UInt32
   let definitionSize: UInt8
   let definition:     Data
 

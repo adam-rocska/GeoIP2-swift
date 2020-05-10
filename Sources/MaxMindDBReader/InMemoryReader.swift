@@ -1,4 +1,5 @@
 import Foundation
+import MaxMindDecoder
 
 public class InMemoryReader {
 
@@ -60,10 +61,11 @@ public class InMemoryReader {
     print("================================================")
     let range        = Range(uncheckedBounds: (
       lower: databaseContent.startIndex,
-      upper: databaseContent.limitedIndex(
+      upper: databaseContent.index(
         databaseContent.startIndex,
-        offsetBy: Int(metadata.nodeByteSize) * 2
-      )
+        offsetBy: Int(metadata.nodeByteSize) * 2,
+        limitedBy: databaseContent.endIndex
+      ) ?? databaseContent.endIndex
     ))
     let subdata      = databaseContent.subdata(in: range)
     var count        = 1

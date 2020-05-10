@@ -1,6 +1,6 @@
 import Foundation
 
-extension MaxMindDecoder {
+public extension MaxMindDecoder {
 
   // TODO : Create tests for this piece of 💩
   func decode(_ iterator: MaxMindIterator, as controlByte: ControlByte) -> Any {

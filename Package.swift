@@ -18,8 +18,19 @@ let package = Package(
   dependencies: [],
   targets: [
     .target(
-      name: "MaxMindDBReader",
+      name: "MaxMindDecoder",
       dependencies: [],
+      path: "Sources/MaxMindDecoder"
+    ),
+    .target(
+      name: "Index",
+      dependencies: ["MaxMindDecoder"],
+      path: "Sources/Index"
+    ),
+
+    .target(
+      name: "MaxMindDBReader",
+      dependencies: ["MaxMindDecoder"],
       path: "Sources/MaxMindDBReader"
     ),
     .target(
@@ -36,6 +47,16 @@ let package = Package(
     .testTarget(
       name: "MaxMindDBReaderTests",
       dependencies: ["MaxMindDBReader"]
+    ),
+
+    .testTarget(
+      name: "IndexTests",
+      dependencies: ["Index"]
+    ),
+
+    .testTarget(
+      name: "MaxMindDecoderTests",
+      dependencies: ["MaxMindDecoder"]
     )
   ]
 )

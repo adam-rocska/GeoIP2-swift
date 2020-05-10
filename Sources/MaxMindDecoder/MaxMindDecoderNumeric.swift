@@ -1,6 +1,6 @@
 import Foundation
 
-extension MaxMindDecoder {
+public extension MaxMindDecoder {
 
   private func getLeadingByte(_ data: Data) -> Data.Element? {
     return input == .big ? data.first : data.last
@@ -24,13 +24,21 @@ extension MaxMindDecoder {
     let bounds: (lower: Range<Data.Index>.Bound, upper: Range<Data.Index>.Bound)
     if input == .big {
       bounds = (
-        lower: data.limitedIndex(data.endIndex, offsetBy: -MemoryLayout<T>.size),
+        lower: data.index(
+          data.endIndex,
+          offsetBy: -MemoryLayout<T>.size,
+          limitedBy: data.startIndex
+        ) ?? data.startIndex,
         upper: data.endIndex
       )
     } else {
       bounds = (
         lower: data.startIndex,
-        upper: data.limitedIndex(data.startIndex, offsetBy: MemoryLayout<T>.size)
+        upper: data.index(
+          data.startIndex,
+          offsetBy: MemoryLayout<T>.size,
+          limitedBy: data.endIndex
+        ) ?? data.endIndex
       )
     }
     var wellSizedData: Data = data.subdata(in: Range(uncheckedBounds: bounds))

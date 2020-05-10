@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import MaxMindDBReader
+@testable import MaxMindDecoder
 
 class MaxMindDecoderStringTest: XCTestCase {
   /// TODO: though MaxMindDB is "big endian" as per the docs, it'd be nice to prepare it for little endian utf-8

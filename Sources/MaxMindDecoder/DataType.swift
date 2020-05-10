@@ -128,7 +128,7 @@ point numbers are stored, this type can easily lose precision when serialized
 and then deserialized. If this is an issue for you, consider using a double
 instead.
 */
-enum DataType: UInt8 {
+public enum DataType: UInt8 {
   case pointer            = 1
   case utf8String         = 2
   case double             = 3

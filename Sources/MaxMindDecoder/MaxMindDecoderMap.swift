@@ -1,6 +1,6 @@
 import Foundation
 
-extension MaxMindDecoder {
+public extension MaxMindDecoder {
 
   func decode(_ iterator: MaxMindIterator, size: Int) -> [String: Any] {
     var result: [String: Any] = [:]

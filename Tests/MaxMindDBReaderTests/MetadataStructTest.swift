@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import MaxMindDBReader
+import MaxMindDecoder
 
 fileprivate struct MetadataTestImpl: Metadata {
   let nodeCount:                UInt32

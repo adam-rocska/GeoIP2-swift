@@ -1,4 +1,5 @@
 import Foundation
+import MaxMindDecoder
 
 struct MetadataStruct: Metadata {
   let nodeCount:                UInt32
