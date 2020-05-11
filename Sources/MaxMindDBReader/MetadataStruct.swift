@@ -10,7 +10,7 @@ struct MetadataStruct {
   let binaryFormatMajorVersion: UInt16
   let binaryFormatMinorVersion: UInt16
   let buildEpoch:               UInt64
-  let description:              LanguageToDescription
+  let description:              [String: String]
   var nodeByteSize:             UInt16 { get { return recordSize / 4 } }
   var searchTreeSize:           UInt64 { get { return UInt64(nodeCount * UInt32(nodeByteSize)) } }
 
@@ -29,7 +29,7 @@ struct MetadataStruct {
     guard let majorVersion = decoded["binary_format_major_version"] as? UInt16 else { return nil }
     guard let minorVersion = decoded["binary_format_minor_version"] as? UInt16 else { return nil }
     guard let buildEpoch = decoded["build_epoch"] as? UInt64 else { return nil }
-    guard let description = decoded["description"] as? LanguageToDescription else { return nil }
+    guard let description = decoded["description"] as? [String: String] else { return nil }
 
     self.nodeCount = nodeCount
     self.recordSize = recordSize

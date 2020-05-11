@@ -1,7 +1,5 @@
 import Foundation
 
-public typealias LanguageToDescription = [String: String]
-
 public protocol Metadata {
 
   var nodeCount:                UInt32 { get }
@@ -12,7 +10,7 @@ public protocol Metadata {
   var binaryFormatMajorVersion: UInt16 { get }
   var binaryFormatMinorVersion: UInt16 { get }
   var buildEpoch:               UInt64 { get }
-  var description:              LanguageToDescription { get }
+  var description:              [String:String] { get }
   var nodeByteSize:             UInt16 { get }
   var searchTreeSize:           UInt64 { get }
 
