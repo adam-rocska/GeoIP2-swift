@@ -1,12 +1,12 @@
 import Foundation
 import XCTest
-@testable import MaxMindDBReader
+@testable import Metadata
 import MaxMindDecoder
 
-class MetadataStructTest: XCTestCase {
+class MetadataTest: XCTestCase {
 
   private func assertCalculatedValues(
-    _ metadata: MetadataStruct,
+    _ metadata: Metadata,
     file: StaticString = #file,
     line: UInt = #line
   ) {
@@ -17,21 +17,21 @@ class MetadataStructTest: XCTestCase {
   }
 
   func testInit_nilIfCantCreateIterator() {
-    XCTAssertNil(MetadataStruct(Data()))
+    XCTAssertNil(Metadata(Data()))
   }
 
   func testInit_nilIfCantFetchFirstControlByte() {
     let data = Data([0b0000_1111])
-    XCTAssertNil(MetadataStruct(data))
+    XCTAssertNil(Metadata(data))
   }
 
   func testInit_nilIfFirstControlByteIsNotMap() {
     let data = Data([0b0010_1111])
-    XCTAssertNil(MetadataStruct(data))
+    XCTAssertNil(Metadata(data))
   }
 
   func testInit_withBinary() {
-    guard let metadata = MetadataStruct(binaryMetaData) else {
+    guard let metadata = Metadata(binaryMetaData) else {
       XCTFail("Input binary is valid. Should have constructed a proper struct.")
       return
     }
@@ -55,7 +55,7 @@ class MetadataStructTest: XCTestCase {
       XCTFail("Input binary is valid. Should have constructed a proper MaxMindIterator.")
       return
     }
-    guard let metadata = MetadataStruct(iterator) else {
+    guard let metadata = Metadata(iterator) else {
       XCTFail("Input binary is valid. Should have constructed a proper struct.")
       return
     }

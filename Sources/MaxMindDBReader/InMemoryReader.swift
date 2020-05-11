@@ -1,6 +1,7 @@
 import Foundation
 import MaxMindDecoder
 import Index
+import Metadata
 
 public class InMemoryReader {
 
@@ -10,7 +11,7 @@ public class InMemoryReader {
 
   private let databaseContent: Data
   private let indexRange:      Range<Data.Index>
-  let metadata: MetadataStruct
+  let metadata: Metadata
 
   public init(data: Data) throws {
     databaseContent = data
@@ -30,7 +31,7 @@ public class InMemoryReader {
       upper: databaseContent.endIndex
     ))
     let rawMetadata   = databaseContent.subdata(in: metadataRange)
-    guard let metadata = MetadataStruct(rawMetadata) else {
+    guard let metadata = Metadata(rawMetadata) else {
       throw ReaderError.corruptMetadata
     }
 
