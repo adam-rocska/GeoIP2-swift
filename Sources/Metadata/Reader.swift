@@ -9,10 +9,12 @@ public class Reader {
 
   let readBufferSize: Int
   let windowSize:     Int
+  private let markerLookup: MarkerLookup
 
   public init(windowSize: Int) {
     self.windowSize = windowSize
     self.readBufferSize = windowSize / 2
+    self.markerLookup = MarkerLookup(marker: Reader.metadataStartMarker)
   }
 
 //  public func read(_ stream: InputStream) -> Metadata {
