@@ -22,23 +22,24 @@ public class Reader {
     stream.open()
     defer { stream.close() }
 
-    var window: [Data] = []
-    let buffer         = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
+    let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
     defer { buffer.deallocate() }
 
     var metadataSection: Data? = nil
+    var previousData:    Data? = nil
 
     while stream.hasBytesAvailable {
-      let read = stream.read(buffer, maxLength: bufferSize)
-      if window.count == 2 { window.removeFirst() }
-      window.append(Data(bytes: buffer, count: read))
-      if window.count != 2 { continue }
-      let dataChain = window[0] + window[1]
-      metadataSection?.append(dataChain)
-      if let idx = markerLookup.lastOccurrenceIn(dataChain) {
-        metadataSection = Data(capacity: Reader.maximumMetadataSize)
-        metadataSection?.append(dataChain[idx...])
+      let read        = stream.read(buffer, maxLength: bufferSize)
+      let currentData = Data(bytes: buffer, count: read)
+      if previousData != nil {
+        let dataChain:Data = previousData! + currentData
+        metadataSection?.append(dataChain)
+        if let idx = markerLookup.lastOccurrenceIn(dataChain) {
+          metadataSection = Data(capacity: Reader.maximumMetadataSize)
+          metadataSection?.append(dataChain[idx...])
+        }
       }
+      previousData = currentData
     }
 
     print(metadataSection)
