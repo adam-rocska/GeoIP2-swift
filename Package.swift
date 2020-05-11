@@ -27,6 +27,11 @@ let package = Package(
       dependencies: ["MaxMindDecoder"],
       path: "Sources/Index"
     ),
+    .target(
+      name: "Metadata",
+      dependencies: ["MaxMindDecoder"],
+      path: "Sources/Metadata"
+    ),
 
     .target(
       name: "MaxMindDBReader",
@@ -52,6 +57,11 @@ let package = Package(
     .testTarget(
       name: "IndexTests",
       dependencies: ["Index"]
+    ),
+
+    .testTarget(
+      name: "MetadataTests",
+      dependencies: ["Metadata"]
     ),
 
     .testTarget(

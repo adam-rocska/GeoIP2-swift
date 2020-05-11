@@ -3,58 +3,17 @@ import XCTest
 @testable import MaxMindDBReader
 import MaxMindDecoder
 
-fileprivate struct MetadataTestImpl: Metadata {
-  let nodeCount:                UInt32
-  let recordSize:               UInt16
-  let ipVersion:                UInt16                = 4
-  let databaseType:             String                = ""
-  let languages:                [String]              = [""]
-  let binaryFormatMajorVersion: UInt16                = 1
-  let binaryFormatMinorVersion: UInt16                = 3
-  let buildEpoch:               UInt64                = 1588065718
-  let description:              LanguageToDescription = [:]
-}
-
 class MetadataStructTest: XCTestCase {
 
-  private func assertCalculatedValues(nodeCount: UInt32, recordSize: UInt16) {
-    let expectedNodeByteSize: UInt16 = recordSize / 4
-    let expectedSearchTreeSize       = UInt64(nodeCount * UInt32(expectedNodeByteSize))
-    XCTAssertEqual(
-      expectedNodeByteSize,
-      MetadataTestImpl(
-        nodeCount: nodeCount,
-        recordSize: recordSize
-      ).nodeByteSize
-    )
-    XCTAssertEqual(
-      expectedSearchTreeSize,
-      MetadataTestImpl(
-        nodeCount: nodeCount,
-        recordSize: recordSize
-      ).searchTreeSize
-    )
-  }
-
-  func testCalculatedValues() {
-    assertCalculatedValues(nodeCount: 3, recordSize: 3)
-    assertCalculatedValues(nodeCount: 3, recordSize: 10)
-    assertCalculatedValues(nodeCount: 3, recordSize: 100)
-    assertCalculatedValues(nodeCount: 3, recordSize: 1000)
-    assertCalculatedValues(nodeCount: 3, recordSize: 1000)
-    assertCalculatedValues(nodeCount: 3, recordSize: 10000)
-    assertCalculatedValues(nodeCount: 5, recordSize: 3)
-    assertCalculatedValues(nodeCount: 5, recordSize: 10)
-    assertCalculatedValues(nodeCount: 5, recordSize: 100)
-    assertCalculatedValues(nodeCount: 5, recordSize: 1000)
-    assertCalculatedValues(nodeCount: 5, recordSize: 1000)
-    assertCalculatedValues(nodeCount: 5, recordSize: 10000)
-    assertCalculatedValues(nodeCount: 500, recordSize: 3)
-    assertCalculatedValues(nodeCount: 500, recordSize: 10)
-    assertCalculatedValues(nodeCount: 500, recordSize: 100)
-    assertCalculatedValues(nodeCount: 500, recordSize: 1000)
-    assertCalculatedValues(nodeCount: 500, recordSize: 1000)
-    assertCalculatedValues(nodeCount: 500, recordSize: 10000)
+  private func assertCalculatedValues(
+    _ metadata: MetadataStruct,
+    file: StaticString = #file,
+    line: UInt = #line
+  ) {
+    let expectedNodeByteSize: UInt16 = metadata.recordSize / 4
+    let expectedSearchTreeSize       = UInt64(metadata.nodeCount * UInt32(expectedNodeByteSize))
+    XCTAssertEqual(expectedNodeByteSize, metadata.nodeByteSize, file: file, line: line)
+    XCTAssertEqual(expectedSearchTreeSize, metadata.searchTreeSize, file: file, line: line)
   }
 
   func testInit_nilIfCantCreateIterator() {
@@ -88,6 +47,7 @@ class MetadataStructTest: XCTestCase {
     XCTAssertEqual(["en": "GeoLite2 Country database"], metadata.description)
     XCTAssertEqual(6, metadata.nodeByteSize)
     XCTAssertEqual(3710754, metadata.searchTreeSize)
+    assertCalculatedValues(metadata)
   }
 
   func testInit_withIterator() {
@@ -111,6 +71,7 @@ class MetadataStructTest: XCTestCase {
     XCTAssertEqual(["en": "GeoLite2 Country database"], metadata.description)
     XCTAssertEqual(6, metadata.nodeByteSize)
     XCTAssertEqual(3710754, metadata.searchTreeSize)
+    assertCalculatedValues(metadata)
   }
 
 }

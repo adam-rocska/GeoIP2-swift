@@ -17,8 +17,3 @@ public protocol Metadata {
   var searchTreeSize:           UInt64 { get }
 
 }
-
-public extension Metadata {
-  var nodeByteSize:   UInt16 { get { return recordSize / 4 } }
-  var searchTreeSize: UInt64 { get { return UInt64(nodeCount * UInt32(nodeByteSize)) } }
-}

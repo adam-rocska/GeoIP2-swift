@@ -10,7 +10,7 @@ public class InMemoryReader {
 
   private let databaseContent: Data
   private let indexRange:      Range<Data.Index>
-  let metadata: Metadata
+  let metadata: MetadataStruct
 
   public init(data: Data) throws {
     databaseContent = data

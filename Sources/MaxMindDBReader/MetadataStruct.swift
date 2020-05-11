@@ -1,7 +1,7 @@
 import Foundation
 import MaxMindDecoder
 
-struct MetadataStruct: Metadata {
+struct MetadataStruct {
   let nodeCount:                UInt32
   let recordSize:               UInt16
   let ipVersion:                UInt16
@@ -11,6 +11,8 @@ struct MetadataStruct: Metadata {
   let binaryFormatMinorVersion: UInt16
   let buildEpoch:               UInt64
   let description:              LanguageToDescription
+  var nodeByteSize:             UInt16 { get { return recordSize / 4 } }
+  var searchTreeSize:           UInt64 { get { return UInt64(nodeCount * UInt32(nodeByteSize)) } }
 
   init?(_ iterator: MaxMindIterator) {
     guard let mapControlByte = iterator.next() else { return nil }
