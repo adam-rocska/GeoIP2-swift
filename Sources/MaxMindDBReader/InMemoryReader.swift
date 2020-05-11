@@ -1,5 +1,6 @@
 import Foundation
 import MaxMindDecoder
+import Index
 
 public class InMemoryReader {
 

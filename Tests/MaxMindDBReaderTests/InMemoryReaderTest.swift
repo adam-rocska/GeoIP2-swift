@@ -1,5 +1,6 @@
 import Foundation
 import XCTest
+import Index
 @testable import MaxMindDBReader
 
 class InMemoryReaderTest: XCTestCase {

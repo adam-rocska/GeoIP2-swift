@@ -30,7 +30,7 @@ let package = Package(
 
     .target(
       name: "MaxMindDBReader",
-      dependencies: ["MaxMindDecoder"],
+      dependencies: ["Index", "MaxMindDecoder"],
       path: "Sources/MaxMindDBReader"
     ),
     .target(

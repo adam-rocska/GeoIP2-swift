@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import MaxMindDBReader
+@testable import Index
 
 class IpAddressTest: XCTestCase {
 
