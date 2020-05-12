@@ -52,9 +52,7 @@ public class Reader {
 
     if metadataSection == nil { return nil }
 
-    let metadata = Metadata(metadataSection!)
-
-    return nil
+    return decode(metadataSection!)
   }
 
 }

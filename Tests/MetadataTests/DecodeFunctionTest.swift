@@ -3,78 +3,44 @@ import XCTest
 @testable import Metadata
 import MaxMindDecoder
 
-class MetadataTest: XCTestCase {
-
-  private func assertCalculatedValues(
-    _ metadata: Metadata,
-    file: StaticString = #file,
-    line: UInt = #line
-  ) {
-    let expectedNodeByteSize: UInt16 = metadata.recordSize / 4
-    let expectedSearchTreeSize       = UInt64(metadata.nodeCount * UInt32(expectedNodeByteSize))
-    XCTAssertEqual(expectedNodeByteSize, metadata.nodeByteSize, file: file, line: line)
-    XCTAssertEqual(expectedSearchTreeSize, metadata.searchTreeSize, file: file, line: line)
-  }
+class DecodeFunctionTest: XCTestCase {
 
   func testInit_nilIfCantCreateIterator() {
-    XCTAssertNil(Metadata(Data()))
+    XCTAssertNil(decode(Data()))
   }
 
   func testInit_nilIfCantFetchFirstControlByte() {
     let data = Data([0b0000_1111])
-    XCTAssertNil(Metadata(data))
+    XCTAssertNil(decode(data))
   }
 
   func testInit_nilIfFirstControlByteIsNotMap() {
     let data = Data([0b0010_1111])
-    XCTAssertNil(Metadata(data))
+    XCTAssertNil(decode(data))
   }
 
   func testInit_withBinary() {
-    guard let metadata = Metadata(binaryMetaData) else {
+    guard let metadata = decode(binaryMetaData) else {
       XCTFail("Input binary is valid. Should have constructed a proper struct.")
       return
     }
 
-    XCTAssertEqual(618459, metadata.nodeCount)
-    XCTAssertEqual(24, metadata.recordSize)
-    XCTAssertEqual(6, metadata.ipVersion)
-    XCTAssertEqual("GeoLite2-Country", metadata.databaseType)
-    XCTAssertEqual(["de", "en", "es", "fr", "ja", "pt-BR", "ru", "zh-CN"], metadata.languages)
-    XCTAssertEqual(2, metadata.binaryFormatMajorVersion)
-    XCTAssertEqual(0, metadata.binaryFormatMinorVersion)
-    XCTAssertEqual(1587472614, metadata.buildEpoch)
-    XCTAssertEqual(["en": "GeoLite2 Country database"], metadata.description)
-    XCTAssertEqual(6, metadata.nodeByteSize)
-    XCTAssertEqual(3710754, metadata.searchTreeSize)
-    assertCalculatedValues(metadata)
-  }
-
-  func testInit_withIterator() {
-    guard let iterator = MaxMindIterator(binaryMetaData) else {
-      XCTFail("Input binary is valid. Should have constructed a proper MaxMindIterator.")
-      return
-    }
-    guard let metadata = Metadata(iterator) else {
-      XCTFail("Input binary is valid. Should have constructed a proper struct.")
-      return
-    }
-
-    XCTAssertEqual(618459, metadata.nodeCount)
-    XCTAssertEqual(24, metadata.recordSize)
-    XCTAssertEqual(6, metadata.ipVersion)
-    XCTAssertEqual("GeoLite2-Country", metadata.databaseType)
-    XCTAssertEqual(["de", "en", "es", "fr", "ja", "pt-BR", "ru", "zh-CN"], metadata.languages)
-    XCTAssertEqual(2, metadata.binaryFormatMajorVersion)
-    XCTAssertEqual(0, metadata.binaryFormatMinorVersion)
-    XCTAssertEqual(1587472614, metadata.buildEpoch)
-    XCTAssertEqual(["en": "GeoLite2 Country database"], metadata.description)
-    XCTAssertEqual(6, metadata.nodeByteSize)
-    XCTAssertEqual(3710754, metadata.searchTreeSize)
-    assertCalculatedValues(metadata)
+    XCTAssertEqual(expectedMetaData, metadata)
   }
 
 }
+
+fileprivate let expectedMetaData = Metadata(
+  nodeCount: 618459,
+  recordSize: 24,
+  ipVersion: 6,
+  databaseType: "GeoLite2-Country",
+  languages: ["de", "en", "es", "fr", "ja", "pt-BR", "ru", "zh-CN"],
+  binaryFormatMajorVersion: 2,
+  binaryFormatMinorVersion: 0,
+  buildEpoch: 1587472614,
+  description: ["en": "GeoLite2 Country database"]
+)
 
 fileprivate let binaryMetaData = Data(
   [
