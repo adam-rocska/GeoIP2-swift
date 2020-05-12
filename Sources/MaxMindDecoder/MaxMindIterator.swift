@@ -20,8 +20,8 @@ public class MaxMindIterator {
         upper: data.index(
           pointer,
           offsetBy: 5,
-          limitedBy: data.endIndex
-        ) ?? data.endIndex
+          limitedBy: data.index(before: data.endIndex)
+        ) ?? data.index(before: data.endIndex)
       ))
       if range.lowerBound == range.upperBound { break }
 
@@ -29,8 +29,8 @@ public class MaxMindIterator {
         pointer = data.index(
           pointer,
           offsetBy: Int(controlByte.definitionSize),
-          limitedBy: data.endIndex
-        ) ?? data.endIndex
+          limitedBy: data.index(before: data.endIndex)
+        ) ?? data.index(before: data.endIndex)
         return controlByte
       }
       pointer = data.index(after: pointer)
