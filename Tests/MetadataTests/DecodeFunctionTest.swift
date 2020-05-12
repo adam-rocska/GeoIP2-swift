@@ -26,6 +26,8 @@ class DecodeFunctionTest: XCTestCase {
     }
 
     XCTAssertEqual(expectedMetaData, metadata)
+    XCTAssertEqual(expectedMetaData.nodeByteSize, metadata.nodeByteSize)
+    XCTAssertEqual(expectedMetaData.searchTreeSize, metadata.searchTreeSize)
   }
 
 }
