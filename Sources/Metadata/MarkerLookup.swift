@@ -1,7 +1,7 @@
 import Foundation
 
 class MarkerLookup {
-  private let marker:    Data
+  let marker:    Data
   private let skipTable: [UInt8: Int]
 
   init(marker: Data) {

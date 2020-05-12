@@ -1,4 +1,5 @@
 import Foundation
+import MaxMindDecoder
 
 public class Reader {
 
@@ -25,24 +26,33 @@ public class Reader {
     let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
     defer { buffer.deallocate() }
 
-    var metadataSection: Data? = nil
-    var previousData:    Data? = nil
+    var metadataSection: Data?       = nil
+    var previousData:    Data?       = nil
+    var pIdx:            Data.Index? = nil
 
     while stream.hasBytesAvailable {
       let read        = stream.read(buffer, maxLength: bufferSize)
       let currentData = Data(bytes: buffer, count: read)
-      if previousData != nil {
-        let dataChain:Data = previousData! + currentData
-        metadataSection?.append(dataChain)
-        if let idx = markerLookup.lastOccurrenceIn(dataChain) {
-          metadataSection = Data(capacity: Reader.maximumMetadataSize)
-          metadataSection?.append(dataChain[idx...])
-        }
-      }
-      previousData = currentData
+      defer { previousData = currentData }
+      if previousData == nil { continue }
+
+      let dataChain: Data = previousData! + currentData
+      metadataSection?.append(currentData)
+
+      guard let idx = markerLookup.lastOccurrenceIn(dataChain) else { continue }
+      if pIdx != nil && (pIdx! - bufferSize) == idx { continue }
+      pIdx = idx
+      metadataSection = Data(capacity: Reader.maximumMetadataSize)
+      let metadataSliceStart = dataChain.index(
+        idx,
+        offsetBy: markerLookup.marker.count
+      )
+      metadataSection?.append(dataChain[metadataSliceStart...])
     }
 
-    print(metadataSection)
+    if metadataSection == nil { return nil }
+
+    let metadata = Metadata(metadataSection!)
 
     return nil
   }
