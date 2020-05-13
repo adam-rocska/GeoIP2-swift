@@ -95,9 +95,7 @@ public enum IpAddress: Equatable, CustomStringConvertible {
         continue
       }
       if chunk.isEmpty {
-        if emptyChunksFound >= 2 {
-          preconditionFailure("Invalid IPv6 format provided.")
-        }
+        precondition(emptyChunksFound <= 2, "Invalid IPv6 format provided : \(string)")
         emptyChunksFound += 1
         continue
       }
@@ -143,7 +141,6 @@ public enum IpAddress: Equatable, CustomStringConvertible {
       data[12], data[13], data[14], data[15]
     )
   }
-
 
 }
 
