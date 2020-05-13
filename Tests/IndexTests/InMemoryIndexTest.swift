@@ -27,6 +27,7 @@ class InMemoryIndexTest: XCTestCase {
 
     print(index.lookup(.v4("80.99.18.166")))
     print(index.lookup(.v4("202.108.22.220")))
+    print(index.lookup(.v4("0.0.0.0")))
   }
 
 }

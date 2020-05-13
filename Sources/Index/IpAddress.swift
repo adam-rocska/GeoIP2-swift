@@ -54,7 +54,7 @@ public enum IpAddress: Equatable, CustomStringConvertible {
   static func v4(_ string: String) -> IpAddress {
     let rawChunks = string.split(separator: ".").compactMap({ Int($0) })
     precondition(rawChunks.count == 4, "IPv4 strings must have 4, and only 4 bytes defined.")
-    precondition(rawChunks.allSatisfy({ $0 > 0 && $0 < 256 }), "All IPv4 bytes must be valid unsigned 8 bit values.")
+    precondition(rawChunks.allSatisfy({ $0 >= 0 && $0 < 256 }), "All IPv4 bytes must be valid unsigned 8 bit values.")
     let bytes = rawChunks.map({ UInt8($0) })
     return v4(bytes[0], bytes[1], bytes[2], bytes[3])
   }
