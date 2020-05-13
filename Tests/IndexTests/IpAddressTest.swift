@@ -206,8 +206,8 @@ class IpAddressTest: XCTestCase {
   }
 
   func testV4EqualityWithV6() {
-    let v4         = IpAddress("80.99.18.166")
-    let v6ByData   = IpAddress(
+    let v4                  = IpAddress("80.99.18.166")
+    let v6ByData            = IpAddress(
       Data([
              0x00, 0x00, 0x00, 0x00,
              0x00, 0x00, 0x00, 0x00,
@@ -216,9 +216,21 @@ class IpAddressTest: XCTestCase {
            ])
     )
     let v6ByStringShortened = IpAddress("::ffff:80.99.18.166")
-    let v6ByStringFull = IpAddress("0000:0000:0000:0000:0000:ffff:80.99.18.166")
+    let v6ByStringFull      = IpAddress("0000:0000:0000:0000:0000:ffff:80.99.18.166")
     XCTAssertEqual(v4, v6ByData)
     XCTAssertEqual(v4, v6ByStringShortened)
     XCTAssertEqual(v4, v6ByStringFull)
   }
+
+  func testDescription() {
+    XCTAssertEqual(
+      "0000:0000:0000:0000:0000:ffff:5063:12a6",
+      IpAddress("0000:0000:0000:0000:0000:ffff:80.99.18.166").description
+    )
+    XCTAssertEqual("0000:0000:0000:0000:0000:ffff:5063:12a6", IpAddress("::ffff:80.99.18.166").description)
+    XCTAssertEqual("0000:0000:0000:0000:0000:ffff:5063:12a6", IpAddress.v6(IpAddress("80.99.18.166")).description)
+
+    XCTAssertEqual("192.168.6.1", IpAddress("192.168.6.1").description)
+  }
+
 }

@@ -12,7 +12,19 @@ public enum IpAddress: Equatable, CustomStringConvertible {
   public var description: String {
     switch self {
       case .v4: return self.data.map({ String($0, radix: 10) }).joined(separator: ".")
-      case .v6: return self.data.map({ String($0, radix: 16) }).joined(separator: ":")
+      case .v6:
+        let bytes: [String] = self.data
+          .map({ String($0, radix: 16) })
+          .map({ String(repeating: "0", count: 2 - $0.count) + $0 })
+
+        var result     = ""
+        var bytesAdded = 0
+        for byte in bytes {
+          result += byte
+          bytesAdded += 1
+          if bytesAdded % 2 == 0 && bytesAdded != 16 { result += ":" }
+        }
+        return result
     }
   }
 
