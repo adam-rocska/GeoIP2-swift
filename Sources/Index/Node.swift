@@ -1,7 +1,7 @@
 import Foundation
 import MaxMindDecoder
 
-struct Node<Record> where Record: UnsignedInteger, Record: FixedWidthInteger {
+struct Node<Record>: Equatable where Record: UnsignedInteger, Record: FixedWidthInteger {
 
   let left:  Record
   let right: Record
@@ -44,7 +44,9 @@ struct Node<Record> where Record: UnsignedInteger, Record: FixedWidthInteger {
     }
 
     let decoder = MaxMindDecoder(inputEndianness: .big)
-    self.left = decoder.decode(leftData) as Record
-    self.right = decoder.decode(rightData) as Record
+    self.init(
+      left: decoder.decode(leftData) as Record,
+      right: decoder.decode(rightData) as Record
+    )
   }
 }

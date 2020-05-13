@@ -26,6 +26,7 @@ class NodeTest: XCTestCase {
         file: file,
         line: line
       )
+      XCTAssertEqual(Node(left: left, right: right), node)
     }
   }
 
