@@ -1,15 +1,11 @@
 import Foundation
+import Metadata
 
-public class Index {
-  private let tree: Tree
+public protocol Index {
 
-  init(recordSize: UInt16, nodeCount: UInt32, nodeByteSize: UInt16, data: Data) {
-    self.tree = Tree(
-      recordSize: recordSize,
-      nodeCount: nodeCount,
-      nodeByteSize: nodeByteSize,
-      data: data
-    )
-  }
+  associatedtype Pointer where Pointer: UnsignedInteger, Pointer: FixedWidthInteger
 
+  init(metadata: Metadata, stream: @autoclosure () -> InputStream)
+
+  func lookup(_ ip: IpAddress) -> Pointer?
 }
