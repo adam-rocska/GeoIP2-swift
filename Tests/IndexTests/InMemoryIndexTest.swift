@@ -25,10 +25,12 @@ class InMemoryIndexTest: XCTestCase {
       stream: InputStream(fileAtPath: InMemoryIndexTest.countryFilePath)!
     )
 
-    XCTAssertEqual(628171, index.lookup(.v4("80.99.18.166")))
-    XCTAssertEqual(618846, index.lookup(.v4("202.108.22.220")))
-    XCTAssertNil(index.lookup(.v4("0.0.0.0")))
-    XCTAssertNil(index.lookup(.v4("255.255.255.255")))
+    XCTAssertEqual(628171, index.lookup(IpAddress("80.99.18.166")))
+    XCTAssertEqual(618846, index.lookup(IpAddress("202.108.22.220")))
+    XCTAssertNil(index.lookup(IpAddress("0.0.0.0")))
+    XCTAssertNil(index.lookup(IpAddress("255.255.255.255")))
+    XCTAssertNil(index.lookup(IpAddress("2001:db8::8a2e:370:7334")))
+    XCTAssertEqual(627015, index.lookup(IpAddress("2001:428:4c06:f000::280")))
   }
 
 }

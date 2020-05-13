@@ -14,11 +14,7 @@ public class InMemoryIndex<Pointer>: Index where Pointer: UnsignedInteger, Point
   required public convenience init(metadata: Metadata, stream createStream: @autoclosure () -> InputStream) {
     precondition(
       metadata.recordSize < (MemoryLayout<Pointer>.size * 8),
-      """
-      The byte size of a record described by the metadata won't fit the memory layout of type \(Pointer.self).
-      : Metadata Record Size : \(metadata.recordSize) bits
-      : Memory Layout Size of \(Pointer.self) : \(MemoryLayout<Pointer>.size) bytes.\n
-      """
+      "Can't fit record size of \(metadata.recordSize) bits in \(Pointer.self)'s \(MemoryLayout<Pointer>.size) bytes."
     )
     let stream = createStream()
     precondition(stream.streamStatus == Stream.Status.notOpen, "should have provided an untouched stream.")
@@ -69,7 +65,6 @@ public class InMemoryIndex<Pointer>: Index where Pointer: UnsignedInteger, Point
         return pointer
       }
     }
-
     return nil
   }
 
