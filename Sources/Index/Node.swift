@@ -12,7 +12,7 @@ struct Node<Record> where Record: UnsignedInteger, Record: FixedWidthInteger {
   }
 
   init(_ data: Data) {
-    precondition(!data.isEmpty)
+    precondition(!data.isEmpty, "Binary representation of Node can't be empty.")
     var leftData:  Data
     var rightData: Data
     let leftRange = Range(uncheckedBounds: (

@@ -16,6 +16,14 @@ public enum IpAddress: Equatable, CustomStringConvertible {
     }
   }
 
+  // utility property to help IP Address to metadata matching, because of the php scripter style design of the db & its metadata
+  internal var version: UInt16 {
+    switch self {
+      case .v4: return 4
+      case .v6: return 6
+    }
+  }
+
   case v4(UInt8, UInt8, UInt8, UInt8)
   case v6(
     UInt8, UInt8, UInt8, UInt8,
