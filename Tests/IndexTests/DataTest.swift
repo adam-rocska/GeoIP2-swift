@@ -3,11 +3,6 @@ import XCTest
 @testable import Index
 
 class DataTest: XCTestCase {
-  func testChunked_chunkSizeSmallerOrEqualToDataSize() {
-    let data = Data([12, 34])
-    XCTAssertEqual([data], data.chunked(into: 3))
-    XCTAssertEqual([data], data.chunked(into: 2))
-  }
 
   func testChunked() {
     let data    = Data([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
@@ -19,4 +14,5 @@ class DataTest: XCTestCase {
     XCTAssertEqual(Data([9, 10]), chunked[4])
     XCTAssertEqual(5, chunked.count)
   }
+
 }
