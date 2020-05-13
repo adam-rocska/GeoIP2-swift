@@ -215,8 +215,10 @@ class IpAddressTest: XCTestCase {
              80, 99, 18, 166
            ])
     )
-    let v6ByString = IpAddress("::ffff:80.99.18.166")
+    let v6ByStringShortened = IpAddress("::ffff:80.99.18.166")
+    let v6ByStringFull = IpAddress("0000:0000:0000:0000:0000:ffff:80.99.18.166")
     XCTAssertEqual(v4, v6ByData)
-    XCTAssertEqual(v4, v6ByString)
+    XCTAssertEqual(v4, v6ByStringShortened)
+    XCTAssertEqual(v4, v6ByStringFull)
   }
 }
