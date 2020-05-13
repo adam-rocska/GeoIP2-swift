@@ -103,16 +103,6 @@ class IpAddressTest: XCTestCase {
              0x00, 0x42, 0x83, 0x29
            ])
     )
-    XCTAssertEqual(fromFullString, fromShortenedString)
-    XCTAssertEqual(fromFullString, fromShortestString)
-    XCTAssertEqual(fromFullString, fromBytes)
-    XCTAssertEqual(fromFullString, fromData)
-    XCTAssertEqual(fromShortenedString, fromShortestString)
-    XCTAssertEqual(fromShortenedString, fromBytes)
-    XCTAssertEqual(fromShortenedString, fromData)
-    XCTAssertEqual(fromShortestString, fromBytes)
-    XCTAssertEqual(fromShortestString, fromData)
-    XCTAssertEqual(fromBytes, fromData)
   }
 
   func testV6_v4Transformed() {
@@ -184,21 +174,6 @@ class IpAddressTest: XCTestCase {
              0x00, 0x42, 0x83, 0x29
            ])
     )
-    XCTAssertEqual(v4Direct, v6LoopbackDirect)
-    XCTAssertEqual(v4Direct, v6Direct)
-    XCTAssertEqual(v4Direct, v4ViaInit)
-    XCTAssertEqual(v4Direct, v6LoopbackViaInit)
-    XCTAssertEqual(v4Direct, v6ViaInit)
-    XCTAssertEqual(v6LoopbackDirect, v6Direct)
-    XCTAssertEqual(v6LoopbackDirect, v4ViaInit)
-    XCTAssertEqual(v6LoopbackDirect, v6LoopbackViaInit)
-    XCTAssertEqual(v6LoopbackDirect, v6ViaInit)
-    XCTAssertEqual(v6Direct, v4ViaInit)
-    XCTAssertEqual(v6Direct, v6LoopbackViaInit)
-    XCTAssertEqual(v6Direct, v6ViaInit)
-    XCTAssertEqual(v4ViaInit, v6LoopbackViaInit)
-    XCTAssertEqual(v4ViaInit, v6ViaInit)
-    XCTAssertEqual(v6LoopbackViaInit, v6ViaInit)
   }
 
   func testV6_fromV4() {
