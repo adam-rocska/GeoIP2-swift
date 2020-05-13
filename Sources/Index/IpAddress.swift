@@ -114,19 +114,18 @@ public enum IpAddress: Equatable, CustomStringConvertible {
       let hexadectet      = String(repeating: "0", count: 4 - chunk.count) + chunk
       let separationIndex = hexadectet.index(hexadectet.startIndex, offsetBy: 2)
 
-      guard let byte1 = UInt8(hexadectet[..<separationIndex], radix: 16) else {
-        preconditionFailure("Invalid hexadectet defined: \(hexadectet)")
-      }
-      guard let byte2 = UInt8(hexadectet[separationIndex...], radix: 16) else {
-        preconditionFailure("Invalid hexadectet defined: \(hexadectet)")
-      }
+      let byte1 = UInt8(hexadectet[..<separationIndex], radix: 16)
+      precondition(byte1 != nil, "Invalid hexadectet \"\(hexadectet)\" in ip : \(string)")
+      let byte2 = UInt8(hexadectet[separationIndex...], radix: 16)
+      precondition(byte2 != nil, "Invalid hexadectet \"\(hexadectet)\" in ip : \(string)")
+
 
       if emptyChunksFound == 0 {
-        prefixBytes.append(byte1)
-        prefixBytes.append(byte2)
+        prefixBytes.append(byte1!)
+        prefixBytes.append(byte2!)
       } else {
-        suffixBytes.append(byte1)
-        suffixBytes.append(byte2)
+        suffixBytes.append(byte1!)
+        suffixBytes.append(byte2!)
       }
     }
 
