@@ -79,9 +79,7 @@ public enum IpAddress: Equatable, CustomStringConvertible {
     var emptyChunksFound     = 0
     for chunk in inputRawChunks {
       if chunk.count > 4 {
-        if chunk.filter({ $0 == "." }).count != 3 {
-          precondition(chunk.count <= 4, "Invalid hexadectet provided : \"\(chunk)\".")
-        }
+        precondition(chunk.filter({ $0 == "." }).count == 3, "Invalid hexadectet \"\(chunk)\" provided in \(string) .")
         let ipv4 = v4(String(chunk)).data
         if emptyChunksFound == 0 {
           prefixBytes.append(ipv4[0])

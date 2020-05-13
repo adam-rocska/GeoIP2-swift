@@ -206,16 +206,17 @@ class IpAddressTest: XCTestCase {
   }
 
   func testV4EqualityWithV6() {
-    XCTAssertEqual(
-      IpAddress(
-        Data([
-               0x00, 0x00, 0x00, 0x00,
-               0x00, 0x00, 0x00, 0x00,
-               0x00, 0x00, 0xFF, 0xFF,
-               80, 99, 18, 166
-             ])
-      ),
-      IpAddress("80.99.18.166")
+    let v4         = IpAddress("80.99.18.166")
+    let v6ByData   = IpAddress(
+      Data([
+             0x00, 0x00, 0x00, 0x00,
+             0x00, 0x00, 0x00, 0x00,
+             0x00, 0x00, 0xFF, 0xFF,
+             80, 99, 18, 166
+           ])
     )
+    let v6ByString = IpAddress("::ffff:80.99.18.166")
+    XCTAssertEqual(v4, v6ByData)
+    XCTAssertEqual(v4, v6ByString)
   }
 }
