@@ -6,7 +6,7 @@ public extension MaxMindDecoder {
   func decode(_ iterator: MaxMindIterator, as controlByte: ControlByte) -> Any {
     switch controlByte.type {
       case .map:
-        return decode(iterator, size: Int(controlByte.payloadSize)) as [String:Any]
+        return decode(iterator, size: Int(controlByte.payloadSize)) as [String: Any]
       case .array:
         return decode(iterator, size: Int(controlByte.payloadSize)) as [Any]
       default:
@@ -18,8 +18,7 @@ public extension MaxMindDecoder {
   func decode(_ data: Data, as controlByte: ControlByte) -> Any {
     switch controlByte.type {
       case .pointer:
-        // TODO
-        return 0
+        return decode(data, strayBits: controlByte.strayBits) as MaxMindPointer
       case .utf8String:
         return decode(data) as String
       case .double:
