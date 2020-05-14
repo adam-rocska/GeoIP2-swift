@@ -106,7 +106,7 @@ class ControlByteTest: XCTestCase {
           return
         }
         XCTAssertEqual(DataType.pointer, controlByte.type)
-        XCTAssertEqual(UInt32((definitionByte & 0b0001_1000) &>> 3), controlByte.payloadSize)
+        XCTAssertEqual(UInt32((definitionByte & 0b0001_1000) &>> 3) + 1, controlByte.payloadSize)
         XCTAssertEqual(1, controlByte.definitionSize)
         XCTAssertEqual(definition, controlByte.definition)
         XCTAssertEqual(definitionByte & 0b0000_0111, controlByte.strayBits)

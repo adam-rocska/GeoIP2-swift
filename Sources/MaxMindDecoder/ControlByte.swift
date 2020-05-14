@@ -120,7 +120,7 @@ public struct ControlByte {
     // TODO : Try to refactor at some point somehow this pile of 💩
     if type == DataType.pointer {
       definitionSize = 1
-      payloadSize = UInt32(payloadSizeDefinition &>> 3)
+      payloadSize = UInt32(payloadSizeDefinition &>> 3) + 1
     } else if payloadSizeDefinition < 29 {
       payloadSize = UInt32(payloadSizeDefinition)
       definitionSize = isExtendedType ? 2 : 1
