@@ -17,7 +17,7 @@ public class InMemoryIndex<Pointer>: Index where Pointer: UnsignedInteger, Point
       "Can't fit record size of \(metadata.recordSize) bits in \(Pointer.self)'s \(MemoryLayout<Pointer>.size) bytes."
     )
     let stream = createStream()
-    precondition(stream.streamStatus == Stream.Status.notOpen, "should have provided an untouched stream.")
+    precondition(stream.streamStatus == Stream.Status.notOpen, "Should have provided an untouched stream.")
     let searchTreeSize = Int(metadata.searchTreeSize)
     stream.open()
     let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: searchTreeSize)
