@@ -4,10 +4,10 @@ import XCTest
 
 class MaxMindPointerTest: XCTestCase {
   func testConvertibility() {
-    let strideStep = UInt.max / 15
-    var value      = UInt.min
-    while value < UInt.max {
-      XCTAssertEqual(value, UInt(MaxMindPointer(value)))
+    let strideStep = UInt32.max / 15
+    var value      = UInt32.min
+    while value < UInt32.max {
+      XCTAssertEqual(value, UInt32(MaxMindPointer(value)))
       value += strideStep
     }
   }
