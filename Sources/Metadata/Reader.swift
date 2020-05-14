@@ -30,9 +30,13 @@ public class Reader {
     var previousData:    Data?       = nil
     var pIdx:            Data.Index? = nil
 
+    var databaseSize        = 0
+    var metadataSectionSize = 0
     while stream.hasBytesAvailable {
-      let read        = stream.read(buffer, maxLength: bufferSize)
-      let currentData = Data(bytes: buffer, count: read)
+      let bytesRead   = stream.read(buffer, maxLength: bufferSize)
+      let currentData = Data(bytes: buffer, count: bytesRead)
+      databaseSize += bytesRead
+      if metadataSection != nil { metadataSectionSize += bytesRead }
       defer { previousData = currentData }
       if previousData == nil { continue }
 
@@ -47,12 +51,18 @@ public class Reader {
         idx,
         offsetBy: markerLookup.marker.count
       )
-      metadataSection?.append(dataChain[metadataSliceStart...])
+      let metadataFirstPart  = dataChain[metadataSliceStart...]
+      metadataSection?.append(metadataFirstPart)
+      metadataSectionSize = metadataFirstPart.count
     }
 
     if metadataSection == nil { return nil }
 
-    return decode(metadataSection!)
+    return decode(
+      metadataSection!,
+      metadataSectionSize: metadataSectionSize + markerLookup.marker.count,
+      databaseSize: databaseSize
+    )
   }
 
 }

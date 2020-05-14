@@ -11,7 +11,22 @@ class ReaderTest: XCTestCase {
     ) else { fatalError("GeoLite2 Country DB file was not found.") }
 
     let reader = Reader(windowSize: 1024)
-    XCTAssertEqual(expectedMetaData, reader.read(InputStream(fileAtPath: countryFilePath)!))
+    guard let stream = InputStream(fileAtPath: countryFilePath) else {
+      preconditionFailure("Should have been able to create an input stream to file \"\(countryFilePath)\".")
+    }
+    guard let actualMetadata = reader.read(stream) else {
+      preconditionFailure("Should have been able to read the expected metadata.")
+    }
+    XCTAssertEqual(expectedMetaData, actualMetadata)
+    XCTAssertEqual(
+      expectedMetaData.databaseSize - expectedMetaData.metadataSectionSize - Int(expectedMetaData.searchTreeSize),
+      actualMetadata.dataSectionSize
+    )
+    XCTAssertEqual(
+      Int(actualMetadata.searchTreeSize) +
+      actualMetadata.dataSectionSize +
+      actualMetadata.metadataSectionSize,
+      actualMetadata.databaseSize)
   }
 
 }
@@ -25,5 +40,8 @@ fileprivate let expectedMetaData = Metadata(
   binaryFormatMajorVersion: 2,
   binaryFormatMinorVersion: 0,
   buildEpoch: 1587472614,
-  description: ["en": "GeoLite2 Country database"]
+  description: ["en": "GeoLite2 Country database"],
+
+  metadataSectionSize: 249,
+  databaseSize: 3803555
 )

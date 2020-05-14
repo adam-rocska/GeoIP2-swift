@@ -15,4 +15,8 @@ public struct Metadata: Equatable {
   public var nodeByteSize:             UInt16 { get { return recordSize / 4 } }
   public var searchTreeSize:           UInt64 { get { return UInt64(nodeCount * UInt32(nodeByteSize)) } }
 
+  public var dataSectionSize:     Int { get { return databaseSize - metadataSectionSize - Int(searchTreeSize) } }
+  public let metadataSectionSize: Int
+  public let databaseSize:        Int
+
 }

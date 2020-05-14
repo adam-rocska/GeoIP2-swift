@@ -1,7 +1,7 @@
 import Foundation
 import MaxMindDecoder
 
-func decode(_ data: Data) -> Metadata? {
+func decode(_ data: Data, metadataSectionSize: Int, databaseSize: Int) -> Metadata? {
   guard let iterator = MaxMindIterator(data) else { return nil }
   guard let mapControlByte = iterator.next() else { return nil }
   if mapControlByte.type != .map { return nil }
@@ -28,6 +28,8 @@ func decode(_ data: Data) -> Metadata? {
     binaryFormatMajorVersion: majorVersion,
     binaryFormatMinorVersion: minorVersion,
     buildEpoch: buildEpoch,
-    description: description
+    description: description,
+    metadataSectionSize: metadataSectionSize,
+    databaseSize: databaseSize
   )
 }

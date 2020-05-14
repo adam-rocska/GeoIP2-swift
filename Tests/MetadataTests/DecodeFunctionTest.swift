@@ -6,21 +6,39 @@ import MaxMindDecoder
 class DecodeFunctionTest: XCTestCase {
 
   func testInit_nilIfCantCreateIterator() {
-    XCTAssertNil(decode(Data()))
+    XCTAssertNil(
+      decode(
+        Data(),
+        metadataSectionSize: 0,
+        databaseSize: 0
+      )
+    )
   }
 
   func testInit_nilIfCantFetchFirstControlByte() {
     let data = Data([0b0000_1111])
-    XCTAssertNil(decode(data))
+    XCTAssertNil(
+      decode(
+        data,
+        metadataSectionSize: 0,
+        databaseSize: 0
+      )
+    )
   }
 
   func testInit_nilIfFirstControlByteIsNotMap() {
     let data = Data([0b0010_1111])
-    XCTAssertNil(decode(data))
+    XCTAssertNil(
+      decode(
+        data,
+        metadataSectionSize: 0,
+        databaseSize: 0
+      )
+    )
   }
 
   func testInit_withBinary() {
-    guard let metadata = decode(binaryMetaData) else {
+    guard let metadata = decode(binaryMetaData, metadataSectionSize: 0, databaseSize: 0) else {
       XCTFail("Input binary is valid. Should have constructed a proper struct.")
       return
     }
@@ -28,6 +46,7 @@ class DecodeFunctionTest: XCTestCase {
     XCTAssertEqual(expectedMetaData, metadata)
     XCTAssertEqual(expectedMetaData.nodeByteSize, metadata.nodeByteSize)
     XCTAssertEqual(expectedMetaData.searchTreeSize, metadata.searchTreeSize)
+    XCTAssertEqual(expectedMetaData.dataSectionSize, metadata.dataSectionSize)
   }
 
 }
@@ -41,7 +60,10 @@ fileprivate let expectedMetaData = Metadata(
   binaryFormatMajorVersion: 2,
   binaryFormatMinorVersion: 0,
   buildEpoch: 1587472614,
-  description: ["en": "GeoLite2 Country database"]
+  description: ["en": "GeoLite2 Country database"],
+
+  metadataSectionSize: 0,
+  databaseSize: 0
 )
 
 fileprivate let binaryMetaData = Data(
