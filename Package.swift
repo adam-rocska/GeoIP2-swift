@@ -34,6 +34,12 @@ let package = Package(
     ),
 
     .target(
+      name: "DataSection",
+      dependencies: ["MaxMindDecoder", "Metadata"],
+      path: "Sources/DataSection"
+    ),
+
+    .target(
       name: "MaxMindDBReader",
       dependencies: ["Index", "Metadata", "MaxMindDecoder"],
       path: "Sources/MaxMindDBReader"
@@ -67,6 +73,11 @@ let package = Package(
     .testTarget(
       name: "MaxMindDecoderTests",
       dependencies: ["MaxMindDecoder"]
+    ),
+
+    .testTarget(
+      name: "DataSectionTests",
+      dependencies: ["DataSection", "Metadata"]
     )
   ]
 )
