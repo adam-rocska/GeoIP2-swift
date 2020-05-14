@@ -80,8 +80,8 @@ bytes.
  */
 public struct ControlByte {
 
-  public let type:           DataType
-  public let payloadSize:    UInt32
+  public let type:        DataType
+  public let payloadSize: UInt32
   let definitionSize: UInt8
   let definition:     Data
 
