@@ -85,12 +85,22 @@ public struct ControlByte {
   let definitionSize: UInt8
   let definition:     Data
 
+  private init(type: DataType, payloadSize: UInt32, definitionSize: UInt8, definition: Data) {
+    self.type = type
+    self.payloadSize = payloadSize
+    self.definitionSize = definitionSize
+    self.definition = definition
+  }
+
   init?(bytes: Data) {
     if bytes.count == 0 || bytes.count > 5 { return nil }
 
     let firstByte                 = bytes.first!
     let typeDefinitionOnFirstByte = firstByte &>> 5
     let isExtendedType            = typeDefinitionOnFirstByte == 0b0000_0000
+
+    let payloadSize:    UInt32
+    let definitionSize: UInt8
 
     guard let type = isExtendedType
                      ? DataType(rawValue: bytes[bytes.index(after: bytes.startIndex)] + 7)
@@ -134,12 +144,17 @@ public struct ControlByte {
       definitionSize = (isExtendedType ? 2 : 1) + payloadSizeDefinition & 0b0000_0011
     }
 
-    self.type = type
     let definitionRange = Range(uncheckedBounds: (
       lower: bytes.startIndex,
       upper: bytes.index(bytes.startIndex, offsetBy: Int(definitionSize))
     ))
-    self.definition = bytes.subdata(in: definitionRange)
+
+    self.init(
+      type: type,
+      payloadSize: payloadSize,
+      definitionSize: definitionSize,
+      definition: bytes.subdata(in: definitionRange)
+    )
   }
 
 }
