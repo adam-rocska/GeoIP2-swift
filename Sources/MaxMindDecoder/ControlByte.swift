@@ -82,6 +82,12 @@ public struct ControlByte {
 
   public let type:        DataType
   public let payloadSize: UInt32
+  var strayBits:      UInt8 {
+    get {
+      precondition(type == DataType.pointer)
+      return definition.first! & 0b0000_0111
+    }
+  }
   let definitionSize: UInt8
   let definition:     Data
 
@@ -110,7 +116,12 @@ public struct ControlByte {
     }
 
     let payloadSizeDefinition = firstByte & 0b0001_1111
-    if payloadSizeDefinition < 29 {
+    // Thank this logic to the php scripters that designed the database.
+    // TODO : Try to refactor at some point somehow this pile of 💩
+    if type == DataType.pointer {
+      definitionSize = 1
+      payloadSize = UInt32(payloadSizeDefinition &>> 3)
+    } else if payloadSizeDefinition < 29 {
       payloadSize = UInt32(payloadSizeDefinition)
       definitionSize = isExtendedType ? 2 : 1
     } else {

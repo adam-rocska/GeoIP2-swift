@@ -94,11 +94,34 @@ class ControlByteTest: XCTestCase {
     }
   }
 
+  func testInit_pointer() {
+    for pointerByte in 0...0b0001_1111 {
+      for strayBytes in 0...4 {
+        let definitionByte = UInt8(pointerByte | 0b0010_0000)
+        let definition     = Data([definitionByte])
+        let noise          = Data(count: strayBytes)
+        let bytes          = definition + noise
+        guard let controlByte = ControlByte(bytes: bytes) else {
+          XCTFail("Should have been able to create a control byte.")
+          return
+        }
+        XCTAssertEqual(DataType.pointer, controlByte.type)
+        XCTAssertEqual(UInt32((definitionByte & 0b0001_1000) &>> 3), controlByte.payloadSize)
+        XCTAssertEqual(1, controlByte.definitionSize)
+        XCTAssertEqual(definition, controlByte.definition)
+        XCTAssertEqual(definitionByte & 0b0000_0111, controlByte.strayBits)
+      }
+    }
+
+  }
+
 }
 
 /// MARK: Utilities for the effective tests of this unit.
 
-fileprivate let dataTypes: [DataType] = (1...255).compactMap({ DataType(rawValue: $0) })
+fileprivate let dataTypes: [DataType] = (1...255)
+  .compactMap({ DataType(rawValue: $0) })
+  .filter({ $0 != DataType.pointer })
 fileprivate let nonExtendedRawValues: [DataType.RawValue] = dataTypes
   .filter({ $0.rawValue <= 7 })
   .map({ $0.rawValue })
