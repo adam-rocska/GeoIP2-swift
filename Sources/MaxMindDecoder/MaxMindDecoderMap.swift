@@ -3,10 +3,14 @@ import Foundation
 public extension MaxMindDecoder {
 
   private func resolveKey(_ iterator: MaxMindIterator) -> String? {
-    guard let keyControlByte = iterator.next() else { return nil }
-    if keyControlByte.type != .utf8String { return nil }
-    let keyBinary = iterator.next(keyControlByte)
-    return decode(keyBinary)
+    switch iterator.next() {
+      case .some(let cb) where cb.type == .pointer:
+        return nil
+      case .some(let cb) where cb.type == .utf8String:
+        return decode(iterator.next(cb))
+      default:
+        return nil
+    }
   }
 
   func decode(_ iterator: MaxMindIterator, size: Int) -> [String: Any] {
