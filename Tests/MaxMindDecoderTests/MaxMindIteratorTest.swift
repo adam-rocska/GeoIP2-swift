@@ -300,6 +300,30 @@ class MaxMindIteratorTest: XCTestCase {
     XCTAssertTrue(iterator.isExhausted)
   }
 
+  func testSeek() {
+    let padData = Data([
+                         0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+                         0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+                         0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+                         0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000
+                       ])
+
+    guard let iterator = MaxMindIterator(padData + maxMindMetaData) else {
+      XCTFail("Iterator should have been creatable.")
+      return
+    }
+    iterator.seek(to: padData.count)
+    assertMaxMindMetaData(iterator, of: maxMindMetaData)
+    XCTAssertNil(iterator.next())
+    XCTAssertTrue(iterator.isExhausted)
+    iterator.rewind()
+    iterator.seek(to: padData.count)
+    XCTAssertFalse(iterator.isExhausted)
+    assertMaxMindMetaData(iterator, of: maxMindMetaData)
+    XCTAssertTrue(iterator.isExhausted)
+
+  }
+
 }
 
 fileprivate let maxMindMetaData = Data(

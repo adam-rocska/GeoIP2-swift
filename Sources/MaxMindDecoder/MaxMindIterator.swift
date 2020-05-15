@@ -5,7 +5,15 @@ public class MaxMindIterator {
   private var pointer: Data.Index
   var isExhausted: Bool { get { return data.endIndex == pointer } }
 
-  func rewind() { pointer = data.startIndex }
+  public func rewind() { pointer = data.startIndex }
+
+  public func seek(to: Int) {
+    pointer = data.index(
+      data.startIndex,
+      offsetBy: to,
+      limitedBy: data.index(before: data.endIndex)
+    ) ?? data.index(before: data.endIndex)
+  }
 
   public init?(_ data: Data) {
     if data.isEmpty { return nil }
