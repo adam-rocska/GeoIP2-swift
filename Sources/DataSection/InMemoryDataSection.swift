@@ -7,9 +7,11 @@ public class InMemoryDataSection: DataSection {
   public static let separator = Data(count: 16)
 
   let metadata: Metadata
+  let iterator: MaxMindIterator
 
-  init(metadata: Metadata) {
+  init(metadata: Metadata, iterator: MaxMindIterator) {
     self.metadata = metadata
+    self.iterator = iterator
   }
 
   public required convenience init(metadata: Metadata, stream createStream: @autoclosure () -> InputStream) {
@@ -34,36 +36,16 @@ public class InMemoryDataSection: DataSection {
     precondition(separatorBytes == InMemoryDataSection.separator, "Separator bytes don't match.")
     separatorBuffer.deallocate()
 
-    print("YOLO")
-
-    let dataSectionSize = metadata.dataSectionSize - InMemoryDataSection.separator.count
-    let fasz            = UnsafeMutablePointer<UInt8>.allocate(capacity: dataSectionSize)
-    let faszRead        = stream.read(fasz, maxLength: dataSectionSize)
-    precondition(faszRead == dataSectionSize, "Faszom fasz.")
-    let faszData = Data(bytes: fasz, count: faszRead)
-    fasz.deallocate()
-
-    let decoder          = MaxMindDecoder(inputEndianness: .big)
-    let iterator         = MaxMindIterator(faszData[9696...])!
-    let cb: ControlByte? = iterator.next()
-    print(cb)
-    for byte in faszData[9697...9796] {
-      let bits = String(byte, radix: 2)
-      let binary = String(repeating: "0", count: 8 - bits.count) + bits
-      print ("Byte : \(binary)")
-    }
-    print(decoder.decode(iterator, as: cb!))
-
-    print("Count : \(faszData.count)")
-    print("Node Count            : \(metadata.nodeCount)")
-    print("Search tree size      : \(metadata.searchTreeSize)")
-    print("Data section size     : \(metadata.dataSectionSize)")
-    print("Metadata section size : \(metadata.metadataSectionSize)")
-    print("Database size         : \(metadata.databaseSize)")
+    let dataSectionSize     = metadata.dataSectionSize - InMemoryDataSection.separator.count
+    let dataSectionBuffer   = UnsafeMutablePointer<UInt8>.allocate(capacity: dataSectionSize)
+    let readDataSectionSize = stream.read(dataSectionBuffer, maxLength: dataSectionSize)
+    precondition(readDataSectionSize == dataSectionSize, "")
+    let dataSectionBinary = Data(bytes: dataSectionBuffer, count: readDataSectionSize)
+    dataSectionBuffer.deallocate()
 
     stream.close()
 
-    self.init(metadata: metadata)
+    self.init(metadata: metadata, iterator: MaxMindIterator(dataSectionBinary)!)
   }
 
 }
