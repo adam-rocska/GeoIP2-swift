@@ -34,14 +34,7 @@ class MaxMindIteratorTest: XCTestCase {
     XCTAssertEqual(type, controlByte.type, file: file, line: line)
     XCTAssertEqual(definitionSize, controlByte.definitionSize, file: file, line: line)
     XCTAssertEqual(payloadSize, controlByte.payloadSize, file: file, line: line)
-    guard let valueBytes = iterator.next(controlByte) else {
-      XCTFail(
-        "Should have returned a byte sequence value of \(expectedValue).",
-        file: file,
-        line: line
-      )
-      return
-    }
+    let valueBytes = iterator.next(controlByte)
 
     XCTAssertEqual(expectedValue, decode(valueBytes), file: file, line: line)
   }

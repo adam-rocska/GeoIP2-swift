@@ -7,7 +7,7 @@ public extension MaxMindDecoder {
     for _ in 0..<size {
       guard let keyControlByte = iterator.next() else { break }
       if keyControlByte.type != .utf8String { break }
-      guard let keyBinary = iterator.next(keyControlByte) else { break }
+      let keyBinary = iterator.next(keyControlByte)
       let key: String = decode(keyBinary)
 
       guard let valueControlByte = iterator.next() else { break }
@@ -15,7 +15,7 @@ public extension MaxMindDecoder {
         case .map, .array:
           result[key] = decode(iterator, as: valueControlByte)
         default:
-          guard let valueBinary = iterator.next(valueControlByte) else { break }
+          let valueBinary = iterator.next(valueControlByte)
           result[key] = decode(valueBinary, as: valueControlByte)
       }
     }

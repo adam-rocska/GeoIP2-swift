@@ -11,7 +11,7 @@ public extension MaxMindDecoder {
     var result: [Any] = []
     for _ in 0..<size {
       guard let controlByte = iterator.next() else { break }
-      guard let binary = iterator.next(controlByte) else { break }
+      let binary = iterator.next(controlByte)
       result.append(decode(binary, as: controlByte))
     }
     return result

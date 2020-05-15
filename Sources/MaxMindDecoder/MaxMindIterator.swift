@@ -47,7 +47,7 @@ public class MaxMindIterator {
     return ControlByte(bytes: data.subdata(in: range))
   }
 
-  private func peek(index: Data.Index, controlByte: ControlByte) -> (data: Data?, upperBound: Data.Index) {
+  private func peek(index: Data.Index, controlByte: ControlByte) -> (data: Data, upperBound: Data.Index) {
     let upperBound = data.index(
       pointer,
       offsetBy: Int(controlByte.payloadSize),
@@ -60,7 +60,7 @@ public class MaxMindIterator {
     )
   }
 
-  public func next(_ controlByte: ControlByte) -> Data? {
+  public func next(_ controlByte: ControlByte) -> Data {
     let (payload, upperBound) = peek(index: pointer, controlByte: controlByte)
     pointer = upperBound
     return payload
