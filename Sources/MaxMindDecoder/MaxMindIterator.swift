@@ -1,23 +1,9 @@
 import Foundation
 
 public class MaxMindIterator {
-
-  public typealias Pointer = Data.Index
-
   private let data:    Data
-  private var pointer: Pointer
+  private var pointer: Data.Index
   var isExhausted: Bool { get { return data.endIndex == pointer } }
-
-  public struct Entry {
-    public let controlByte: ControlByte
-    public let position:    Pointer
-
-    private init(controlByte: ControlByte, position: Pointer) {
-      precondition(controlByte.type != .pointer, "MaxMind pointer values mustn't be exposed.")
-      self.controlByte = controlByte
-      self.position = position
-    }
-  }
 
   public func rewind() { pointer = data.startIndex }
 
