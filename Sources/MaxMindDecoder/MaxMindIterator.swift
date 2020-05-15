@@ -23,17 +23,7 @@ public class MaxMindIterator {
 
   public func next() -> ControlByte? {
     while !isExhausted {
-      let range = Range(uncheckedBounds: (
-        lower: pointer,
-        upper: data.index(
-          pointer,
-          offsetBy: 5,
-          limitedBy: data.index(before: data.endIndex)
-        ) ?? data.index(before: data.endIndex)
-      ))
-      if range.lowerBound == range.upperBound { break }
-
-      if let controlByte = ControlByte(bytes: data.subdata(in: range)) {
+      if let controlByte = peek(index: pointer) {
         pointer = data.index(
           pointer,
           offsetBy: Int(controlByte.definitionSize),
@@ -44,6 +34,17 @@ public class MaxMindIterator {
       pointer = data.index(after: pointer)
     }
     return nil
+  }
+
+  private func peek(index: Data.Index) -> ControlByte? {
+    let upperBound = data.index(
+      index,
+      offsetBy: 5,
+      limitedBy: data.index(before: data.endIndex)
+    ) ?? data.index(before: data.endIndex)
+    if index == upperBound { return nil }
+    let range = Range(uncheckedBounds: (lower: index, upper: upperBound))
+    return ControlByte(bytes: data.subdata(in: range))
   }
 
   public func next(_ controlByte: ControlByte) -> Data? {
