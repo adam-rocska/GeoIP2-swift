@@ -333,6 +333,25 @@ class MaxMindIteratorTest: XCTestCase {
 
   }
 
+  func testPeek() {
+    let controlByteBinary = Data([0b0101_1100])
+    let stringBinary      = "Hello World Hello World test".data(using: .utf8)!
+    let iterator          = MaxMindIterator(controlByteBinary + stringBinary)!
+    XCTAssertEqual(iterator.peek(at: 0), iterator.peek(at: 0))
+    XCTAssertEqual(ControlByte(bytes: controlByteBinary), iterator.peek(at: 0))
+    let controlByte = iterator.next()!
+    XCTAssertEqual(controlByte, iterator.peek(at: 0))
+    XCTAssertEqual(stringBinary, iterator.peek(controlByte, at: 1))
+    XCTAssertEqual(iterator.peek(controlByte, at: 1), iterator.peek(controlByte, at: 1))
+    XCTAssertEqual(iterator.peek(controlByte, at: 1), iterator.next(controlByte))
+    XCTAssertTrue(iterator.isExhausted)
+    XCTAssertEqual(ControlByte(bytes: controlByteBinary), iterator.peek(at: 0))
+    XCTAssertEqual(stringBinary, iterator.peek(controlByte, at: 1))
+
+    XCTAssertNil(iterator.peek(at: 9999999))
+    XCTAssertNil(iterator.peek(controlByte, at: 9999999))
+  }
+
 }
 
 fileprivate let maxMindMetaData = Data(

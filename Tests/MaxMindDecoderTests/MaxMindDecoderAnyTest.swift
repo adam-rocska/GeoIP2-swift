@@ -4,6 +4,7 @@ import XCTest
 
 class MaxMindDecoderAnyTest: XCTestCase {
 
+  // TODO : little endian cases to be covered
   private let bigEndianDecoder    = MaxMindDecoder(inputEndianness: .big)
   private let littleEndianDecoder = MaxMindDecoder(inputEndianness: .little)
 
@@ -64,7 +65,6 @@ class MaxMindDecoderAnyTest: XCTestCase {
     let encoded     = Data([0b1111_1111])
     let decoded     = bigEndianDecoder.decode(encoded, as: pointer_255)
     XCTAssertEqual(MaxMindPointer(255), decoded as? MaxMindPointer)
-    // TODO : little endian case to be covered
   }
 
   func testDecode_any_asArray_fromData() {

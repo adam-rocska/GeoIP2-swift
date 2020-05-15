@@ -78,7 +78,7 @@ total size is (65,821 + 3,355,443) = 3,421,264.
 This means that the maximum payload size for a single field is 16,843,036
 bytes.
  */
-public struct ControlByte {
+public struct ControlByte: Equatable {
 
   public let type:        DataType
   public let payloadSize: UInt32
