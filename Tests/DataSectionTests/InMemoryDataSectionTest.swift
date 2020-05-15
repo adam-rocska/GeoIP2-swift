@@ -18,26 +18,36 @@ class InMemoryDataSectionTest: XCTestCase {
 
   private static let countryMetadata = Reader(windowSize: 1024).read(
     InputStream(fileAtPath: countryFilePath)!
-  )
+  )!
 
   func testLookup_returnsNilIfIteratorCantResolveNextControlByte() {
     let dataSection = InMemoryDataSection(
-      metadata: InMemoryDataSectionTest.countryMetadata!,
-      iterator: MaxMindIterator(Data([0b0000_0000]))!
+      metadata: InMemoryDataSectionTest.countryMetadata,
+      iterator: MaxMindIterator(Data([0b0000_0000]))!,
+      decoder: MaxMindDecoder(inputEndianness: .big)
     )
     XCTAssertNil(dataSection.lookup(pointer: 100))
   }
 
   func testLookup_returnsNilIfIteratorDoesntResolveToMap() {
     let dataSection = InMemoryDataSection(
-      metadata: InMemoryDataSectionTest.countryMetadata!,
+      metadata: InMemoryDataSectionTest.countryMetadata,
       iterator: MaxMindIterator(
         Data(
           [0b0101_1100] + "Hello World Hello World test".data(using: .utf8)!
         )
-      )!
+      )!,
+      decoder: MaxMindDecoder(inputEndianness: .big)
     )
     XCTAssertNil(dataSection.lookup(pointer: 0))
+  }
+
+  func testLookup_returnsExpectedDictionary() {
+    let dataSection = InMemoryDataSection(
+      metadata: InMemoryDataSectionTest.countryMetadata,
+      stream: InputStream(fileAtPath: InMemoryDataSectionTest.countryFilePath)!
+    )
+    print(dataSection.lookup(pointer: 9696))
   }
 
 }

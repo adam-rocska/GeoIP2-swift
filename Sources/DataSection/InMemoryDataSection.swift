@@ -8,10 +8,12 @@ public class InMemoryDataSection: DataSection {
 
   public let  metadata: Metadata
   private let iterator: MaxMindIterator
+  private let decoder:  MaxMindDecoder
 
-  init(metadata: Metadata, iterator: MaxMindIterator) {
+  init(metadata: Metadata, iterator: MaxMindIterator, decoder: MaxMindDecoder) {
     self.metadata = metadata
     self.iterator = iterator
+    self.decoder = decoder
   }
 
   public required convenience init(metadata: Metadata, stream createStream: @autoclosure () -> InputStream) {
@@ -45,14 +47,18 @@ public class InMemoryDataSection: DataSection {
 
     stream.close()
 
-    self.init(metadata: metadata, iterator: MaxMindIterator(dataSectionBinary)!)
+    self.init(
+      metadata: metadata,
+      iterator: MaxMindIterator(dataSectionBinary)!,
+      decoder: MaxMindDecoder(inputEndianness: .big)
+    )
   }
 
   public func lookup(pointer: Int) -> [String: Any]? {
     iterator.seek(to: pointer)
     guard let mapControlByte = iterator.next() else { return nil }
     if mapControlByte.type != .map { return nil }
-    return [:]
+    return decoder.decode(iterator, size: Int(mapControlByte.payloadSize)) as [String: Any]
   }
 
 }
