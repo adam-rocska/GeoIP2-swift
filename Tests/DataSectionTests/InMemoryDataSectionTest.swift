@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import Metadata
+import MaxMindDecoder
 @testable import DataSection
 
 class InMemoryDataSectionTest: XCTestCase {
@@ -19,11 +20,24 @@ class InMemoryDataSectionTest: XCTestCase {
     InputStream(fileAtPath: countryFilePath)!
   )
 
-  func testLookup() {
-    let section = InMemoryDataSection(
+  func testLookup_returnsNilIfIteratorCantResolveNextControlByte() {
+    let dataSection = InMemoryDataSection(
       metadata: InMemoryDataSectionTest.countryMetadata!,
-      stream: InputStream(fileAtPath: InMemoryDataSectionTest.countryFilePath)!
+      iterator: MaxMindIterator(Data([0b0000_0000]))!
     )
+    XCTAssertNil(dataSection.lookup(pointer: 100))
+  }
+
+  func testLookup_returnsNilIfIteratorDoesntResolveToMap() {
+    let dataSection = InMemoryDataSection(
+      metadata: InMemoryDataSectionTest.countryMetadata!,
+      iterator: MaxMindIterator(
+        Data(
+          [0b0101_1100] + "Hello World Hello World test".data(using: .utf8)!
+        )
+      )!
+    )
+    XCTAssertNil(dataSection.lookup(pointer: 0))
   }
 
 }

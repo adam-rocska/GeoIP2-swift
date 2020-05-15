@@ -6,8 +6,8 @@ public class InMemoryDataSection: DataSection {
 
   public static let separator = Data(count: 16)
 
-  let metadata: Metadata
-  let iterator: MaxMindIterator
+  public let  metadata: Metadata
+  private let iterator: MaxMindIterator
 
   init(metadata: Metadata, iterator: MaxMindIterator) {
     self.metadata = metadata
@@ -39,13 +39,20 @@ public class InMemoryDataSection: DataSection {
     let dataSectionSize     = metadata.dataSectionSize - InMemoryDataSection.separator.count
     let dataSectionBuffer   = UnsafeMutablePointer<UInt8>.allocate(capacity: dataSectionSize)
     let readDataSectionSize = stream.read(dataSectionBuffer, maxLength: dataSectionSize)
-    precondition(readDataSectionSize == dataSectionSize, "")
+    precondition(readDataSectionSize == dataSectionSize, "Metadata mismatches provided input stream.")
     let dataSectionBinary = Data(bytes: dataSectionBuffer, count: readDataSectionSize)
     dataSectionBuffer.deallocate()
 
     stream.close()
 
     self.init(metadata: metadata, iterator: MaxMindIterator(dataSectionBinary)!)
+  }
+
+  public func lookup(pointer: Int) -> [String: Any]? {
+    iterator.seek(to: pointer)
+    guard let mapControlByte = iterator.next() else { return nil }
+    if mapControlByte.type != .map { return nil }
+    return [:]
   }
 
 }
