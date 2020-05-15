@@ -1,6 +1,6 @@
 import Foundation
 
-public class MaxMindIterator {
+public class MaxMindIterator: PeekableDataSequence, AlternatingIterator {
   private let data:    Data
   private var pointer: Data.Index
   var isExhausted: Bool { get { return data.endIndex == pointer } }
