@@ -11,3 +11,9 @@ public extension UInt32 {
     self.init(maxMindPointer.value)
   }
 }
+
+public extension Int {
+  init(_ maxMindPointer: MaxMindPointer) {
+    self.init(maxMindPointer.value)
+  }
+}
