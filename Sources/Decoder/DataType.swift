@@ -20,4 +20,23 @@ enum DataType: UInt8, CaseIterable {
 
   var isExtendedType: Bool { get { return self.rawValue > 7 } }
 
+  init?(_ data: Foundation.Data) {
+    guard let firstByte = data.first else { return nil }
+    let firstByteTypeMarker = firstByte &>> 5
+
+    let rawValueCandidate: UInt8
+    if firstByteTypeMarker == 0 {
+      let lastByteIndex = data.index(before: data.endIndex)
+      guard let secondByteIndex = data.index(data.startIndex, offsetBy: 1, limitedBy: lastByteIndex) else { return nil }
+      let secondByte = data[secondByteIndex]
+      if secondByte > UInt8.max - 7 { return nil }
+      rawValueCandidate = secondByte + 7
+    } else {
+      rawValueCandidate = firstByteTypeMarker
+    }
+
+    guard let dataType = DataType(rawValue: rawValueCandidate) else { return nil }
+    self = dataType
+  }
+
 }
