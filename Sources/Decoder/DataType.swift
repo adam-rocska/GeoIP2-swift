@@ -28,9 +28,8 @@ enum DataType: UInt8, CaseIterable {
     if firstByteTypeMarker == 0 {
       let lastByteIndex = data.index(before: data.endIndex)
       guard let secondByteIndex = data.index(data.startIndex, offsetBy: 1, limitedBy: lastByteIndex) else { return nil }
-      let secondByte = data[secondByteIndex]
-      if secondByte > UInt8.max - 7 { return nil }
-      rawValueCandidate = secondByte + 7
+      if data[secondByteIndex] > UInt8.max - 7 { return nil }
+      rawValueCandidate = data[secondByteIndex] + 7
     } else {
       rawValueCandidate = firstByteTypeMarker
     }
