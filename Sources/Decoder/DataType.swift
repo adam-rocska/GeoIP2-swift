@@ -1,6 +1,7 @@
 import Foundation
 
-enum DataType: UInt8 {
+enum DataType: UInt8, CaseIterable {
+
   case pointer            = 1
   case utf8String         = 2
   case double             = 3
@@ -16,4 +17,7 @@ enum DataType: UInt8 {
   case endMarker          = 13
   case boolean            = 14
   case float              = 15
+
+  var isExtendedType: Bool { get { return self.rawValue > 7 } }
+
 }
