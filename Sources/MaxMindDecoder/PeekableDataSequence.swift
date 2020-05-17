@@ -1,6 +1,6 @@
 import Foundation
 
-protocol PeekableDataSequence {
+public protocol PeekableDataSequence {
 
   func peek(at offset: Int) -> ControlByte?
 

@@ -60,13 +60,6 @@ class MaxMindDecoderAnyTest: XCTestCase {
     XCTAssertEqual(true, decoded as? Bool)
   }
 
-  func testDecode_any_asPointer_fromData() {
-    let pointer_255 = ControlByte(bytes: Data([0b0010_0000]))!
-    let encoded     = Data([0b1111_1111])
-    let decoded     = bigEndianDecoder.decode(encoded, as: pointer_255)
-    XCTAssertEqual(MaxMindPointer(255), decoded as? MaxMindPointer)
-  }
-
   func testDecode_any_asArray_fromData() {
     let array                   = ControlByte(bytes: Data([0b00001000, 0b00000100]))!
     let encoded                 = Data(

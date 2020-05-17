@@ -2,123 +2,122 @@ import Foundation
 import XCTest
 @testable import MaxMindDecoder
 
-class MaxMindDecoderPointerTest: XCTestCase {
-
+class DecoderPointerTest: XCTestCase {
   // TODO : Little endian decoding also deserves coverage
-  private let bigEndianDecoder = MaxMindDecoder(inputEndianness: .big)
+  private let bigEndianDecoder = Decoder(inputEndianness: .big)
 
   func testDecode_pointerSize1() {
     XCTAssertEqual(
-      MaxMindPointer(1),
-      bigEndianDecoder.decode(Data([0b0000_0001]), strayBits: 0) as MaxMindPointer
+      OutputData.pointer(1),
+      bigEndianDecoder.decode(Data([0b0000_0001]), strayBits: 0)
     )
     XCTAssertEqual(
-      MaxMindPointer(1793),
-      bigEndianDecoder.decode(Data([0b0000_0001]), strayBits: 0b0000_0111) as MaxMindPointer
+      OutputData.pointer(1793),
+      bigEndianDecoder.decode(Data([0b0000_0001]), strayBits: 0b0000_0111)
     )
     XCTAssertEqual(
-      MaxMindPointer(1993),
-      bigEndianDecoder.decode(Data([0b1100_1001]), strayBits: 0b0000_0111) as MaxMindPointer
+      OutputData.pointer(1993),
+      bigEndianDecoder.decode(Data([0b1100_1001]), strayBits: 0b0000_0111)
     )
   }
 
   func testDecode_pointerSize2() {
     XCTAssertEqual(
-      MaxMindPointer(2049),
+      OutputData.pointer(2049),
       bigEndianDecoder.decode(
         Data([0b0000_0000, 0b0000_0001]),
         strayBits: 0
-      ) as MaxMindPointer
+      )
     )
     XCTAssertEqual(
-      MaxMindPointer(2304),
+      OutputData.pointer(2304),
       bigEndianDecoder.decode(
         Data([0b0000_0001, 0b0000_0000]),
         strayBits: 0
-      ) as MaxMindPointer
+      )
     )
     XCTAssertEqual(
-      MaxMindPointer(460801),
+      OutputData.pointer(460801),
       bigEndianDecoder.decode(
         Data([0b0000_0000, 0b0000_0001]),
         strayBits: 0b0000_0111
-      ) as MaxMindPointer
+      )
     )
     XCTAssertEqual(
-      MaxMindPointer(461056),
+      OutputData.pointer(461056),
       bigEndianDecoder.decode(
         Data([0b0000_0001, 0b0000_0000]),
         strayBits: 0b0000_0111
-      ) as MaxMindPointer
+      )
     )
   }
 
   func testDecode_pointerSize3() {
     XCTAssertEqual(
-      MaxMindPointer(526337),
+      OutputData.pointer(526337),
       bigEndianDecoder.decode(
         Data([0b0000_0000, 0b0000_0000, 0b0000_0001]),
         strayBits: 0
-      ) as MaxMindPointer
+      )
     )
     XCTAssertEqual(
-      MaxMindPointer(591872),
+      OutputData.pointer(591872),
       bigEndianDecoder.decode(
         Data([0b0000_0001, 0b0000_0000, 0b0000_0000]),
         strayBits: 0
-      ) as MaxMindPointer
+      )
     )
     XCTAssertEqual(
-      MaxMindPointer(117966849),
+      OutputData.pointer(117966849),
       bigEndianDecoder.decode(
         Data([0b0000_0000, 0b0000_0000, 0b0000_0001]),
         strayBits: 0b0000_0111
-      ) as MaxMindPointer
+      )
     )
     XCTAssertEqual(
-      MaxMindPointer(118032384),
+      OutputData.pointer(118032384),
       bigEndianDecoder.decode(
         Data([0b0000_0001, 0b0000_0000, 0b0000_0000]),
         strayBits: 0b0000_0111
-      ) as MaxMindPointer
+      )
     )
   }
 
   func testDecode_pointerSize4() {
     XCTAssertEqual(
-      MaxMindPointer(1),
+      OutputData.pointer(1),
       bigEndianDecoder.decode(
         Data([0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0001]),
         strayBits: 0
-      ) as MaxMindPointer
+      )
     )
     XCTAssertEqual(
-      MaxMindPointer(16777216),
+      OutputData.pointer(16777216),
       bigEndianDecoder.decode(
         Data([0b0000_0001, 0b0000_0000, 0b0000_0000, 0b0000_0000]),
         strayBits: 0
-      ) as MaxMindPointer
+      )
     )
     XCTAssertEqual(
-      MaxMindPointer(1),
+      OutputData.pointer(1),
       bigEndianDecoder.decode(
         Data([0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0001]),
         strayBits: 0b0000_0111
-      ) as MaxMindPointer
+      )
     )
     XCTAssertEqual(
-      MaxMindPointer(16777216),
+      OutputData.pointer(16777216),
       bigEndianDecoder.decode(
         Data([0b0000_0001, 0b0000_0000, 0b0000_0000, 0b0000_0000]),
         strayBits: 0b0000_0111
-      ) as MaxMindPointer
+      )
     )
     XCTAssertEqual(
-      MaxMindPointer(4294967295),
+      OutputData.pointer(4294967295),
       bigEndianDecoder.decode(
         Data([0b1111_1111, 0b1111_1111, 0b1111_1111, 0b1111_1111]),
         strayBits: 0b0000_0111
-      ) as MaxMindPointer
+      )
     )
   }
 

@@ -32,11 +32,6 @@ let package = Package(
       dependencies: ["MaxMindDecoder"],
       path: "Sources/Metadata"
     ),
-    .target(
-      name: "Decoder",
-      dependencies: [],
-      path: "Sources/Decoder"
-    ),
 
     .target(
       name: "DataSection",
@@ -78,11 +73,6 @@ let package = Package(
     .testTarget(
       name: "MaxMindDecoderTests",
       dependencies: ["MaxMindDecoder"]
-    ),
-
-    .testTarget(
-      name: "DecoderTests",
-      dependencies: ["Decoder"]
     ),
 
     .testTarget(

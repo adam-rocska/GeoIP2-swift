@@ -18,7 +18,7 @@ public extension MaxMindDecoder {
   func decode(_ data: Data, as controlByte: ControlByte) -> Any {
     switch controlByte.type {
       case .pointer:
-        return decode(data, strayBits: controlByte.strayBits) as MaxMindPointer
+        return 0
       case .utf8String:
         return decode(data) as String
       case .double:
