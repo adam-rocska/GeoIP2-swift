@@ -39,318 +39,318 @@ class MaxMindIteratorTest: XCTestCase {
     XCTAssertEqual(expectedValue, decode(valueBytes), file: file, line: line)
   }
 
-  private func assertMaxMindMetaData(_ iterator: MaxMindIterator, of data: Data) {
-    let mainMapByte = iterator.next()
-    XCTAssertEqual(DataType.map, mainMapByte?.type)
-    XCTAssertEqual(1, mainMapByte?.definitionSize)
-    XCTAssertEqual(9, mainMapByte?.payloadSize)
+//  private func assertMaxMindMetaData(_ iterator: MaxMindIterator, of data: Data) {
+//    let mainMapByte = iterator.next()
+//    XCTAssertEqual(DataType.map, mainMapByte?.type)
+//    XCTAssertEqual(1, mainMapByte?.definitionSize)
+//    XCTAssertEqual(9, mainMapByte?.payloadSize)
+//
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 27,
+//      definitionSize: 1,
+//      expectedValue: "binary_format_major_version",
+//      decoder: decoder.decode
+//    )
+//
+//    assertNext(
+//      iterator,
+//      type: .uInt16,
+//      payloadSize: 1,
+//      definitionSize: 1,
+//      expectedValue: 2,
+//      decoder: decoder.decode
+//    )
+//
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 27,
+//      definitionSize: 1,
+//      expectedValue: "binary_format_minor_version",
+//      decoder: decoder.decode
+//    )
+//
+//    assertNext(
+//      iterator,
+//      type: .uInt16,
+//      payloadSize: 0,
+//      definitionSize: 1,
+//      expectedValue: 0,
+//      decoder: decoder.decode
+//    )
+//
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 11,
+//      definitionSize: 1,
+//      expectedValue: "build_epoch",
+//      decoder: decoder.decode
+//    )
+//
+//    assertNext(
+//      iterator,
+//      type: .uInt64,
+//      payloadSize: 4,
+//      definitionSize: 2,
+//      expectedValue: UInt64(1587472614),
+//      decoder: decoder.decode
+//    )
+//
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 13,
+//      definitionSize: 1,
+//      expectedValue: "database_type",
+//      decoder: decoder.decode
+//    )
+//
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 16,
+//      definitionSize: 1,
+//      expectedValue: "GeoLite2-Country",
+//      decoder: decoder.decode
+//    )
+//
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 11,
+//      definitionSize: 1,
+//      expectedValue: "description",
+//      decoder: decoder.decode
+//    )
+//
+//    let descriptionMapByte = iterator.next()
+//    XCTAssertEqual(DataType.map, descriptionMapByte?.type)
+//    XCTAssertEqual(1, descriptionMapByte?.definitionSize)
+//    XCTAssertEqual(1, descriptionMapByte?.payloadSize)
+//
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 2,
+//      definitionSize: 1,
+//      expectedValue: "en",
+//      decoder: decoder.decode
+//    )
+//
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 25,
+//      definitionSize: 1,
+//      expectedValue: "GeoLite2 Country database",
+//      decoder: decoder.decode
+//    )
+//
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 10,
+//      definitionSize: 1,
+//      expectedValue: "ip_version",
+//      decoder: decoder.decode
+//    )
+//
+//    assertNext(
+//      iterator,
+//      type: .uInt16,
+//      payloadSize: 1,
+//      definitionSize: 1,
+//      expectedValue: 6,
+//      decoder: decoder.decode
+//    )
+//
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 9,
+//      definitionSize: 1,
+//      expectedValue: "languages",
+//      decoder: decoder.decode
+//    )
+//
+//    let languagesArrayByte = iterator.next()
+//    XCTAssertEqual(DataType.array, languagesArrayByte?.type)
+//    XCTAssertEqual(2, languagesArrayByte?.definitionSize)
+//    XCTAssertEqual(8, languagesArrayByte?.payloadSize)
+//
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 2,
+//      definitionSize: 1,
+//      expectedValue: "de",
+//      decoder: decoder.decode
+//    )
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 2,
+//      definitionSize: 1,
+//      expectedValue: "en",
+//      decoder: decoder.decode
+//    )
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 2,
+//      definitionSize: 1,
+//      expectedValue: "es",
+//      decoder: decoder.decode
+//    )
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 2,
+//      definitionSize: 1,
+//      expectedValue: "fr",
+//      decoder: decoder.decode
+//    )
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 2,
+//      definitionSize: 1,
+//      expectedValue: "ja",
+//      decoder: decoder.decode
+//    )
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 5,
+//      definitionSize: 1,
+//      expectedValue: "pt-BR",
+//      decoder: decoder.decode
+//    )
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 2,
+//      definitionSize: 1,
+//      expectedValue: "ru",
+//      decoder: decoder.decode
+//    )
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 5,
+//      definitionSize: 1,
+//      expectedValue: "zh-CN",
+//      decoder: decoder.decode
+//    )
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 10,
+//      definitionSize: 1,
+//      expectedValue: "node_count",
+//      decoder: decoder.decode
+//    )
+//    assertNext(
+//      iterator,
+//      type: .uInt32,
+//      payloadSize: 3,
+//      definitionSize: 1,
+//      expectedValue: 618459,
+//      decoder: decoder.decode
+//    )
+//    assertNext(
+//      iterator,
+//      type: .utf8String,
+//      payloadSize: 11,
+//      definitionSize: 1,
+//      expectedValue: "record_size",
+//      decoder: decoder.decode
+//    )
+//    assertNext(
+//      iterator,
+//      type: .uInt16,
+//      payloadSize: 1,
+//      definitionSize: 1,
+//      expectedValue: 24,
+//      decoder: decoder.decode
+//    )
+//  }
 
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 27,
-      definitionSize: 1,
-      expectedValue: "binary_format_major_version",
-      decoder: decoder.decode
-    )
+//  func testNext() {
+//    guard let iterator = MaxMindIterator(maxMindMetaData) else {
+//      XCTFail("Iterator should have been creatable.")
+//      return
+//    }
+//    assertMaxMindMetaData(iterator, of: maxMindMetaData)
+//    XCTAssertNil(iterator.next())
+//    XCTAssertTrue(iterator.isExhausted)
+//    iterator.rewind()
+//    XCTAssertFalse(iterator.isExhausted)
+//    assertMaxMindMetaData(iterator, of: maxMindMetaData)
+//    XCTAssertTrue(iterator.isExhausted)
+//  }
 
-    assertNext(
-      iterator,
-      type: .uInt16,
-      payloadSize: 1,
-      definitionSize: 1,
-      expectedValue: 2,
-      decoder: decoder.decode
-    )
+//  func testNext_skipsUnrecognizedDataType() {
+//    guard let iterator = MaxMindIterator(Data([0]) + maxMindMetaData) else {
+//      XCTFail("Iterator should have been creatable.")
+//      return
+//    }
+//
+//    assertMaxMindMetaData(iterator, of: maxMindMetaData)
+//    XCTAssertNil(iterator.next())
+//    XCTAssertTrue(iterator.isExhausted)
+//    iterator.rewind()
+//    XCTAssertFalse(iterator.isExhausted)
+//    assertMaxMindMetaData(iterator, of: maxMindMetaData)
+//    XCTAssertTrue(iterator.isExhausted)
+//    iterator.rewind()
+//  }
 
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 27,
-      definitionSize: 1,
-      expectedValue: "binary_format_minor_version",
-      decoder: decoder.decode
-    )
+//  func testSeek() {
+//    let padData = Data([
+//                         0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+//                         0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+//                         0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+//                         0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000
+//                       ])
+//
+//    guard let iterator = MaxMindIterator(padData + maxMindMetaData) else {
+//      XCTFail("Iterator should have been creatable.")
+//      return
+//    }
+//    iterator.seek(to: padData.count)
+//    assertMaxMindMetaData(iterator, of: maxMindMetaData)
+//    XCTAssertNil(iterator.next())
+//    XCTAssertTrue(iterator.isExhausted)
+//    iterator.rewind()
+//    iterator.seek(to: padData.count)
+//    XCTAssertFalse(iterator.isExhausted)
+//    assertMaxMindMetaData(iterator, of: maxMindMetaData)
+//    XCTAssertTrue(iterator.isExhausted)
+//
+//  }
 
-    assertNext(
-      iterator,
-      type: .uInt16,
-      payloadSize: 0,
-      definitionSize: 1,
-      expectedValue: 0,
-      decoder: decoder.decode
-    )
-
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 11,
-      definitionSize: 1,
-      expectedValue: "build_epoch",
-      decoder: decoder.decode
-    )
-
-    assertNext(
-      iterator,
-      type: .uInt64,
-      payloadSize: 4,
-      definitionSize: 2,
-      expectedValue: UInt64(1587472614),
-      decoder: decoder.decode
-    )
-
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 13,
-      definitionSize: 1,
-      expectedValue: "database_type",
-      decoder: decoder.decode
-    )
-
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 16,
-      definitionSize: 1,
-      expectedValue: "GeoLite2-Country",
-      decoder: decoder.decode
-    )
-
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 11,
-      definitionSize: 1,
-      expectedValue: "description",
-      decoder: decoder.decode
-    )
-
-    let descriptionMapByte = iterator.next()
-    XCTAssertEqual(DataType.map, descriptionMapByte?.type)
-    XCTAssertEqual(1, descriptionMapByte?.definitionSize)
-    XCTAssertEqual(1, descriptionMapByte?.payloadSize)
-
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 2,
-      definitionSize: 1,
-      expectedValue: "en",
-      decoder: decoder.decode
-    )
-
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 25,
-      definitionSize: 1,
-      expectedValue: "GeoLite2 Country database",
-      decoder: decoder.decode
-    )
-
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 10,
-      definitionSize: 1,
-      expectedValue: "ip_version",
-      decoder: decoder.decode
-    )
-
-    assertNext(
-      iterator,
-      type: .uInt16,
-      payloadSize: 1,
-      definitionSize: 1,
-      expectedValue: 6,
-      decoder: decoder.decode
-    )
-
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 9,
-      definitionSize: 1,
-      expectedValue: "languages",
-      decoder: decoder.decode
-    )
-
-    let languagesArrayByte = iterator.next()
-    XCTAssertEqual(DataType.array, languagesArrayByte?.type)
-    XCTAssertEqual(2, languagesArrayByte?.definitionSize)
-    XCTAssertEqual(8, languagesArrayByte?.payloadSize)
-
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 2,
-      definitionSize: 1,
-      expectedValue: "de",
-      decoder: decoder.decode
-    )
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 2,
-      definitionSize: 1,
-      expectedValue: "en",
-      decoder: decoder.decode
-    )
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 2,
-      definitionSize: 1,
-      expectedValue: "es",
-      decoder: decoder.decode
-    )
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 2,
-      definitionSize: 1,
-      expectedValue: "fr",
-      decoder: decoder.decode
-    )
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 2,
-      definitionSize: 1,
-      expectedValue: "ja",
-      decoder: decoder.decode
-    )
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 5,
-      definitionSize: 1,
-      expectedValue: "pt-BR",
-      decoder: decoder.decode
-    )
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 2,
-      definitionSize: 1,
-      expectedValue: "ru",
-      decoder: decoder.decode
-    )
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 5,
-      definitionSize: 1,
-      expectedValue: "zh-CN",
-      decoder: decoder.decode
-    )
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 10,
-      definitionSize: 1,
-      expectedValue: "node_count",
-      decoder: decoder.decode
-    )
-    assertNext(
-      iterator,
-      type: .uInt32,
-      payloadSize: 3,
-      definitionSize: 1,
-      expectedValue: 618459,
-      decoder: decoder.decode
-    )
-    assertNext(
-      iterator,
-      type: .utf8String,
-      payloadSize: 11,
-      definitionSize: 1,
-      expectedValue: "record_size",
-      decoder: decoder.decode
-    )
-    assertNext(
-      iterator,
-      type: .uInt16,
-      payloadSize: 1,
-      definitionSize: 1,
-      expectedValue: 24,
-      decoder: decoder.decode
-    )
-  }
-
-  func testNext() {
-    guard let iterator = MaxMindIterator(maxMindMetaData) else {
-      XCTFail("Iterator should have been creatable.")
-      return
-    }
-    assertMaxMindMetaData(iterator, of: maxMindMetaData)
-    XCTAssertNil(iterator.next())
-    XCTAssertTrue(iterator.isExhausted)
-    iterator.rewind()
-    XCTAssertFalse(iterator.isExhausted)
-    assertMaxMindMetaData(iterator, of: maxMindMetaData)
-    XCTAssertTrue(iterator.isExhausted)
-  }
-
-  func testNext_skipsUnrecognizedDataType() {
-    guard let iterator = MaxMindIterator(Data([0]) + maxMindMetaData) else {
-      XCTFail("Iterator should have been creatable.")
-      return
-    }
-
-    assertMaxMindMetaData(iterator, of: maxMindMetaData)
-    XCTAssertNil(iterator.next())
-    XCTAssertTrue(iterator.isExhausted)
-    iterator.rewind()
-    XCTAssertFalse(iterator.isExhausted)
-    assertMaxMindMetaData(iterator, of: maxMindMetaData)
-    XCTAssertTrue(iterator.isExhausted)
-    iterator.rewind()
-  }
-
-  func testSeek() {
-    let padData = Data([
-                         0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
-                         0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
-                         0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
-                         0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000
-                       ])
-
-    guard let iterator = MaxMindIterator(padData + maxMindMetaData) else {
-      XCTFail("Iterator should have been creatable.")
-      return
-    }
-    iterator.seek(to: padData.count)
-    assertMaxMindMetaData(iterator, of: maxMindMetaData)
-    XCTAssertNil(iterator.next())
-    XCTAssertTrue(iterator.isExhausted)
-    iterator.rewind()
-    iterator.seek(to: padData.count)
-    XCTAssertFalse(iterator.isExhausted)
-    assertMaxMindMetaData(iterator, of: maxMindMetaData)
-    XCTAssertTrue(iterator.isExhausted)
-
-  }
-
-  func testPeek() {
-    let controlByteBinary = Data([0b0101_1100])
-    let stringBinary      = "Hello World Hello World test".data(using: .utf8)!
-    let iterator          = MaxMindIterator(controlByteBinary + stringBinary)!
-    XCTAssertEqual(iterator.peek(at: 0), iterator.peek(at: 0))
-    XCTAssertEqual(ControlByte(bytes: controlByteBinary), iterator.peek(at: 0))
-    let controlByte = iterator.next()!
-    XCTAssertEqual(controlByte, iterator.peek(at: 0))
-    XCTAssertEqual(stringBinary, iterator.peek(controlByte, at: 1))
-    XCTAssertEqual(iterator.peek(controlByte, at: 1), iterator.peek(controlByte, at: 1))
-    XCTAssertEqual(iterator.peek(controlByte, at: 1), iterator.next(controlByte))
-    XCTAssertTrue(iterator.isExhausted)
-    XCTAssertEqual(ControlByte(bytes: controlByteBinary), iterator.peek(at: 0))
-    XCTAssertEqual(stringBinary, iterator.peek(controlByte, at: 1))
-
-    XCTAssertNil(iterator.peek(at: 9999999))
-    XCTAssertNil(iterator.peek(controlByte, at: 9999999))
-  }
+//  func testPeek() {
+//    let controlByteBinary = Data([0b0101_1100])
+//    let stringBinary      = "Hello World Hello World test".data(using: .utf8)!
+//    let iterator          = MaxMindIterator(controlByteBinary + stringBinary)!
+//    XCTAssertEqual(iterator.peek(at: 0), iterator.peek(at: 0))
+//    XCTAssertEqual(ControlByte(bytes: controlByteBinary), iterator.peek(at: 0))
+//    let controlByte = iterator.next()!
+//    XCTAssertEqual(controlByte, iterator.peek(at: 0))
+//    XCTAssertEqual(stringBinary, iterator.peek(controlByte, at: 1))
+//    XCTAssertEqual(iterator.peek(controlByte, at: 1), iterator.peek(controlByte, at: 1))
+//    XCTAssertEqual(iterator.peek(controlByte, at: 1), iterator.next(controlByte))
+//    XCTAssertTrue(iterator.isExhausted)
+//    XCTAssertEqual(ControlByte(bytes: controlByteBinary), iterator.peek(at: 0))
+//    XCTAssertEqual(stringBinary, iterator.peek(controlByte, at: 1))
+//
+//    XCTAssertNil(iterator.peek(at: 9999999))
+//    XCTAssertNil(iterator.peek(controlByte, at: 9999999))
+//  }
 
 }
 

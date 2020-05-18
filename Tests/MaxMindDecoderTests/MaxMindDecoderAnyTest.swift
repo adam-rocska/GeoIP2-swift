@@ -8,15 +8,15 @@ class MaxMindDecoderAnyTest: XCTestCase {
   private let bigEndianDecoder    = MaxMindDecoder(inputEndianness: .big)
   private let littleEndianDecoder = MaxMindDecoder(inputEndianness: .little)
 
-  func testDecode_any_asString_fromData() {
-    let string28BytesLong = ControlByte(bytes: Data([0b0101_1100]))!
-    let expectedString    = "Hello World Hello World test"
-    let decoded           = bigEndianDecoder.decode(
-      expectedString.data(using: .utf8)!,
-      as: string28BytesLong
-    )
-    XCTAssertEqual(expectedString, decoded as? String)
-  }
+//  func testDecode_any_asString_fromData() {
+//    let string28BytesLong = ControlByte(bytes: Data([0b0101_1100]))!
+//    let expectedString    = "Hello World Hello World test"
+//    let decoded           = bigEndianDecoder.decode(
+//      expectedString.data(using: .utf8)!,
+//      as: string28BytesLong
+//    )
+//    XCTAssertEqual(expectedString, decoded as? String)
+//  }
 
   func testDecode_any_asBytes_fromData() {
     let bytes5BytesLong = ControlByte(bytes: Data([0b1000_0101]))!
@@ -60,26 +60,26 @@ class MaxMindDecoderAnyTest: XCTestCase {
     XCTAssertEqual(true, decoded as? Bool)
   }
 
-  func testDecode_any_asArray_fromData() {
-    let array                   = ControlByte(bytes: Data([0b00001000, 0b00000100]))!
-    let encoded                 = Data(
-      [0b01000010, 0b01100100, 0b01100101, 0b01000010,
-       0b01100101, 0b01101110, 0b01000010, 0b01100101,
-       0b01110011, 0b01000010, 0b01100110, 0b01110010,
-       0b01000010, 0b01101010, 0b01100001, 0b01000101,
-       0b01110000, 0b01110100, 0b00101101, 0b01000010,
-       0b01010010, 0b01000010, 0b01110010, 0b01110101,
-       0b01000101, 0b01111010, 0b01101000, 0b00101101,
-       0b01000011, 0b01001110
-      ]
-    )
-    let expectedValues          = ["de", "en", "es", "fr", "ja", "pt-BR", "ru", "zh-CN"]
-    let decodedViaAny           = bigEndianDecoder.decode(encoded, as: array) as? [Any]
-    let decodedViaDirect: [Any] = bigEndianDecoder.decode(encoded, size: Int(array.payloadSize))
-
-    XCTAssertEqual(expectedValues, decodedViaAny as? [String])
-    XCTAssertEqual(expectedValues, decodedViaDirect as? [String])
-    XCTAssertEqual(decodedViaAny as? [String], decodedViaDirect as? [String])
-  }
+//  func testDecode_any_asArray_fromData() {
+//    let array                   = ControlByte(bytes: Data([0b00001000, 0b00000100]))!
+//    let encoded                 = Data(
+//      [0b01000010, 0b01100100, 0b01100101, 0b01000010,
+//       0b01100101, 0b01101110, 0b01000010, 0b01100101,
+//       0b01110011, 0b01000010, 0b01100110, 0b01110010,
+//       0b01000010, 0b01101010, 0b01100001, 0b01000101,
+//       0b01110000, 0b01110100, 0b00101101, 0b01000010,
+//       0b01010010, 0b01000010, 0b01110010, 0b01110101,
+//       0b01000101, 0b01111010, 0b01101000, 0b00101101,
+//       0b01000011, 0b01001110
+//      ]
+//    )
+//    let expectedValues          = ["de", "en", "es", "fr", "ja", "pt-BR", "ru", "zh-CN"]
+//    let decodedViaAny           = bigEndianDecoder.decode(encoded, as: array) as? [Any]
+//    let decodedViaDirect: [Any] = bigEndianDecoder.decode(encoded, size: Int(array.payloadSize))
+//
+//    XCTAssertEqual(expectedValues, decodedViaAny as? [String])
+//    XCTAssertEqual(expectedValues, decodedViaDirect as? [String])
+//    XCTAssertEqual(decodedViaAny as? [String], decodedViaDirect as? [String])
+//  }
 
 }

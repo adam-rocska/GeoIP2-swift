@@ -4,8 +4,6 @@ public extension MaxMindDecoder {
 
   private func resolveKey(_ iterator: MaxMindIterator) -> String? {
     switch iterator.next() {
-      case .some(let cb) where cb.type == .utf8String:
-        return decode(iterator.next(cb))
       default:
         return nil
     }

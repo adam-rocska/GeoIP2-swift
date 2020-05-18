@@ -20,7 +20,7 @@ public extension MaxMindDecoder {
       case .pointer:
         return 0
       case .utf8String:
-        return decode(data) as String
+        return 0
       case .double:
         // TODO
         return 0

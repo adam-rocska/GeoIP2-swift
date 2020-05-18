@@ -2,7 +2,7 @@ import Foundation
 
 extension Decoder {
 
-  func decode(_ data: Data, strayBits: UInt8) -> OutputData {
+  func decodeAsPointer(_ data: Data, strayBits: UInt8) -> OutputData {
     let dataSize = data.count
     precondition(dataSize <= 4 && dataSize >= 1, "Pointer size must be at least 1 byte & at most 4. Got \(dataSize)")
 

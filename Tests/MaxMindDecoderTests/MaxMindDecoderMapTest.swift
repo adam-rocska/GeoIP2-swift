@@ -87,25 +87,25 @@ class MaxMindDecoderMapTest: XCTestCase {
     )
   }
 
-  func testDecode_dataToDictionary() {
-    let actualMaxMindMetaDataDictionary: [String: Any] = bigEndianDecoder.decode(maxMindMetaData, size: 9)
-    assertMetadataEquality(
-      expectedMaxMindMetaDataDictionary,
-      actualMaxMindMetaDataDictionary
-    )
-  }
+//  func testDecode_dataToDictionary() {
+//    let actualMaxMindMetaDataDictionary: [String: Any] = bigEndianDecoder.decode(maxMindMetaData, size: 9)
+//    assertMetadataEquality(
+//      expectedMaxMindMetaDataDictionary,
+//      actualMaxMindMetaDataDictionary
+//    )
+//  }
 
-  func testDecode_iteratorToDictionary() {
-    guard let iterator = MaxMindIterator(maxMindMetaData) else {
-      XCTFail("MaxMind Meta Data is a valid input, yet iterator was not created.")
-      return
-    }
-    let actualMaxMindMetaDataDictionary: [String: Any] = bigEndianDecoder.decode(iterator, size: 9)
-    assertMetadataEquality(
-      expectedMaxMindMetaDataDictionary,
-      actualMaxMindMetaDataDictionary
-    )
-  }
+//  func testDecode_iteratorToDictionary() {
+//    guard let iterator = MaxMindIterator(maxMindMetaData) else {
+//      XCTFail("MaxMind Meta Data is a valid input, yet iterator was not created.")
+//      return
+//    }
+//    let actualMaxMindMetaDataDictionary: [String: Any] = bigEndianDecoder.decode(iterator, size: 9)
+//    assertMetadataEquality(
+//      expectedMaxMindMetaDataDictionary,
+//      actualMaxMindMetaDataDictionary
+//    )
+//  }
 
 }
 
