@@ -192,4 +192,36 @@ class DataTest: XCTestCase {
     }
   }
 
+  private func assertPaddingFor<N>(_ Type: N.Type) where N: FixedWidthInteger {
+    // TODO : This assertion is incomplete, and primitve for the edge cases when the php scripter fantasy world sends us for example 0b1000_1111  to interpret as a signed int 32.
+    let byteVariances: [UInt8] = N.isSigned ? [0x00, 0xFF] : [0x00]
+    for count in 0...MemoryLayout<N>.size {
+      for byte in byteVariances {
+        let bigPadded    = Data(repeating: byte, count: count).padded(for: Type.self, as: .big)
+        let littlePadded = Data(repeating: byte, count: count).padded(for: Type.self, as: .little)
+        XCTAssertEqual(
+          MemoryLayout<N>.size,
+          bigPadded.count,
+          "The padded Data's length must equal the expected type's byte count."
+        )
+        XCTAssertEqual(
+          MemoryLayout<N>.size,
+          littlePadded.count,
+          "The padded Data's length must equal the expected type's byte count."
+        )
+        let expected = Data(repeating: count == 0 ? 0x00 : byte, count: MemoryLayout<N>.size)
+        XCTAssertEqual(expected, bigPadded, "Expected \(expected as NSData), got \(bigPadded as NSData)")
+        XCTAssertEqual(expected, littlePadded, "Expected \(expected as NSData), got \(bigPadded as NSData)")
+      }
+    }
+  }
+
+  func testPadded() {
+    assertPaddingFor(UInt8.self)
+    assertPaddingFor(UInt16.self)
+    assertPaddingFor(UInt32.self)
+    assertPaddingFor(UInt64.self)
+    assertPaddingFor(Int32.self)
+  }
+
 }
