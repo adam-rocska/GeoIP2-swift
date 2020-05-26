@@ -25,7 +25,7 @@ internal extension Data {
     let padByte = Type.isSigned && (mostSignificantByte & 0b1000_0000) == 0b1000_0000
                   ? UInt8(0xFF)
                   : UInt8(0x00)
-    return concat(self, Data(repeating: padByte, count: expectedSize - count))
+    return concat(Data(repeating: padByte, count: expectedSize - count), self)
   }
 
 }
