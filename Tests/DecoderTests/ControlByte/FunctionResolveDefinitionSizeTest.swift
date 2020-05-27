@@ -50,7 +50,9 @@ class FunctionResolveDefinitionSizeTest: XCTestCase {
                     ? Data([baseBits, dataType.rawValue])
                     : Data([(dataType.rawValue &<< 5) | baseBits])
 
-        let expectedDefinitionSize        = expectedBaseSize + (baseBits & 0b0000_0011)
+        let expectedDefinitionSize        = baseBits < 29
+                                            ? expectedBaseSize
+                                            : expectedBaseSize + (baseBits & 0b0000_0011)
         let bigEndianActualDefinitionSize = resolveDefinitionSize(
           dataType: dataType,
           bytes: input,
