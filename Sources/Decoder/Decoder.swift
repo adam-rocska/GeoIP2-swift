@@ -2,10 +2,10 @@ import Foundation
 
 public class Decoder {
 
-  public typealias Output = (
+  typealias Output = (
     payload: Payload,
-    controlStart: Data.Index,
-    payloadStart: Data.Index
+    controlRange: Range<Data.Index>,
+    payloadRange: Range<Data.Index>
   )
 
   private let data:                   Data
@@ -68,10 +68,17 @@ public class Decoder {
         payloadStart: payloadStart
       ),
       using: self,
-      resolvePointers : resolvePointers
+      resolvePointers: resolvePointers
     )
 //    return (payload, controlByteOffset, payloadOffset)
     return nil
+  }
+
+  public func read(at controlByteOffset: Int, resolvePointers: Bool = true) -> Payload? {
+    guard let output: Output = read(at: controlByteOffset, resolvePointers: resolvePointers) else {
+      return nil
+    }
+    return output.payload
   }
 
 }

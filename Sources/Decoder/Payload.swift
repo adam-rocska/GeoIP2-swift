@@ -1,6 +1,6 @@
 import Foundation
 
-public enum Payload {
+public enum Payload: Equatable {
   case pointer(UInt32)
   case utf8String(String)
   case double(Double)

@@ -14,7 +14,7 @@ class DecoderTest: XCTestCase {
       )
       let exceedingIndex = byteCount + 1
       XCTAssertNil(
-        decoder.read(at: exceedingIndex),
+        decoder.read(at: exceedingIndex) as Decoder.Output?,
         "Should have returned nil for \(data as NSData) when looking up an exceeding index of \(exceedingIndex)"
       )
     }
@@ -57,7 +57,7 @@ class DecoderTest: XCTestCase {
         },
         payloadInterpreter: MockPayloadInterpreter()
       )
-      XCTAssertNil(decoder.read(at: indexToStartLookupFrom))
+      XCTAssertNil(decoder.read(at: indexToStartLookupFrom) as Decoder.Output?)
       XCTAssertTrue(interpretCalled, "Interpreter should have been called.")
     }
   }

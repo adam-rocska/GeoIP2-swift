@@ -32,9 +32,12 @@ class PayloadInterpreter {
       case .int32:      return interpretInt32(bytes: input.bytes, sourceEndianness: input.sourceEndianness)
       case .uInt64:     return interpretUInt64(bytes: input.bytes, sourceEndianness: input.sourceEndianness)
       case .uInt128:    return Payload.uInt128(input.bytes)
-      case .array(let entryCount):
-        // TODO
-        return Payload.array([])
+      case .array(let entryCount): return interpretArray(
+        entryCount: entryCount,
+        decoder: decoder,
+        payloadStart: input.payloadStart,
+        resolvePointers: resolvePointers
+      )
       case .dataCacheContainer(let entryCount):
         // TODO
         return Payload.dataCacheContainer([])
