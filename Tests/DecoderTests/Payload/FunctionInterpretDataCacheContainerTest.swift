@@ -2,23 +2,23 @@ import Foundation
 import XCTest
 @testable import Decoder
 
-class FunctionInterpretArrayTest: XCTestCase {
+class FunctionInterpretDataCacheContainerTest: XCTestCase {
 
-  func testInterpretArray_returnsNilIfAtLeastOneElementIsUnresolved() {
+  func testInterpretDataCacheContainer_returnsNilIfAtLeastOneElementIsUnresolved() {
     let mockDecoder = MockDecoder()
-    XCTAssertNil(interpretArray(entryCount: 3, decoder: mockDecoder, payloadStart: 10, resolvePointers: true))
+    XCTAssertNil(interpretDataCacheContainer(entryCount: 3, decoder: mockDecoder, payloadStart: 10, resolvePointers: true))
     XCTAssertEqual(1, mockDecoder.readCounter)
     mockDecoder.entries[ReadKey(controlByteOffset: 10, resolvePointers: true)] = (
       payload: Payload.int32(100),
       controlRange: Range(uncheckedBounds: (0, 5)),
       payloadRange: Range(uncheckedBounds: (5, 7))
     )
-    XCTAssertNil(interpretArray(entryCount: 3, decoder: mockDecoder, payloadStart: 10, resolvePointers: true))
+    XCTAssertNil(interpretDataCacheContainer(entryCount: 3, decoder: mockDecoder, payloadStart: 10, resolvePointers: true))
     XCTAssertEqual(3, mockDecoder.readCounter)
   }
 
-  func testInterpretArray_constructsAndReturnsArrayIfAllElementsAreResolved() {
-    let expectedArray = [
+  func testInterpretDataCacheContainer_constructsAndReturnsDataCacheContainerIfAllElementsAreResolved() {
+    let expectedDataCacheContainer = [
       Payload.utf8String("Test String"),
       Payload.double(123.0),
       Payload.bytes(Data([0xAB, 0xCD, 0xDE])),
@@ -28,7 +28,7 @@ class FunctionInterpretArrayTest: XCTestCase {
       Payload.int32(123),
       Payload.uInt64(123),
       Payload.uInt128(Data([0xAB, 0xCD])),
-      Payload.array([
+      Payload.dataCacheContainer([
                       Payload.utf8String("ab"),
                       Payload.utf8String("cd"),
                       Payload.utf8String("ef")
@@ -48,7 +48,7 @@ class FunctionInterpretArrayTest: XCTestCase {
 
     let startOffset = 10
     var offset      = startOffset
-    for (index, payload) in expectedArray.enumerated() {
+    for (index, payload) in expectedDataCacheContainer.enumerated() {
       let nextOffset = offset + index + 1
       let key        = ReadKey(controlByteOffset: offset, resolvePointers: true)
       let value      = (
@@ -60,8 +60,8 @@ class FunctionInterpretArrayTest: XCTestCase {
       offset = nextOffset
     }
 
-    guard let payload = interpretArray(
-      entryCount: UInt32(expectedArray.count),
+    guard let payload = interpretDataCacheContainer(
+      entryCount: UInt32(expectedDataCacheContainer.count),
       decoder: mockDecoder,
       payloadStart: startOffset,
       resolvePointers: true
@@ -71,11 +71,11 @@ class FunctionInterpretArrayTest: XCTestCase {
     }
 
     switch payload {
-      case .array(let items):
+      case .dataCacheContainer(let items):
         for (index, item) in items.enumerated() {
-          XCTAssertEqual(expectedArray[index], item)
+          XCTAssertEqual(expectedDataCacheContainer[index], item)
         }
-      default: XCTFail("Should have resolved an array payload.")
+      default: XCTFail("Should have resolved an dataCacheContainer payload.")
     }
   }
 

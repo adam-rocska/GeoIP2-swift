@@ -38,8 +38,12 @@ class PayloadInterpreter {
         payloadStart: input.payloadStart,
         resolvePointers: resolvePointers
       )
-      case .dataCacheContainer(let entryCount):
-        // TODO
+      case .dataCacheContainer(let entryCount): return interpretDataCacheContainer(
+        entryCount: entryCount,
+        decoder: decoder,
+        payloadStart: input.payloadStart,
+        resolvePointers: resolvePointers
+      )
         return Payload.dataCacheContainer([])
       case .endMarker:            return Payload.endMarker
       case .boolean(let payload): return Payload.boolean(payload)
