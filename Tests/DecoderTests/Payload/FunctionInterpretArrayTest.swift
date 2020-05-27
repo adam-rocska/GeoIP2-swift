@@ -60,7 +60,7 @@ class FunctionInterpretArrayTest: XCTestCase {
       offset = nextOffset
     }
 
-    guard let payload = interpretArray(
+    guard let (payload, payloadSize) = interpretArray(
       entryCount: UInt32(expectedArray.count),
       decoder: mockDecoder,
       payloadStart: startOffset,
@@ -70,6 +70,7 @@ class FunctionInterpretArrayTest: XCTestCase {
       return
     }
 
+    XCTAssertEqual(offset - startOffset, Int(payloadSize))
     switch payload {
       case .array(let items):
         for (index, item) in items.enumerated() {
@@ -122,5 +123,5 @@ fileprivate class MockPayloadInterpreter: PayloadInterpreter {
     input: Input,
     using decoder: Decoder,
     resolvePointers: Bool
-  ) -> Payload? { return nil }
+  ) -> InterpretationResult? { return nil }
 }

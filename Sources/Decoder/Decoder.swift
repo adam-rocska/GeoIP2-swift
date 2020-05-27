@@ -23,7 +23,7 @@ public class Decoder {
     self.payloadInterpreter = payloadInterpreter
   }
 
-  private func sliceData(offset: Int, count: Int) -> Data {
+  private func rangeOfData(offset: Int, count: Int) -> Range<Data.Index> {
     let sliceStart = data.index(
       data.startIndex,
       offsetBy: offset,
@@ -32,16 +32,16 @@ public class Decoder {
 
     let sliceEnd = data.index(
       sliceStart,
-      offsetBy: count - 1,
-      limitedBy: data.index(before: data.endIndex)
-    ) ?? data.index(before: data.endIndex)
+      offsetBy: count,
+      limitedBy: data.endIndex
+    ) ?? data.endIndex
 
-    return data[sliceStart...sliceEnd]
+    return Range(uncheckedBounds: (lower: sliceStart, upper: sliceEnd))
   }
 
   func read(at controlByteOffset: Int, resolvePointers: Bool = true) -> Output? {
     if controlByteOffset >= data.count { return nil }
-    let controlByteCandidate = sliceData(offset: controlByteOffset, count: 5)
+    let controlByteCandidate = data.subdata(in: rangeOfData(offset: controlByteOffset, count: 5))
     guard let controlByteResult = controlByteInterpreter.interpret(
       bytes: controlByteCandidate,
       sourceEndianness: .big
@@ -53,13 +53,14 @@ public class Decoder {
     let payloadBytes: Data
     if let controlByteCount = controlByteResult.controlByte.byteCount {
       let payloadEnd = payloadStart + Int(controlByteCount)
-      if !data.indices.contains(payloadEnd) { return nil }
-      payloadBytes = sliceData(offset: payloadStart, count: Int(controlByteCount))
+      if payloadEnd > data.endIndex { return nil }
+//      if !data.indices.contains(payloadEnd) { return nil }
+      payloadBytes = data.subdata(in: rangeOfData(offset: payloadStart, count: Int(controlByteCount)))
     } else {
       payloadBytes = Data()
     }
 
-    let payload = payloadInterpreter.interpret(
+    guard let payloadResult = payloadInterpreter.interpret(
       input: (
         bytes: payloadBytes,
         controlByte: controlByteResult.controlByte,
@@ -69,9 +70,23 @@ public class Decoder {
       ),
       using: self,
       resolvePointers: resolvePointers
+    ) else {
+      return nil
+    }
+
+    let controlRange = Range(
+      uncheckedBounds: (
+        lower: controlByteOffset,
+        upper: controlByteOffset + controlByteResult.definition.count
+      )
     )
-//    return (payload, controlByteOffset, payloadOffset)
-    return nil
+    let payloadRange = Range(
+      uncheckedBounds: (
+        lower: controlRange.upperBound,
+        upper: controlRange.upperBound + Int(payloadResult.definitionSize)
+      )
+    )
+    return (payloadResult.payload, controlRange, payloadRange)
   }
 
   public func read(at controlByteOffset: Int, resolvePointers: Bool = true) -> Payload? {

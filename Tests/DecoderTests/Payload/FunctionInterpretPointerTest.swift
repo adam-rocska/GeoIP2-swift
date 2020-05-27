@@ -60,7 +60,7 @@ fileprivate class StubControlByteInterpreter: ControlByteInterpreter {
 }
 
 fileprivate class StubPayloadInterpreter: PayloadInterpreter {
-  override func interpret(input: Input, using decoder: Decoder, resolvePointers: Bool) -> Payload? {
+  override func interpret(input: Input, using decoder: Decoder, resolvePointers: Bool) -> InterpretationResult? {
     return nil
   }
 }

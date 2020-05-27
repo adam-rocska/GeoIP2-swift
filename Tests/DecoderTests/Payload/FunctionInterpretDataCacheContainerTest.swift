@@ -6,14 +6,18 @@ class FunctionInterpretDataCacheContainerTest: XCTestCase {
 
   func testInterpretDataCacheContainer_returnsNilIfAtLeastOneElementIsUnresolved() {
     let mockDecoder = MockDecoder()
-    XCTAssertNil(interpretDataCacheContainer(entryCount: 3, decoder: mockDecoder, payloadStart: 10, resolvePointers: true))
+    XCTAssertNil(
+      interpretDataCacheContainer(entryCount: 3, decoder: mockDecoder, payloadStart: 10, resolvePointers: true)
+    )
     XCTAssertEqual(1, mockDecoder.readCounter)
     mockDecoder.entries[ReadKey(controlByteOffset: 10, resolvePointers: true)] = (
       payload: Payload.int32(100),
       controlRange: Range(uncheckedBounds: (0, 5)),
       payloadRange: Range(uncheckedBounds: (5, 7))
     )
-    XCTAssertNil(interpretDataCacheContainer(entryCount: 3, decoder: mockDecoder, payloadStart: 10, resolvePointers: true))
+    XCTAssertNil(
+      interpretDataCacheContainer(entryCount: 3, decoder: mockDecoder, payloadStart: 10, resolvePointers: true)
+    )
     XCTAssertEqual(3, mockDecoder.readCounter)
   }
 
@@ -29,10 +33,10 @@ class FunctionInterpretDataCacheContainerTest: XCTestCase {
       Payload.uInt64(123),
       Payload.uInt128(Data([0xAB, 0xCD])),
       Payload.dataCacheContainer([
-                      Payload.utf8String("ab"),
-                      Payload.utf8String("cd"),
-                      Payload.utf8String("ef")
-                    ]),
+                                   Payload.utf8String("ab"),
+                                   Payload.utf8String("cd"),
+                                   Payload.utf8String("ef")
+                                 ]),
       Payload.dataCacheContainer([
                                    Payload.utf8String("ab"),
                                    Payload.utf8String("cd"),
@@ -60,7 +64,7 @@ class FunctionInterpretDataCacheContainerTest: XCTestCase {
       offset = nextOffset
     }
 
-    guard let payload = interpretDataCacheContainer(
+    guard let (payload, payloadSize) = interpretDataCacheContainer(
       entryCount: UInt32(expectedDataCacheContainer.count),
       decoder: mockDecoder,
       payloadStart: startOffset,
@@ -70,6 +74,7 @@ class FunctionInterpretDataCacheContainerTest: XCTestCase {
       return
     }
 
+    XCTAssertEqual(offset - startOffset, Int(payloadSize))
     switch payload {
       case .dataCacheContainer(let items):
         for (index, item) in items.enumerated() {
@@ -122,5 +127,5 @@ fileprivate class MockPayloadInterpreter: PayloadInterpreter {
     input: Input,
     using decoder: Decoder,
     resolvePointers: Bool
-  ) -> Payload? { return nil }
+  ) -> InterpretationResult? { return nil }
 }

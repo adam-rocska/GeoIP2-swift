@@ -5,7 +5,7 @@ func interpretDataCacheContainer(
   decoder: Decoder,
   payloadStart: Data.Index,
   resolvePointers: Bool
-) -> Payload? {
+) -> (Payload, UInt32)? {
   var result: [Payload]  = []
   var payloadIndexToRead = payloadStart
   for _ in 1...entryCount {
@@ -16,5 +16,5 @@ func interpretDataCacheContainer(
     result.append(output.payload)
   }
 
-  return Payload.dataCacheContainer(result)
+  return (Payload.dataCacheContainer(result), UInt32(payloadIndexToRead - payloadStart))
 }

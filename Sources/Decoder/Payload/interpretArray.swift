@@ -5,7 +5,7 @@ func interpretArray(
   decoder: Decoder,
   payloadStart: Data.Index,
   resolvePointers: Bool
-) -> Payload? {
+) -> (Payload, UInt32)? {
   var result: [Payload]  = []
   var payloadIndexToRead = payloadStart
   for _ in 1...entryCount {
@@ -16,5 +16,5 @@ func interpretArray(
     result.append(output.payload)
   }
 
-  return Payload.array(result)
+  return (Payload.array(result), UInt32(payloadIndexToRead - payloadStart))
 }

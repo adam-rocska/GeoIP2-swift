@@ -10,44 +10,87 @@ class PayloadInterpreter {
     payloadStart: Data.Index
   )
 
-  func interpret(input: Input, using decoder: Decoder, resolvePointers: Bool) -> Payload? {
+  typealias InterpretationResult = (payload: Payload, definitionSize: UInt32)
+
+  func interpret(input: Input, using decoder: Decoder, resolvePointers: Bool) -> InterpretationResult? {
     switch input.controlByte {
       case .pointer(let payloadSize, let strayBits):
-        return interpretPointer(
+        guard let payload = interpretPointer(
           bytes: input.bytes,
           payloadSize: payloadSize,
           strayBits: strayBits,
           sourceEndianness: input.sourceEndianness,
           resolvePointers: resolvePointers,
           decoder: decoder
-        )
-      case .utf8String: return interpretUtf8String(bytes: input.bytes)
-      case .double:     return interpretDouble(bytes: input.bytes, sourceEndianness: input.sourceEndianness)
-      case .bytes:      return Payload.bytes(input.bytes)
-      case .uInt16:     return interpretUInt16(bytes: input.bytes, sourceEndianness: input.sourceEndianness)
-      case .uInt32:     return interpretUInt32(bytes: input.bytes, sourceEndianness: input.sourceEndianness)
+        ) else { return nil }
+        return (payload, payloadSize)
+      case .utf8String(let payloadSize):
+        guard let payload = interpretUtf8String(bytes: input.bytes) else { return nil }
+        return (payload, payloadSize)
+      case .double(let payloadSize):
+        guard let payload = interpretDouble(
+          bytes: input.bytes,
+          sourceEndianness: input.sourceEndianness
+        ) else { return nil }
+        return (payload, payloadSize)
+      case .bytes(let payloadSize):
+        return (Payload.bytes(input.bytes), payloadSize)
+      case .uInt16(let payloadSize):
+        guard let payload = interpretUInt16(
+          bytes: input.bytes,
+          sourceEndianness: input.sourceEndianness
+        ) else { return nil }
+        return (payload, payloadSize)
+      case .uInt32(let payloadSize):
+        guard let payload = interpretUInt32(bytes: input.bytes, sourceEndianness: input.sourceEndianness) else {
+          return nil
+        }
+        return (payload, payloadSize)
       case .map(let entryCount):
-        // TODO
-        return Payload.map([:])
-      case .int32:      return interpretInt32(bytes: input.bytes, sourceEndianness: input.sourceEndianness)
-      case .uInt64:     return interpretUInt64(bytes: input.bytes, sourceEndianness: input.sourceEndianness)
-      case .uInt128:    return Payload.uInt128(input.bytes)
-      case .array(let entryCount): return interpretArray(
-        entryCount: entryCount,
-        decoder: decoder,
-        payloadStart: input.payloadStart,
-        resolvePointers: resolvePointers
-      )
-      case .dataCacheContainer(let entryCount): return interpretDataCacheContainer(
-        entryCount: entryCount,
-        decoder: decoder,
-        payloadStart: input.payloadStart,
-        resolvePointers: resolvePointers
-      )
-        return Payload.dataCacheContainer([])
-      case .endMarker:            return Payload.endMarker
-      case .boolean(let payload): return Payload.boolean(payload)
-      case .float:                return interpretFloat(bytes: input.bytes, sourceEndianness: input.sourceEndianness)
+        return interpretMap(
+          entryCount: entryCount,
+          decoder: decoder,
+          payloadStart: input.payloadStart,
+          resolvePointers: resolvePointers
+        )
+      case .int32(let payloadSize):
+        guard let payload = interpretInt32(
+          bytes: input.bytes,
+          sourceEndianness: input.sourceEndianness
+        ) else { return nil }
+        return (payload, payloadSize)
+      case .uInt64(let payloadSize):
+        guard let payload = interpretUInt64(
+          bytes: input.bytes,
+          sourceEndianness: input.sourceEndianness
+        ) else { return nil }
+        return (payload, payloadSize)
+      case .uInt128(let payloadSize):
+        return (Payload.uInt128(input.bytes), payloadSize)
+      case .array(let entryCount):
+        return interpretArray(
+          entryCount: entryCount,
+          decoder: decoder,
+          payloadStart: input.payloadStart,
+          resolvePointers: resolvePointers
+        )
+      case .dataCacheContainer(let entryCount):
+        return interpretDataCacheContainer(
+          entryCount: entryCount,
+          decoder: decoder,
+          payloadStart: input.payloadStart,
+          resolvePointers: resolvePointers
+        )
+      case .endMarker:
+        return (Payload.endMarker, 0)
+      case .boolean(let value):
+        return (Payload.boolean(value), 0)
+      case .float(let payloadSize):
+        guard let payload = interpretFloat(
+          bytes: input.bytes,
+          sourceEndianness: input.sourceEndianness
+        ) else { return nil }
+        return (payload, payloadSize)
     }
   }
 
