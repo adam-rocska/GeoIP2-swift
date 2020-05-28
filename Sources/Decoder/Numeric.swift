@@ -1,6 +1,6 @@
 import Foundation
 
-internal extension Numeric {
+public extension Numeric {
 
   init(_ data: Data, sourceEndianness: Endianness) {
     var value: Self = .zero

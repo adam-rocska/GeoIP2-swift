@@ -1,6 +1,6 @@
 import Foundation
 
-internal extension Data {
+public extension Data {
 
   init(_ string: String) { self.init(string.utf8) }
 

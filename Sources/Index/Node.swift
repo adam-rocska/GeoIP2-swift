@@ -1,5 +1,5 @@
 import Foundation
-import MaxMindDecoder
+import Decoder
 
 struct Node<Record>: Equatable where Record: UnsignedInteger, Record: FixedWidthInteger {
 
@@ -43,10 +43,9 @@ struct Node<Record>: Equatable where Record: UnsignedInteger, Record: FixedWidth
       rightData = rightNibble + data.subdata(in: rightRange)
     }
 
-    let decoder = MaxMindDecoder(inputEndianness: .big)
     self.init(
-      left: decoder.decode(leftData) as Record,
-      right: decoder.decode(rightData) as Record
+      left: Record.init(leftData.padded(for: Record.self, as: .big), sourceEndianness: .big),
+      right: Record.init(rightData.padded(for: Record.self, as: .big), sourceEndianness: .big)
     )
   }
 }

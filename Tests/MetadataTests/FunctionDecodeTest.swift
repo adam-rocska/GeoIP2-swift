@@ -1,9 +1,8 @@
 import Foundation
 import XCTest
 @testable import Metadata
-import MaxMindDecoder
 
-class DecodeFunctionTest: XCTestCase {
+class FunctionDecodeTest: XCTestCase {
 
   func testInit_nilIfCantCreateIterator() {
     XCTAssertNil(

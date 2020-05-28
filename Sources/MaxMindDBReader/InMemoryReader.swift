@@ -1,5 +1,4 @@
 import Foundation
-import MaxMindDecoder
 import Index
 import Metadata
 

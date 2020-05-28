@@ -18,19 +18,13 @@ let package = Package(
   dependencies: [],
   targets: [
     .target(
-      name: "MaxMindDecoder",
-      dependencies: [],
-      path: "Sources/MaxMindDecoder"
-    ),
-    .target(
       name: "Index",
-      dependencies: ["MaxMindDecoder", "Metadata"],
+      dependencies: ["Decoder", "Metadata"],
       path: "Sources/Index"
     ),
     .target(
       name: "Metadata",
-      dependencies: ["MaxMindDecoder"],
-      path: "Sources/Metadata"
+      dependencies: ["Decoder"]
     ),
     .target(
       name: "Decoder",
@@ -39,13 +33,13 @@ let package = Package(
     ),
     .target(
       name: "DataSection",
-      dependencies: ["MaxMindDecoder", "Metadata"],
+      dependencies: ["Decoder", "Metadata"],
       path: "Sources/DataSection"
     ),
 
     .target(
       name: "MaxMindDBReader",
-      dependencies: ["Index", "Metadata", "MaxMindDecoder"],
+      dependencies: ["Index", "Metadata", "Decoder"],
       path: "Sources/MaxMindDBReader"
     ),
     .target(
@@ -71,12 +65,7 @@ let package = Package(
 
     .testTarget(
       name: "MetadataTests",
-      dependencies: ["Metadata"]
-    ),
-
-    .testTarget(
-      name: "MaxMindDecoderTests",
-      dependencies: ["MaxMindDecoder"]
+      dependencies: ["Metadata", "Decoder"]
     ),
 
     .testTarget(

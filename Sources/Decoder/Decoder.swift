@@ -11,6 +11,7 @@ public class Decoder {
   private let data:                   Data
   private let controlByteInterpreter: ControlByteInterpreter
   private let payloadInterpreter:     PayloadInterpreter
+  private let sourceEndianness:       Endianness = .big
 
   init(
     data: Data,
@@ -21,6 +22,30 @@ public class Decoder {
     self.data = data
     self.controlByteInterpreter = controlByteInterpreter
     self.payloadInterpreter = payloadInterpreter
+  }
+
+  public convenience init(_ data: Data) {
+    self.init(
+      data: data,
+      controlByteInterpreter: ControlByteInterpreter(
+        typeResolver: resolveType,
+        payloadSizeResolver: resolvePayloadSize,
+        definitionSizeResolver: resolveDefinitionSize
+      ),
+      payloadInterpreter: PayloadInterpreter(
+        interpretArray: interpretArray,
+        interpretDataCacheContainer: interpretDataCacheContainer,
+        interpretDouble: interpretDouble,
+        interpretFloat: interpretFloat,
+        interpretInt32: interpretInt32,
+        interpretMap: interpretMap,
+        interpretPointer: interpretPointer,
+        interpretUInt16: interpretUInt16,
+        interpretUInt32: interpretUInt32,
+        interpretUInt64: interpretUInt64,
+        interpretUtf8String: interpretUtf8String
+      )
+    )
   }
 
   private func rangeOfData(offset: Int, count: Int) -> Range<Data.Index> {
@@ -39,12 +64,12 @@ public class Decoder {
     return Range(uncheckedBounds: (lower: sliceStart, upper: sliceEnd))
   }
 
-  func read(at controlByteOffset: Int, resolvePointers: Bool = true) -> Output? {
+  internal func read(at controlByteOffset: Int, resolvePointers: Bool = true) -> Output? {
     if controlByteOffset >= data.count { return nil }
     let controlByteCandidate = data.subdata(in: rangeOfData(offset: controlByteOffset, count: 5))
     guard let controlByteResult = controlByteInterpreter.interpret(
       bytes: controlByteCandidate,
-      sourceEndianness: .big
+      sourceEndianness: sourceEndianness
     ) else {
       return nil
     }
@@ -64,7 +89,7 @@ public class Decoder {
       input: (
         bytes: payloadBytes,
         controlByte: controlByteResult.controlByte,
-        sourceEndianness: .big,
+        sourceEndianness: sourceEndianness,
         controlStart: controlByteOffset,
         payloadStart: payloadStart
       ),

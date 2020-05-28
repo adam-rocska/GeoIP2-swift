@@ -123,6 +123,23 @@ fileprivate class MockControlByteInterpreter: ControlByteInterpreter {
 }
 
 fileprivate class MockPayloadInterpreter: PayloadInterpreter {
+
+  init() {
+    super.init(
+      interpretArray: { _, _, _, _ in nil },
+      interpretDataCacheContainer: { _, _, _, _ in nil },
+      interpretDouble: { _, _ in nil },
+      interpretFloat: { _, _ in nil },
+      interpretInt32: { _, _ in nil },
+      interpretMap: { _, _, _, _ in nil },
+      interpretPointer: { _, _, _, _, _, _ in nil },
+      interpretUInt16: { _, _ in nil },
+      interpretUInt32: { _, _ in nil },
+      interpretUInt64: { _, _ in nil },
+      interpretUtf8String: { _ in nil }
+    )
+  }
+
   override func interpret(
     input: Input,
     using decoder: Decoder,

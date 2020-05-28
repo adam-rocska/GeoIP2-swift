@@ -1,5 +1,4 @@
 import Foundation
-import MaxMindDecoder
 
 public class Reader {
 

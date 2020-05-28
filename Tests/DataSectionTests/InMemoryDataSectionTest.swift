@@ -1,7 +1,7 @@
 import Foundation
 import XCTest
 import Metadata
-import MaxMindDecoder
+import Decoder
 @testable import DataSection
 
 class InMemoryDataSectionTest: XCTestCase {
@@ -23,8 +23,7 @@ class InMemoryDataSectionTest: XCTestCase {
   func testLookup_returnsNilIfIteratorCantResolveNextControlByte() {
     let dataSection = InMemoryDataSection(
       metadata: InMemoryDataSectionTest.countryMetadata,
-      iterator: MaxMindIterator(Data([0b0000_0000]))!,
-      decoder: MaxMindDecoder(inputEndianness: .big)
+      decoder: Decoder(Data([0b0000_0000]))
     )
     XCTAssertNil(dataSection.lookup(pointer: 100))
   }
@@ -32,12 +31,9 @@ class InMemoryDataSectionTest: XCTestCase {
   func testLookup_returnsNilIfIteratorDoesntResolveToMap() {
     let dataSection = InMemoryDataSection(
       metadata: InMemoryDataSectionTest.countryMetadata,
-      iterator: MaxMindIterator(
-        Data(
-          [0b0101_1100] + "Hello World Hello World test".data(using: .utf8)!
-        )
-      )!,
-      decoder: MaxMindDecoder(inputEndianness: .big)
+      decoder: Decoder(Data(
+        [0b0101_1100] + "Hello World Hello World test".data(using: .utf8)!
+      ))
     )
     XCTAssertNil(dataSection.lookup(pointer: 0))
   }

@@ -1,34 +1,32 @@
 import Foundation
-import MaxMindDecoder
+import Decoder
 
 func decode(_ data: Data, metadataSectionSize: Int, databaseSize: Int) -> Metadata? {
-  guard let iterator = MaxMindIterator(data) else { return nil }
-  guard let mapControlByte = iterator.next() else { return nil }
-  if mapControlByte.type != .map { return nil }
-  let decoder = MaxMindDecoder(inputEndianness: .big)
+  if data.isEmpty { return nil }
+  let decoder = Decoder(data)
+  guard let payload = decoder.read(at: 0) else { return nil }
+  guard case let Payload.map(map) = payload else { return nil }
 
-  let decoded: [String: Any] = decoder.decode(iterator, size: Int(mapControlByte.payloadSize))
-
-  guard let nodeCount = decoded["node_count"] as? UInt32 else { return nil }
-  guard let recordSize = decoded["record_size"] as? UInt16 else { return nil }
-  guard let ipVersion = decoded["ip_version"] as? UInt16 else { return nil }
-  guard let databaseType = decoded["database_type"] as? String else { return nil }
-  guard let languages = decoded["languages"] as? [String] else { return nil }
-  guard let majorVersion = decoded["binary_format_major_version"] as? UInt16 else { return nil }
-  guard let minorVersion = decoded["binary_format_minor_version"] as? UInt16 else { return nil }
-  guard let buildEpoch = decoded["build_epoch"] as? UInt64 else { return nil }
-  guard let description = decoded["description"] as? [String: String] else { return nil }
+  guard let nodeCount = map["node_count"]?.unwrap() as UInt32? else { return nil }
+  guard let recordSize = map["record_size"]?.unwrap() as UInt16? else { return nil }
+  guard let ipVersion = map["ip_version"]?.unwrap() as UInt16? else { return nil }
+  guard let databaseType = map["database_type"]?.unwrap() as String? else { return nil }
+  guard let languages = map["languages"]?.unwrap() as [Payload]? else { return nil }
+  guard let majorVersion = map["binary_format_major_version"]?.unwrap() as UInt16? else { return nil }
+  guard let minorVersion = map["binary_format_minor_version"]?.unwrap() as UInt16? else { return nil }
+  guard let buildEpoch = map["build_epoch"]?.unwrap() as UInt64? else { return nil }
+  guard let description = map["description"]?.unwrap() as [String: Payload]? else { return nil }
 
   return Metadata(
     nodeCount: nodeCount,
     recordSize: recordSize,
     ipVersion: ipVersion,
     databaseType: databaseType,
-    languages: languages,
+    languages: languages.compactMap({ $0.unwrap() as String? }),
     binaryFormatMajorVersion: majorVersion,
     binaryFormatMinorVersion: minorVersion,
     buildEpoch: buildEpoch,
-    description: description,
+    description: description.compactMapValues({ $0.unwrap() as String? }),
     metadataSectionSize: metadataSectionSize,
     databaseSize: databaseSize
   )

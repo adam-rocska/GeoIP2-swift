@@ -1,18 +1,16 @@
 import Foundation
 import Metadata
-import MaxMindDecoder
+import Decoder
 
 public class InMemoryDataSection: DataSection {
 
   public static let separator = Data(count: 16)
 
   public let  metadata: Metadata
-  private let iterator: MaxMindIterator
-  private let decoder:  MaxMindDecoder
+  private let decoder:  Decoder
 
-  init(metadata: Metadata, iterator: MaxMindIterator, decoder: MaxMindDecoder) {
+  init(metadata: Metadata, decoder: Decoder) {
     self.metadata = metadata
-    self.iterator = iterator
     self.decoder = decoder
   }
 
@@ -49,16 +47,14 @@ public class InMemoryDataSection: DataSection {
 
     self.init(
       metadata: metadata,
-      iterator: MaxMindIterator(dataSectionBinary)!,
-      decoder: MaxMindDecoder(inputEndianness: .big)
+      decoder: Decoder(dataSectionBinary)
     )
   }
 
-  public func lookup(pointer: Int) -> [String: Any]? {
-    iterator.seek(to: pointer)
-    guard let mapControlByte = iterator.next() else { return nil }
-    if mapControlByte.type != .map { return nil }
-    return decoder.decode(iterator, size: Int(mapControlByte.payloadSize)) as [String: Any]
+  public func lookup(pointer: Int) -> [String: Payload]? {
+    guard let payload = decoder.read(at: pointer, resolvePointers: true) else { return nil }
+    guard case let Payload.map(result) = payload else { return nil }
+    return result
   }
 
 }

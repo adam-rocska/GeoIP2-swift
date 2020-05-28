@@ -17,3 +17,26 @@ public enum Payload: Equatable {
   case boolean(Bool)
   case float(Float)
 }
+
+public extension Payload {
+  func unwrap<T>() -> T? {
+    switch self {
+      case .pointer(let value)            where value is T: return (value as! T)
+      case .utf8String(let value)         where value is T: return (value as! T)
+      case .double(let value)             where value is T: return (value as! T)
+      case .bytes(let value)              where value is T: return (value as! T)
+      case .uInt16(let value)             where value is T: return (value as! T)
+      case .uInt32(let value)             where value is T: return (value as! T)
+      case .map(let value)                where value is T: return (value as! T)
+      case .int32(let value)              where value is T: return (value as! T)
+      case .uInt64(let value)             where value is T: return (value as! T)
+      case .uInt128(let value)            where value is T: return (value as! T)
+      case .array(let value)              where value is T: return (value as! T)
+      case .dataCacheContainer(let value) where value is T: return (value as! T)
+      case .boolean(let value)            where value is T: return (value as! T)
+      case .float(let value)              where value is T: return (value as! T)
+      default: return nil
+    }
+  }
+
+}
