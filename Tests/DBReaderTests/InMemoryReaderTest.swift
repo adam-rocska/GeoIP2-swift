@@ -1,7 +1,7 @@
 //import Foundation
 //import XCTest
 //import Index
-//@testable import MaxMindDBReader
+//@testable import DBReader
 //
 //class InMemoryReaderTest: XCTestCase {
 //
