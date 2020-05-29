@@ -2,6 +2,7 @@ import Foundation
 import Index
 import Metadata
 import DataSection
+import Decoder
 
 public class InMemoryReader<SearchIndex> where SearchIndex: Index {
 
@@ -15,8 +16,10 @@ public class InMemoryReader<SearchIndex> where SearchIndex: Index {
     self.dataSection = dataSection
   }
 
-  func get(_ ip: IpAddress) -> Payload? {
+  func get(_ ip: IpAddress) -> [String: Payload]? {
     guard let lookup = index.lookup(ip) else { return nil }
+    guard let lookupResult = dataSection.lookup(pointer: Int(lookup)) else { return nil }
+    return lookupResult
   }
 
 }
