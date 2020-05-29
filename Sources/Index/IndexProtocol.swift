@@ -1,7 +1,7 @@
 import Foundation
 import Metadata
 
-public protocol Index {
+public protocol IndexProtocol {
 
   associatedtype Pointer where Pointer: UnsignedInteger, Pointer: FixedWidthInteger
 

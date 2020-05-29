@@ -4,7 +4,7 @@ import Metadata
 import DataSection
 import Decoder
 
-public class InMemoryReader<SearchIndex> where SearchIndex: Index {
+public class InMemoryReader<SearchIndex> where SearchIndex: IndexProtocol {
 
   private let index:       SearchIndex
   public let  metadata:    Metadata

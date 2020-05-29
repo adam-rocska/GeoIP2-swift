@@ -22,7 +22,7 @@ let package = Package(
     .target(name: "Metadata", dependencies: ["Decoder"]),
     .target(name: "Decoder", dependencies: [], path: "Sources/Decoder"),
     .target(name: "DBReader", dependencies: ["Index", "DataSection", "Metadata", "Decoder"]),
-    .target(name: "Api", dependencies: ["DBReader"]),
+    .target(name: "Api", dependencies: ["DBReader", "Index"]),
 
     .testTarget(name: "IndexTests", dependencies: ["Index", "Metadata"]),
     .testTarget(name: "DataSectionTests", dependencies: ["DataSection", "Metadata"]),
