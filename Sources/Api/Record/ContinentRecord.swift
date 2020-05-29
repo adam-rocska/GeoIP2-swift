@@ -1,6 +1,6 @@
 import Foundation
 
-struct ContinentRecord {
+public struct ContinentRecord {
   let code:      String?
   let geonameId: Int?
   let name:      String?

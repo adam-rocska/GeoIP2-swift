@@ -1,6 +1,6 @@
 import Foundation
 
-struct AnonymousIpModel {
+public struct AnonymousIpModel {
   let isAnonymous:       Bool
   let isAnonymousVpn:    Bool
   let isHostingProvider: Bool

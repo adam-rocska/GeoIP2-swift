@@ -1,6 +1,6 @@
 import Foundation
 
-struct CountryModel {
+public struct CountryModel {
   let continent:          ContinentRecord
   let country:            CountryRecord
   let maxmind:            MaxMindRecord

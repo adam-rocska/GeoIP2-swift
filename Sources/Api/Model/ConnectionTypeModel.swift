@@ -1,6 +1,6 @@
 import Foundation
 
-struct ConnectionTypeModel {
+public struct ConnectionTypeModel {
   let connectionType: String?
   let ipAddress:      IpAddress
   let network:        String

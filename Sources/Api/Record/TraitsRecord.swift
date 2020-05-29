@@ -1,6 +1,6 @@
 import Foundation
 
-struct TraitsRecord {
+public struct TraitsRecord {
   let autonomousSystemNumber:       Int?
   let autonomousSystemOrganization: String?
   let connectionType:               String?

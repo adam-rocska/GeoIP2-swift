@@ -1,6 +1,6 @@
 import Foundation
 
-struct AsnModel {
+public struct AsnModel {
   let autonomousSystemNumber:       Int?
   let autonomousSystemOrganization: String?
   let ipAddress:                    IpAddress

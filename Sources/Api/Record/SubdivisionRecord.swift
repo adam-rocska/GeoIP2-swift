@@ -1,6 +1,6 @@
 import Foundation
 
-struct SubdivisionRecord {
+public struct SubdivisionRecord {
   let confidence: Int?
   let geonameId:  Int?
   let isoCode:    String?

@@ -1,6 +1,6 @@
 import Foundation
 
-struct LocationRecord {
+public struct LocationRecord {
   let averageIncome:     Int?
   let accuracyRadius:    Int?
   let latitude:          Float?

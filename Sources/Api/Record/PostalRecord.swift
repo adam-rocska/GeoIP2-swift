@@ -1,6 +1,6 @@
 import Foundation
 
-struct PostalRecord {
+public struct PostalRecord {
   let code:String?
   let confidence:Int?
 }

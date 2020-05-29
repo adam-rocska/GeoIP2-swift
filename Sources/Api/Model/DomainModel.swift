@@ -1,6 +1,6 @@
 import Foundation
 
-struct DomainModel {
+public struct DomainModel {
   let domain:    String?
   let ipAddress: IpAddress
   let network:   String

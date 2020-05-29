@@ -1,6 +1,6 @@
 import Foundation
 
-struct CityModel {
+public struct CityModel {
   let city:                    CityRecord
   let location:                LocationRecord
   let postal:                  PostalRecord

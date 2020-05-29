@@ -1,6 +1,6 @@
 import Foundation
 
-struct IspModel {
+public struct IspModel {
   let autonomousSystemNumber:       Int?
   let autonomousSystemOrganization: String?
   let isp:                          String?

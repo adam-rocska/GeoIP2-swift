@@ -1,6 +1,6 @@
 import Foundation
 
-struct CountryRecord {
+public struct CountryRecord {
   // CONFIDENCE BEING AN INT?! ARE YOU FUCKING KIDDING ME! AND IT'S OPTIONAL.
   let confidence:        Int?
   let geonameId:         Int?

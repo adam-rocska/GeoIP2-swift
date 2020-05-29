@@ -1,5 +1,5 @@
 import Foundation
 
-struct RepresentedCountryRecord {
+public struct RepresentedCountryRecord {
   let type: String?
 }

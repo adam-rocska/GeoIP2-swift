@@ -1,7 +1,7 @@
 import Foundation
 
 // WTF! SRSLY!
-struct CityRecord {
+public struct CityRecord {
   let confidence: Int?
   let geonameId:  Int?
   let name:       String?
