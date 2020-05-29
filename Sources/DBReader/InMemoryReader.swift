@@ -1,10 +1,10 @@
 import Foundation
 import Index
-import Metadata
+import struct Metadata.Metadata
 import DataSection
 import Decoder
 
-public class InMemoryReader<SearchIndex> where SearchIndex: Index {
+public class InMemoryReader<SearchIndex>: Reader where SearchIndex: Index {
 
   private let index:       SearchIndex
   public let  metadata:    Metadata
