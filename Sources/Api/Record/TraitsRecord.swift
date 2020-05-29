@@ -5,7 +5,7 @@ struct TraitsRecord {
   let autonomousSystemOrganization: String?
   let connectionType:               String?
   let domain:                       String?
-  let ipAddress:                    String
+  let ipAddress:                    IpAddress
   let isAnonymous:                  Bool
   let isAnonymousProxy:             Bool
   let isAnonymousVpn:               Bool

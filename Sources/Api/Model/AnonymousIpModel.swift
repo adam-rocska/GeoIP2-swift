@@ -6,6 +6,6 @@ struct AnonymousIpModel {
   let isHostingProvider: Bool
   let isPublicProxy:     Bool
   let isTorExitNode:     Bool
-  let ipAddress:         String
+  let ipAddress:         IpAddress
   let network:           String
 }

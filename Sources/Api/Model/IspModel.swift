@@ -5,6 +5,6 @@ struct IspModel {
   let autonomousSystemOrganization: String?
   let isp:                          String?
   let organization:                 String?
-  let ipAddress:                    String
+  let ipAddress:                    IpAddress
   let network:                      String
 }
