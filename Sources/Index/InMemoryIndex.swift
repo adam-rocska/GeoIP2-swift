@@ -1,7 +1,7 @@
 import Foundation
 import Metadata
 
-public class InMemoryIndex<Pointer>: IndexProtocol where Pointer: UnsignedInteger, Pointer: FixedWidthInteger {
+public class InMemoryIndex<Pointer>: Index where Pointer: UnsignedInteger, Pointer: FixedWidthInteger {
 
   private let metadata: Metadata
   private let tree:     [Pointer: Node<Pointer>]
