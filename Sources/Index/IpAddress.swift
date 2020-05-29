@@ -1,7 +1,7 @@
 import Foundation
 
-typealias IpV4Tuple = (UInt8, UInt8, UInt8, UInt8)
-typealias IpV6Tuple = (
+public typealias IpV4Tuple = (UInt8, UInt8, UInt8, UInt8)
+public typealias IpV6Tuple = (
   UInt8, UInt8, UInt8, UInt8,
   UInt8, UInt8, UInt8, UInt8,
   UInt8, UInt8, UInt8, UInt8,
@@ -44,7 +44,7 @@ public enum IpAddress: Equatable, CustomStringConvertible {
     UInt8, UInt8, UInt8, UInt8
   )
 
-  var data: Data {
+  public var data: Data {
     get {
       switch self {
         case let (.v4(a)): return Data([a.0, a.1, a.2, a.3])
@@ -58,12 +58,12 @@ public enum IpAddress: Equatable, CustomStringConvertible {
     }
   }
 
-  static func v4(_ data: Data) -> IpAddress {
+  public static func v4(_ data: Data) -> IpAddress {
     precondition(data.count == 4, "IPv4 strings must have 4, and only 4 bytes defined.")
     return v4(data[0], data[1], data[2], data[3])
   }
 
-  static func v4(_ string: String) -> IpAddress {
+  public static func v4(_ string: String) -> IpAddress {
     let rawChunks = string.split(separator: ".").compactMap({ Int($0) })
     precondition(rawChunks.count == 4, "IPv4 strings must have 4, and only 4 bytes defined.")
     precondition(rawChunks.allSatisfy({ $0 >= 0 && $0 < 256 }), "All IPv4 bytes must be valid unsigned 8 bit values.")
@@ -71,7 +71,7 @@ public enum IpAddress: Equatable, CustomStringConvertible {
     return v4(bytes[0], bytes[1], bytes[2], bytes[3])
   }
 
-  static func v6(_ ip: IpAddress) -> IpAddress {
+  public static func v6(_ ip: IpAddress) -> IpAddress {
     switch ip {
       case .v6: return ip
       case let .v4(bytes): return v6(
@@ -83,7 +83,7 @@ public enum IpAddress: Equatable, CustomStringConvertible {
     }
   }
 
-  static func v6(_ string: String) -> IpAddress {
+  public static func v6(_ string: String) -> IpAddress {
     let inputRawChunks = string.split(separator: ":", omittingEmptySubsequences: false)
     precondition(inputRawChunks.count <= 8, "IPv6 strings must have at most 8 bytes defined.")
     var prefixBytes: [UInt8] = []
@@ -143,7 +143,7 @@ public enum IpAddress: Equatable, CustomStringConvertible {
     )
   }
 
-  static func v6(_ data: Data) -> IpAddress {
+  public static func v6(_ data: Data) -> IpAddress {
     precondition(data.count == 16, "An IPv6 address can only be created of 16 byte sized binary Data.")
     return v6(
       data[0], data[1], data[2], data[3],
@@ -175,7 +175,7 @@ public extension IpAddress {
   }
 }
 
-func ==(lhs: IpV6Tuple, rhs: IpV6Tuple) -> Bool {
+public func ==(lhs: IpV6Tuple, rhs: IpV6Tuple) -> Bool {
   return lhs.0 == rhs.0 && lhs.1 == rhs.1 && lhs.2 == rhs.2 && lhs.3 == rhs.3 &&
          lhs.4 == rhs.4 && lhs.5 == rhs.5 && lhs.6 == rhs.6 && lhs.7 == rhs.7 &&
          lhs.8 == rhs.8 && lhs.9 == rhs.9 && lhs.10 == rhs.10 && lhs.11 == rhs.11 &&

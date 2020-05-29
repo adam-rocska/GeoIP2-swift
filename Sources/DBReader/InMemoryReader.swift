@@ -1,8 +1,8 @@
 import Foundation
 import Index
+import enum Decoder.Payload
+import protocol DataSection.DataSection
 import struct Metadata.Metadata
-import DataSection
-import Decoder
 
 public class InMemoryReader<SearchIndex>: Reader where SearchIndex: Index {
 
