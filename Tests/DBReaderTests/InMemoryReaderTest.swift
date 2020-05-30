@@ -79,6 +79,21 @@ class InMemoryReaderTest: XCTestCase {
     XCTAssertTrue(mockDataSectionCalled)
   }
 
+  func testOverall() throws {
+    let factory = ReaderFactory()
+    let streamFactory: () -> InputStream = {
+      InputStream(
+        fileAtPath: "/Users/rocskaadam/src/adam-rocska/src/GeoIP2-swift/Tests/ApiTests/Resources/GeoLite2-City_20200526/GeoLite2-City.mmdb"
+//        fileAtPath: "/Users/rocskaadam/src/adam-rocska/src/GeoIP2-swift/Tests/DBReaderTests/Resources/GeoLite2-Country_20200421/GeoLite2-Country.mmdb"
+      )!
+    }
+    let reader = try factory.makeInMemoryReader(streamFactory)
+//    measure {
+//      reader.get(IpAddress.v4("80.99.18.166"))
+//    }
+    print(reader.get(IpAddress.v4("80.99.18.166")))
+  }
+
 }
 
 internal class MockSearchIndex: Index {
