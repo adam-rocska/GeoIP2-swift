@@ -11,13 +11,13 @@ public class InMemoryReader<SearchIndex>: Reader where SearchIndex: Index {
   public let  metadata:    Metadata
   private let dataSection: DataSection
 
-  init(index: SearchIndex, dataSection: DataSection, metadata: Metadata) {
+  public init(index: SearchIndex, dataSection: DataSection, metadata: Metadata) {
     self.index = index
     self.metadata = metadata
     self.dataSection = dataSection
   }
 
-  func get(_ ip: IpAddress) -> [String: Payload]? {
+  public func get(_ ip: IpAddress) -> [String: Payload]? {
     guard let lookup = index.lookup(ip) else { return nil }
     guard let lookupResult = dataSection.lookup(pointer: Int(lookup)) else { return nil }
     return lookupResult
