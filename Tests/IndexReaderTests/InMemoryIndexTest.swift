@@ -1,7 +1,7 @@
 import Foundation
 import XCTest
 import class MetadataReader.Reader
-@testable import Index
+@testable import IndexReader
 
 class InMemoryIndexTest: XCTestCase {
 

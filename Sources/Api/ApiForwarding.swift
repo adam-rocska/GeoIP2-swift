@@ -1,5 +1,5 @@
 import Foundation
-import enum Index.IpAddress
+import enum IndexReader.IpAddress
 import struct MetadataReader.Metadata
 
 public typealias IpAddress = Index.IpAddress

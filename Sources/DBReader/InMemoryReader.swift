@@ -1,14 +1,14 @@
 import Foundation
 import enum Decoder.Payload
-import enum Index.IpAddress
+import enum IndexReader.IpAddress
 import protocol DataSection.DataSection
-import protocol Index.Index
+import protocol IndexReader.Index
 import struct MetadataReader.Metadata
 import class MetadataReader.Reader
-import class Index.InMemoryIndex
+import class IndexReader.InMemoryIndex
 import class DataSection.InMemoryDataSection
 
-public class InMemoryReader<SearchIndex>: Reader where SearchIndex: Index {
+public class InMemoryReader<SearchIndex>: Reader where SearchIndex: IndexReader.Index {
 
   private let index:       SearchIndex
   public let  metadata:    Metadata

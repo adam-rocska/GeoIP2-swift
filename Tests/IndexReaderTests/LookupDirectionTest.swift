@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import Index
+@testable import IndexReader
 
 class LookupDirectionTest: XCTestCase {
 

@@ -3,7 +3,7 @@ import XCTest
 @testable import Api
 
 import protocol DBReader.Reader
-import enum Index.IpAddress
+import enum IndexReader.IpAddress
 import enum Decoder.Payload
 @testable import struct MetadataReader.Metadata
 

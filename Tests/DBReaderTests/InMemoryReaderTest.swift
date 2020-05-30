@@ -2,9 +2,9 @@ import Foundation
 import XCTest
 @testable import DBReader
 import enum Decoder.Payload
-import enum Index.IpAddress
+import enum IndexReader.IpAddress
 import protocol DataSection.DataSection
-import protocol Index.Index
+import protocol IndexReader.Index
 @testable import struct MetadataReader.Metadata
 
 class InMemoryReaderTest: XCTestCase {

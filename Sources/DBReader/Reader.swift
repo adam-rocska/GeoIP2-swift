@@ -1,6 +1,6 @@
 import Foundation
 import enum Decoder.Payload
-import enum Index.IpAddress
+import enum IndexReader.IpAddress
 import struct MetadataReader.Metadata
 
 public protocol Reader {
