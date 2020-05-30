@@ -37,6 +37,7 @@ class CityFileBasedTest: XCTestCase {
       getWasCalled = true
       return nil
     }
+
     let cityFileBased = CityFileBased(dbReader: mockReader)
     XCTAssertNil(cityFileBased.lookup(expectedIp))
     XCTAssertTrue(getWasCalled)
