@@ -5,35 +5,15 @@ import XCTest
 class FunctionDecodeTest: XCTestCase {
 
   func testInit_nilIfCantCreateIterator() {
-    XCTAssertNil(
-      decode(
-        Data(),
-        metadataSectionSize: 0,
-        databaseSize: 0
-      )
-    )
+    XCTAssertNil(decode(Data(), metadataSectionSize: 0, databaseSize: 0))
   }
 
   func testInit_nilIfCantFetchFirstControlByte() {
-    let data = Data([0b0000_1111])
-    XCTAssertNil(
-      decode(
-        data,
-        metadataSectionSize: 0,
-        databaseSize: 0
-      )
-    )
+    XCTAssertNil(decode(Data([0b0000_1111]), metadataSectionSize: 0, databaseSize: 0))
   }
 
   func testInit_nilIfFirstControlByteIsNotMap() {
-    let data = Data([0b0010_1111])
-    XCTAssertNil(
-      decode(
-        data,
-        metadataSectionSize: 0,
-        databaseSize: 0
-      )
-    )
+    XCTAssertNil(decode(Data([0b0010_1111]), metadataSectionSize: 0, databaseSize: 0))
   }
 
   func testInit_withBinary() {
