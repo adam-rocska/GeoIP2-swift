@@ -22,13 +22,13 @@ let package = Package(
     .target(name: "Metadata", dependencies: ["Decoder"]),
     .target(name: "Decoder", dependencies: [], path: "Sources/Decoder"),
     .target(name: "DBReader", dependencies: ["Index", "DataSection", "Metadata", "Decoder"]),
-    .target(name: "Api", dependencies: ["DBReader", "Index"]),
+    .target(name: "Api", dependencies: ["DBReader", "Decoder", "Metadata", "Index"]),
 
     .testTarget(name: "IndexTests", dependencies: ["Index", "Metadata"]),
     .testTarget(name: "DataSectionTests", dependencies: ["DataSection", "Metadata"]),
     .testTarget(name: "MetadataTests", dependencies: ["Metadata", "Decoder"]),
     .testTarget(name: "DecoderTests", dependencies: ["Decoder"]),
     .testTarget(name: "DBReaderTests", dependencies: ["DBReader"]),
-    .testTarget(name: "ApiTests", dependencies: ["Api"])
+    .testTarget(name: "ApiTests", dependencies: ["Api", "Decoder", "Index","DBReader", "Metadata"])
   ]
 )
