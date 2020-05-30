@@ -17,18 +17,18 @@ let package = Package(
   ],
   dependencies: [],
   targets: [
-    .target(name: "Index", dependencies: ["Decoder", "Metadata"]),
-    .target(name: "DataSection", dependencies: ["Decoder", "Metadata"]),
-    .target(name: "Metadata", dependencies: ["Decoder"]),
+    .target(name: "Index", dependencies: ["Decoder", "MetadataReader"]),
+    .target(name: "DataSection", dependencies: ["Decoder", "MetadataReader"]),
+    .target(name: "MetadataReader", dependencies: ["Decoder"]),
     .target(name: "Decoder", dependencies: [], path: "Sources/Decoder"),
-    .target(name: "DBReader", dependencies: ["Index", "DataSection", "Metadata", "Decoder"]),
-    .target(name: "Api", dependencies: ["DBReader", "Decoder", "Metadata", "Index"]),
+    .target(name: "DBReader", dependencies: ["Index", "DataSection", "MetadataReader", "Decoder"]),
+    .target(name: "Api", dependencies: ["DBReader", "Decoder", "MetadataReader", "Index"]),
 
-    .testTarget(name: "IndexTests", dependencies: ["Index", "Metadata"]),
-    .testTarget(name: "DataSectionTests", dependencies: ["DataSection", "Metadata"]),
-    .testTarget(name: "MetadataTests", dependencies: ["Metadata", "Decoder"]),
+    .testTarget(name: "IndexTests", dependencies: ["Index", "MetadataReader"]),
+    .testTarget(name: "DataSectionTests", dependencies: ["DataSection", "MetadataReader"]),
+    .testTarget(name: "MetadataReaderTests", dependencies: ["MetadataReader", "Decoder"]),
     .testTarget(name: "DecoderTests", dependencies: ["Decoder"]),
     .testTarget(name: "DBReaderTests", dependencies: ["DBReader"]),
-    .testTarget(name: "ApiTests", dependencies: ["Api", "Decoder", "Index","DBReader", "Metadata"])
+    .testTarget(name: "ApiTests", dependencies: ["Api", "Decoder", "Index","DBReader", "MetadataReader"])
   ]
 )

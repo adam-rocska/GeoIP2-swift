@@ -1,6 +1,7 @@
 import Foundation
-import Metadata
-import Decoder
+import struct MetadataReader.Metadata
+import class Decoder.Decoder
+import enum Decoder.Payload
 
 public class InMemoryDataSection: DataSection {
 

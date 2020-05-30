@@ -1,5 +1,5 @@
 import Foundation
-import Metadata
+import struct MetadataReader.Metadata
 
 public class InMemoryIndex<Pointer>: Index where Pointer: UnsignedInteger, Pointer: FixedWidthInteger {
 

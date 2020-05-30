@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import Metadata
+@testable import MetadataReader
 
 class FunctionDecodeTest: XCTestCase {
 

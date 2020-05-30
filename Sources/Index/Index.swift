@@ -1,5 +1,5 @@
 import Foundation
-import Metadata
+import struct MetadataReader.Metadata
 
 public protocol Index {
 

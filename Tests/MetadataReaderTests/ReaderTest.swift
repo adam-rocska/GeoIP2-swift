@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
-@testable import Metadata
+@testable import class MetadataReader.Reader
+@testable import struct MetadataReader.Metadata
 
 class ReaderTest: XCTestCase {
 

@@ -1,6 +1,6 @@
 import Foundation
-import Metadata
-import Decoder
+import enum Decoder.Payload
+import struct MetadataReader.Metadata
 
 public protocol DataSection {
 

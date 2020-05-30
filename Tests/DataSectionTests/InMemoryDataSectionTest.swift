@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import Metadata
+import class MetadataReader.Reader
 import Decoder
 @testable import DataSection
 

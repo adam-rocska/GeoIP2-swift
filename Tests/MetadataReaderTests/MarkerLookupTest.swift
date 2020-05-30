@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import Metadata
+@testable import MetadataReader
 
 class MarkerLookupTest: XCTestCase {
 
@@ -40,8 +40,8 @@ class MarkerLookupTest: XCTestCase {
 
 
   func testLastIndex_ofData() {
-    let lookupWorld      = MarkerLookup(marker: "World".asciiData)
-    let lookupHello      = MarkerLookup(marker: "Hello".asciiData)
+    let lookupWorld = MarkerLookup(marker: "World".asciiData)
+    let lookupHello = MarkerLookup(marker: "Hello".asciiData)
     XCTAssertEqual(6, lookupWorld.lastOccurrenceIn("Hello World".asciiData))
     XCTAssertEqual(18, lookupWorld.lastOccurrenceIn("Hello World Hello World".asciiData))
     XCTAssertNil(lookupWorld.lastOccurrenceIn("Hello world".asciiData))
@@ -71,7 +71,10 @@ class MarkerLookupTest: XCTestCase {
     XCTAssertEqual(18, lookupWorld.lastOccurrenceIn("Hello World Hello World".asciiData, after: 10))
     XCTAssertNil(lookupWorld.lastOccurrenceIn("Hello world".asciiData, after: 2))
     XCTAssertNil(lookupWorld.lastOccurrenceIn("Hello world Hello world".asciiData, after: 5))
-    XCTAssertEqual(40, lookupWorld.lastOccurrenceIn("Hello world SOME World Hello world SOME World".asciiData, after: 21))
+    XCTAssertEqual(
+      40,
+      lookupWorld.lastOccurrenceIn("Hello world SOME World Hello world SOME World".asciiData, after: 21)
+    )
     XCTAssertNil(lookupHello.lastOccurrenceIn("hello world".asciiData, after: 10))
     XCTAssertNil(lookupHello.lastOccurrenceIn("hello World SOME World".asciiData, after: 10))
     XCTAssertNil(lookupHello.lastOccurrenceIn("hello world SOME World".asciiData, after: 15))

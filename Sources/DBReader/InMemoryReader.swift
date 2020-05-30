@@ -3,7 +3,7 @@ import enum Decoder.Payload
 import enum Index.IpAddress
 import protocol DataSection.DataSection
 import protocol Index.Index
-import struct Metadata.Metadata
+import struct MetadataReader.Metadata
 
 public class InMemoryReader<SearchIndex>: Reader where SearchIndex: Index {
 

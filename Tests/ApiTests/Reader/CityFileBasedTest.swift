@@ -5,7 +5,7 @@ import XCTest
 import protocol DBReader.Reader
 import enum Index.IpAddress
 import enum Decoder.Payload
-@testable import struct Metadata.Metadata
+@testable import struct MetadataReader.Metadata
 
 class CityFileBasedTest: XCTestCase {
 

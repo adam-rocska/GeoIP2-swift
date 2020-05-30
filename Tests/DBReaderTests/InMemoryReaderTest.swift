@@ -5,7 +5,7 @@ import enum Decoder.Payload
 import enum Index.IpAddress
 import protocol DataSection.DataSection
 import protocol Index.Index
-@testable import struct Metadata.Metadata
+@testable import struct MetadataReader.Metadata
 
 class InMemoryReaderTest: XCTestCase {
 
