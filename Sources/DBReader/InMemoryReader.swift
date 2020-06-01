@@ -18,8 +18,9 @@ public class InMemoryReader<SearchIndex>: Reader where SearchIndex: IndexReader.
   }
 
   public func get(_ ip: IpAddress) -> [String: Payload]? {
-    guard let lookup = index.lookup(ip) else { return nil }
-    guard let lookupResult = dataSection.lookup(pointer: Int(lookup)) else { return nil }
+    guard let pointer = index.lookup(ip) else { return nil }
+    let dataSectionPointer = pointer - SearchIndex.Pointer(metadata.nodeCount) - 16
+    guard let lookupResult = dataSection.lookup(pointer: Int(dataSectionPointer)) else { return nil }
     return lookupResult
   }
 

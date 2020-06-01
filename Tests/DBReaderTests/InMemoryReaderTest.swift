@@ -10,17 +10,17 @@ import protocol IndexReader.Index
 class InMemoryReaderTest: XCTestCase {
 
   private let stubMetadata = Metadata(
-    nodeCount: 0,
-    recordSize: 0,
-    ipVersion: 0,
+    nodeCount: 123,
+    recordSize: 456,
+    ipVersion: 4,
     databaseType: "test",
     languages: [],
     binaryFormatMajorVersion: 0,
     binaryFormatMinorVersion: 0,
     buildEpoch: 0,
     description: [:],
-    metadataSectionSize: 0,
-    databaseSize: 0
+    metadataSectionSize: 123,
+    databaseSize: 456
   )
 
   func testGet_returnsNilIfIndexLookupDidntSucceed() {
@@ -37,13 +37,14 @@ class InMemoryReaderTest: XCTestCase {
   }
 
   func testGet_returnsNilIfDataSectionLookupDidntSucceed() {
-    let expectedPointer: UInt       = 1234567890
+    let pointerToSeek:   UInt       = 1234567890
+    let expectedPointer: UInt       = pointerToSeek - UInt(stubMetadata.nodeCount) - 16
     let expectedIp:      IpAddress  = .v4("192.168.0.1")
     var mockSearchIndexLookupCalled = false
     let mockSearchIndex = MockSearchIndex { ip in
       XCTAssertEqual(expectedIp, ip)
       mockSearchIndexLookupCalled = true
-      return expectedPointer
+      return pointerToSeek
     }
     var mockDataSectionCalled = false
     let mockDataSection = MockDataSection { pointer in
@@ -58,14 +59,15 @@ class InMemoryReaderTest: XCTestCase {
   }
 
   func testGet_returnsDataSectionLookupResultAsIs() {
-    let expectedPointer: UInt       = 1234567890
+    let pointerToSeek:   UInt       = 1234567890
+    let expectedPointer: UInt       = pointerToSeek - UInt(stubMetadata.nodeCount) - 16
     let expectedIp:      IpAddress  = .v4("192.168.0.1")
     let expectedLookupResult        = ["test": Payload.utf8String("Test String")]
     var mockSearchIndexLookupCalled = false
     let mockSearchIndex = MockSearchIndex { ip in
       XCTAssertEqual(expectedIp, ip)
       mockSearchIndexLookupCalled = true
-      return expectedPointer
+      return pointerToSeek
     }
     var mockDataSectionCalled = false
     let mockDataSection = MockDataSection { pointer in
@@ -77,22 +79,6 @@ class InMemoryReaderTest: XCTestCase {
     XCTAssertEqual(expectedLookupResult, reader.get(expectedIp))
     XCTAssertTrue(mockSearchIndexLookupCalled)
     XCTAssertTrue(mockDataSectionCalled)
-  }
-
-  func testOverall() throws {
-    let factory = ReaderFactory()
-    let streamFactory: () -> InputStream = {
-      InputStream(
-//        fileAtPath: "/Users/rocskaadam/src/adam-rocska/src/GeoIP2-swift/Tests/ApiTests/Resources/GeoLite2-City_20200526/GeoLite2-City.mmdb"
-        fileAtPath: "/Users/rocskaadam/src/adam-rocska/src/GeoIP2-swift/Tests/ApiTests/Resources/GeoLite2-ASN_20200526/GeoLite2-ASN.mmdb"
-//        fileAtPath: "/Users/rocskaadam/src/adam-rocska/src/GeoIP2-swift/Tests/DBReaderTests/Resources/GeoLite2-Country_20200421/GeoLite2-Country.mmdb"
-      )!
-    }
-    let reader = try factory.makeInMemoryReader(streamFactory)
-//    measure {
-//      reader.get(IpAddress.v4("80.99.18.166"))
-//    }
-    print(reader.get(IpAddress.v4("80.99.18.166")))
   }
 
 }

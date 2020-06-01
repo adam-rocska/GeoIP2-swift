@@ -29,3 +29,16 @@ makes my enterprise originated soul cry for a whiskey. Or a pálinka.
 
 What I want is to design either an enum based exception case communication & 
 coverage, either a thrown error based one.
+
+## Eliminate retarded type casting jungle
+
+I know I made a retarded type casting jungle, especially for numeric types. I 
+know it's horrible, and I honestly feel ashamed for it. To my excuse, most of it
+was explicitly or implicitly forced by MaxMindDB's binary spec. I'm sure it can
+be done way better, and/or smarter. But purely out of the spec' this is what I 
+managed to pull out. Even their library implementations don't respect the spec.
+For example if you get **128bit unsigned int index pointers**, you'll face quite a 
+bit of fun.
+
+I'll do my best to massage things out. Once the public API is stable, and neat,
+the underlying crap can be cleaned up.

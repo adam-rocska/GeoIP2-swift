@@ -49,8 +49,7 @@ public class InMemoryIndex<Pointer>: Index where Pointer: UnsignedInteger, Point
       guard let direction = stack.popLast() else { break }
       let pointerInTree = pointer * nodeByteSize
       let nodeCandidate = tree[pointerInTree..<pointerInTree + nodeByteSize]
-      let node = Node<Pointer>(nodeCandidate)
-//      guard let node = tree[pointer] else { return pointer }
+      let node          = Node<Pointer>(nodeCandidate)
 
       switch direction {
         case .left: pointer = node.left

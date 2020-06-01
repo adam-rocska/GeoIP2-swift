@@ -15,7 +15,6 @@ public class CityFileBased {
 
   public func lookup(_ ip: IpAddress) -> CityModel? {
     guard let dictionary = dbReader.get(ip) else { return nil }
-    print(dictionary)
     return nil
   }
 }
