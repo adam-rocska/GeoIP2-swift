@@ -53,7 +53,7 @@ public class InMemoryDataSection: DataSection {
   }
 
   public func lookup(pointer: Int) -> [String: Payload]? {
-    guard let payload = decoder.read(at: pointer, resolvePointers: true) else { return nil }
+    guard let payload = decoder.read(at: pointer - Int(metadata.nodeCount) - 16, resolvePointers: true) else { return nil }
     guard case let Payload.map(result) = payload else { return nil }
     return result
   }

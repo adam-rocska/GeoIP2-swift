@@ -4,9 +4,9 @@ import struct MetadataReader.Metadata
 public class InMemoryIndex<Pointer>: Index where Pointer: UnsignedInteger, Pointer: FixedWidthInteger {
 
   private let metadata: Metadata
-  private let tree:     [Pointer: Node<Pointer>]
+  private let tree:     Data
 
-  init(metadata: Metadata, tree: [Pointer: Node<Pointer>]) {
+  init(metadata: Metadata, tree: Data) {
     self.metadata = metadata
     self.tree = tree
   }
@@ -23,20 +23,14 @@ public class InMemoryIndex<Pointer>: Index where Pointer: UnsignedInteger, Point
     let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: searchTreeSize)
     let read   = stream.read(buffer, maxLength: searchTreeSize)
 
-    var tree: [Pointer: Node<Pointer>] = [:]
-    let nodes = Data(
+    buffer.deallocate()
+    stream.close()
+//    precondition(tree.count == metadata.nodeCount)
+    self.init(metadata: metadata, tree: Data(
       bytesNoCopy: buffer,
       count: read,
       deallocator: .none
-    )
-      .chunked(into: Int(metadata.nodeByteSize))
-      .map({ Node<Pointer>($0) })
-    for (pointer, node) in nodes.enumerated() { tree[Pointer(pointer)] = node }
-
-    buffer.deallocate()
-    stream.close()
-    precondition(tree.count == metadata.nodeCount)
-    self.init(metadata: metadata, tree: tree)
+    ))
   }
 
   public func lookup(_ ip: IpAddress) -> Pointer? {
@@ -50,9 +44,13 @@ public class InMemoryIndex<Pointer>: Index where Pointer: UnsignedInteger, Point
     }
     var pointer: Pointer = 0
 
+    let nodeByteSize = Pointer.init(metadata.nodeByteSize)
     while pointer < metadata.nodeCount {
       guard let direction = stack.popLast() else { break }
-      guard let node = tree[pointer] else { return pointer }
+      let pointerInTree = pointer * nodeByteSize
+      let nodeCandidate = tree[pointerInTree..<pointerInTree + nodeByteSize]
+      let node = Node<Pointer>(nodeCandidate)
+//      guard let node = tree[pointer] else { return pointer }
 
       switch direction {
         case .left: pointer = node.left

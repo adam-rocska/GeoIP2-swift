@@ -83,7 +83,8 @@ class InMemoryReaderTest: XCTestCase {
     let factory = ReaderFactory()
     let streamFactory: () -> InputStream = {
       InputStream(
-        fileAtPath: "/Users/rocskaadam/src/adam-rocska/src/GeoIP2-swift/Tests/ApiTests/Resources/GeoLite2-City_20200526/GeoLite2-City.mmdb"
+//        fileAtPath: "/Users/rocskaadam/src/adam-rocska/src/GeoIP2-swift/Tests/ApiTests/Resources/GeoLite2-City_20200526/GeoLite2-City.mmdb"
+        fileAtPath: "/Users/rocskaadam/src/adam-rocska/src/GeoIP2-swift/Tests/ApiTests/Resources/GeoLite2-ASN_20200526/GeoLite2-ASN.mmdb"
 //        fileAtPath: "/Users/rocskaadam/src/adam-rocska/src/GeoIP2-swift/Tests/DBReaderTests/Resources/GeoLite2-Country_20200421/GeoLite2-Country.mmdb"
       )!
     }
