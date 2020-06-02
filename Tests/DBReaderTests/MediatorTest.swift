@@ -7,7 +7,7 @@ import protocol DataSection.DataSection
 import protocol IndexReader.Index
 @testable import struct MetadataReader.Metadata
 
-class InMemoryReaderTest: XCTestCase {
+class MediatorTest: XCTestCase {
 
   private let stubMetadata = Metadata(
     nodeCount: 123,
@@ -31,7 +31,7 @@ class InMemoryReaderTest: XCTestCase {
       mockSearchIndexLookupCalled = true
       return nil
     }
-    let reader = InMemoryReader(index: mockSearchIndex, dataSection: MockDataSection(), metadata: stubMetadata)
+    let reader = Mediator(index: mockSearchIndex, dataSection: MockDataSection(), metadata: stubMetadata)
     XCTAssertNil(reader.get(expectedIp))
     XCTAssertTrue(mockSearchIndexLookupCalled)
   }
@@ -52,7 +52,7 @@ class InMemoryReaderTest: XCTestCase {
       mockDataSectionCalled = true
       return nil
     }
-    let reader = InMemoryReader(index: mockSearchIndex, dataSection: mockDataSection, metadata: stubMetadata)
+    let reader = Mediator(index: mockSearchIndex, dataSection: mockDataSection, metadata: stubMetadata)
     XCTAssertNil(reader.get(expectedIp))
     XCTAssertTrue(mockSearchIndexLookupCalled)
     XCTAssertTrue(mockDataSectionCalled)
@@ -75,7 +75,7 @@ class InMemoryReaderTest: XCTestCase {
       mockDataSectionCalled = true
       return expectedLookupResult
     }
-    let reader = InMemoryReader(index: mockSearchIndex, dataSection: mockDataSection, metadata: stubMetadata)
+    let reader = Mediator(index: mockSearchIndex, dataSection: mockDataSection, metadata: stubMetadata)
     XCTAssertEqual(expectedLookupResult, reader.get(expectedIp))
     XCTAssertTrue(mockSearchIndexLookupCalled)
     XCTAssertTrue(mockDataSectionCalled)

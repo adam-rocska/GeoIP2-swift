@@ -5,7 +5,7 @@ import protocol DataSection.DataSection
 import protocol IndexReader.Index
 import struct MetadataReader.Metadata
 
-public class InMemoryReader<SearchIndex>: Reader where SearchIndex: IndexReader.Index {
+class Mediator<SearchIndex>: Reader where SearchIndex: IndexReader.Index {
 
   private let index:       SearchIndex
   public let  metadata:    Metadata
