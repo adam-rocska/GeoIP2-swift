@@ -24,11 +24,35 @@ let package = Package(
     .target(name: "DBReader", dependencies: ["IndexReader", "DataSection", "MetadataReader", "Decoder"]),
     .target(name: "Api", dependencies: ["DBReader", "Decoder", "MetadataReader", "IndexReader"]),
 
-    .testTarget(name: "IndexReaderTests", dependencies: ["IndexReader", "MetadataReader"]),
-    .testTarget(name: "DataSectionTests", dependencies: ["DataSection", "MetadataReader"]),
-    .testTarget(name: "MetadataReaderTests", dependencies: ["MetadataReader", "Decoder"]),
-    .testTarget(name: "DecoderTests", dependencies: ["Decoder"]),
-    .testTarget(name: "DBReaderTests", dependencies: ["DBReader"]),
-    .testTarget(name: "ApiTests", dependencies: ["Api", "Decoder", "IndexReader","DBReader", "MetadataReader"])
+    .testTarget(
+      name: "IndexReaderTests", 
+      dependencies: ["IndexReader", "MetadataReader"], 
+      path: "Tests/Unit/IndexReaderTests"
+    ),
+    .testTarget(
+      name: "DataSectionTests", 
+      dependencies: ["DataSection", "MetadataReader"], 
+      path: "Tests/Unit/DataSectionTests"
+    ),
+    .testTarget(
+      name: "MetadataReaderTests", 
+      dependencies: ["MetadataReader", "Decoder"], 
+      path: "Tests/Unit/MetadataReaderTests"
+    ),
+    .testTarget(
+      name: "DecoderTests", 
+      dependencies: ["Decoder"], 
+      path: "Tests/Unit/DecoderTests"
+    ),
+    .testTarget(
+      name: "DBReaderTests", 
+      dependencies: ["DBReader"], 
+      path: "Tests/Unit/DBReaderTests"
+    ),
+    .testTarget(
+      name: "ApiTests", 
+      dependencies: ["Api", "Decoder", "IndexReader","DBReader", "MetadataReader"], 
+      path: "Tests/Unit/ApiTests"
+    )
   ]
 )
