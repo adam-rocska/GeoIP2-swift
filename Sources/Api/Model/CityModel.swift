@@ -1,29 +1,15 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct CityModel: DictionaryInitialisable {
+public struct CityModel {
   let city:                    CityRecord
   let location:                LocationRecord
   let postal:                  PostalRecord
   let subdivisions:            [SubdivisionRecord]
-  var mostSpecificSubdivision: SubdivisionRecord {
-    get {
-      return subdivisions.last ?? SubdivisionRecord(nil)
-    }
-  }
+  var mostSpecificSubdivision: SubdivisionRecord { get { return subdivisions.last ?? SubdivisionRecord(nil) } }
+}
 
-  public init(
-    city: CityRecord,
-    location: LocationRecord,
-    postal: PostalRecord,
-    subdivisions: [SubdivisionRecord]
-  ) {
-    self.city = city
-    self.location = location
-    self.postal = postal
-    self.subdivisions = subdivisions
-  }
-
+extension CityModel: DictionaryInitialisable {
   public init(_ dictionary: [String: Payload]?) {
     self.init(
       city: CityRecord(dictionary?["city"]?.unwrap()),

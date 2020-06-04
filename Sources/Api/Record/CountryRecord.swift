@@ -8,22 +8,10 @@ public struct CountryRecord {
   let isoCode:           String?
   let names:             [String: String]?
   var name:              String? { get { return names?["en"] } }
+}
 
-  public init(
-    confidence: UInt8?,
-    geonameId: UInt32?,
-    isInEuropeanUnion: Bool,
-    isoCode: String?,
-    names: [String: String]?
-  ) {
-    self.confidence = confidence
-    self.geonameId = geonameId
-    self.isInEuropeanUnion = isInEuropeanUnion
-    self.isoCode = isoCode
-    self.names = names
-  }
-
-  init(_ dictionary: [String: Payload]?) {
+extension CountryRecord: DictionaryInitialisable {
+  public init(_ dictionary: [String: Payload]?) {
     self.init(
       confidence: dictionary?["confidence"]?.unwrap(),
       geonameId: dictionary?["geoname_id"]?.unwrap(),

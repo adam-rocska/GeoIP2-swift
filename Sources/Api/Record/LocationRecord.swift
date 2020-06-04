@@ -12,26 +12,10 @@ public struct LocationRecord {
   // assumed
   let metroCode:         UInt16?
   let timeZone:          String?
+}
 
-  public init(
-    averageIncome: UInt32?,
-    accuracyRadius: UInt16?,
-    latitude: Double?,
-    longitude: Double?,
-    populationDensity: UInt16?,
-    metroCode: UInt16?,
-    timeZone: String?
-  ) {
-    self.averageIncome = averageIncome
-    self.accuracyRadius = accuracyRadius
-    self.latitude = latitude
-    self.longitude = longitude
-    self.populationDensity = populationDensity
-    self.metroCode = metroCode
-    self.timeZone = timeZone
-  }
-
-  init(_ dictionary: [String: Payload]?) {
+extension LocationRecord: DictionaryInitialisable {
+  public init(_ dictionary: [String: Payload]?) {
     self.init(
       averageIncome: dictionary?["average_income"]?.unwrap(),
       accuracyRadius: dictionary?["accuracy_radius"]?.unwrap(),
