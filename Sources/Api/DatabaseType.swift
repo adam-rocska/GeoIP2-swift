@@ -1,6 +1,6 @@
 import Foundation
 
-enum DatabaseType: String {
+public enum DatabaseType: String {
   case city           = "City"
   case country        = "Country"
   case anonymousIp    = "GeoIP2-Anonymous-IP"

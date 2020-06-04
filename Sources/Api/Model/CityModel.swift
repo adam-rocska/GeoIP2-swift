@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct CityModel {
+public struct CityModel: DictionaryInitialisable {
   let city:                    CityRecord
   let location:                LocationRecord
   let postal:                  PostalRecord
@@ -24,7 +24,7 @@ public struct CityModel {
     self.subdivisions = subdivisions
   }
 
-  init(_ dictionary: [String: Payload]?) {
+  public init(_ dictionary: [String: Payload]?) {
     self.init(
       city: CityRecord(dictionary?["city"]?.unwrap()),
       location: LocationRecord(dictionary?["location"]?.unwrap()),
