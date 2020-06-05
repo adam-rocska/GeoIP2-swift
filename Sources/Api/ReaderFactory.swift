@@ -18,12 +18,11 @@ public class ReaderFactory {
 
   public func makeReader<Model>(source: URL, type: DatabaseType) throws -> Reader<Model>? {
     if !source.isFileURL { return nil }
-
-    return Reader<Model>(
-      dbReader: try fileReaderFactory.makeInMemoryReader {
-        InputStream(url: source) ?? InputStream()
-      }
-    )
+    let reader = try fileReaderFactory.makeInMemoryReader {
+      InputStream(url: source) ?? InputStream()
+    }
+    precondition(reader.metadata.databaseType.contains(type.rawValue))
+    return Reader<Model>(dbReader: reader)
   }
 
 }

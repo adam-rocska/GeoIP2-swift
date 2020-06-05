@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 /Library/Developer/Toolchains/swift-5.0.3-RELEASE.xctoolchain/usr/bin/swift test \
 --enable-code-coverage \
 --parallel \
