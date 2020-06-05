@@ -1,5 +1,6 @@
 import Foundation
 import XCTest
+import TestResources
 @testable import class Api.ReaderFactory
 @testable import struct MetadataReader.Metadata
 import enum Api.DatabaseType

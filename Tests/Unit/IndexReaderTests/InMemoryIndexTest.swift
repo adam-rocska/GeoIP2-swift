@@ -1,5 +1,6 @@
 import Foundation
 import XCTest
+import TestResources
 import class MetadataReader.Reader
 @testable import IndexReader
 

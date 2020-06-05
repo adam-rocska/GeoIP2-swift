@@ -1,5 +1,6 @@
 import Foundation
 import XCTest
+import TestResources
 @testable import DBReader
 import enum Decoder.Payload
 import enum IndexReader.IpAddress

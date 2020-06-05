@@ -1,5 +1,5 @@
 import XCTest
-
+import TestResources
 #if !canImport(ObjectiveC)
 public func allTests() -> [XCTestCaseEntry] {
     return [

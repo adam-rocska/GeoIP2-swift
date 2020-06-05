@@ -1,5 +1,6 @@
 import Foundation
 import XCTest
+import TestResources
 @testable import struct MetadataReader.Metadata
 @testable import class Api.Reader
 import enum Decoder.Payload

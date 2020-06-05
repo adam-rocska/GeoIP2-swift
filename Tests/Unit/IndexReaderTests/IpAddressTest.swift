@@ -1,5 +1,6 @@
 import Foundation
 import XCTest
+import TestResources
 @testable import IndexReader
 
 class IpAddressTest: XCTestCase {

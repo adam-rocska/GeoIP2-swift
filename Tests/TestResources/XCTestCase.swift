@@ -1,8 +1,7 @@
 import Foundation
 import XCTest
 
-extension XCTestCase {
-
+public extension XCTestCase {
   static var bundle: Bundle {
     get {
       guard let currentFileUrl = URL(string: #file) else { return Bundle.main }
@@ -14,5 +13,4 @@ extension XCTestCase {
   }
 
   var bundle: Bundle { get { return XCTestCase.bundle } }
-
 }
