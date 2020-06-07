@@ -234,4 +234,21 @@ class IpAddressTest: XCTestCase {
     XCTAssertEqual("192.168.6.1", IpAddress("192.168.6.1").description)
   }
 
+  func testComparability() {
+    XCTAssertGreaterThan(IpAddress("192.168.0.1"), IpAddress("192.168.0.0"))
+    XCTAssertGreaterThan(IpAddress("192.168.1.0"), IpAddress("192.168.0.0"))
+    XCTAssertGreaterThan(IpAddress("192.169.0.0"), IpAddress("192.168.0.0"))
+    XCTAssertGreaterThan(IpAddress("193.168.0.0"), IpAddress("192.168.0.0"))
+    XCTAssertGreaterThan(IpAddress("193.168.0.0"), IpAddress("80.99.18.166"))
+    XCTAssertLessThan(IpAddress("192.168.0.0"), IpAddress("192.168.0.1"))
+    XCTAssertLessThan(IpAddress("192.168.0.0"), IpAddress("192.168.1.0"))
+    XCTAssertLessThan(IpAddress("192.168.0.0"), IpAddress("192.169.0.0"))
+    XCTAssertLessThan(IpAddress("192.168.0.0"), IpAddress("193.168.0.0"))
+    XCTAssertLessThan(IpAddress("80.99.18.166"), IpAddress("193.168.0.0"))
+    XCTAssertGreaterThan(IpAddress("0000:0000:0000:0000:0000:ffff:5063:12a7"), IpAddress("::ffff:80.99.18.166"))
+    XCTAssertGreaterThan(IpAddress("0000:0000:0000:0000:0000:ffff:5063:12a7"), IpAddress("80.99.18.166"))
+    XCTAssertLessThan(IpAddress("::ffff:80.99.18.166"), IpAddress("0000:0000:0000:0000:0000:ffff:5063:12a7"))
+    XCTAssertLessThan(IpAddress("80.99.18.166"), IpAddress("0000:0000:0000:0000:0000:ffff:5063:12a7"))
+  }
+
 }

@@ -190,3 +190,28 @@ public func ==(lhs: IpAddress, rhs: IpAddress) -> Bool {
     case (.v6, .v4): return IpAddress.v6(rhs) == lhs
   }
 }
+
+extension IpAddress: Comparable {
+  public static func <(lhs: IpAddress, rhs: IpAddress) -> Bool {
+    let left:  Data
+    let right: Data
+    switch (lhs, rhs) {
+      case (.v4, .v6):
+        left = IpAddress.v6(lhs).data
+        right = rhs.data
+      case (.v6, .v4):
+        left = lhs.data
+        right = IpAddress.v6(rhs).data
+      default:
+        left = lhs.data
+        right = rhs.data
+    }
+    var rightSideIndex = right.startIndex
+    for leftByte in left {
+      defer { rightSideIndex = right.index(after: rightSideIndex) }
+      let rightByte = right[rightSideIndex]
+      if leftByte < rightByte { return true }
+    }
+    return false
+  }
+}
