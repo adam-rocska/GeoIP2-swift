@@ -245,3 +245,29 @@ extension IpAddress {
     return IpAddress(createMaskBytes(Data(repeating: 0, count: 16), bits))
   }
 }
+
+public extension IpAddress {
+
+  static prefix func ~(ip: IpAddress) -> IpAddress {
+    return IpAddress(Data(ip.data.map({ ~$0 })))
+  }
+
+  static func &(lhs: IpAddress, rhs: IpAddress) -> IpAddress {
+    precondition(lhs.version == rhs.version, "IpAddress versions must match.")
+    var rightSideIterator = rhs.data.makeIterator()
+    return IpAddress(Data(lhs.data.map { $0 & rightSideIterator.next()! }))
+  }
+
+  static func |(lhs: IpAddress, rhs: IpAddress) -> IpAddress {
+    precondition(lhs.version == rhs.version, "IpAddress versions must match.")
+    var rightSideIterator = rhs.data.makeIterator()
+    return IpAddress(Data(lhs.data.map { $0 | rightSideIterator.next()! }))
+  }
+
+  static func ^(lhs: IpAddress, rhs: IpAddress) -> IpAddress {
+    precondition(lhs.version == rhs.version, "IpAddress versions must match.")
+    var rightSideIterator = rhs.data.makeIterator()
+    return IpAddress(Data(lhs.data.map { $0 ^ rightSideIterator.next()! }))
+  }
+
+}

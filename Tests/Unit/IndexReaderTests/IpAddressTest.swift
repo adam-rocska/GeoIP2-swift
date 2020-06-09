@@ -296,4 +296,67 @@ class IpAddressTest: XCTestCase {
     )
   }
 
+  func testBitwiseNot() {
+    XCTAssertEqual(
+      IpAddress(Data([0b0000_0000, 0b0000_0000, 0b1111_1111, 0b1111_1111])),
+      ~IpAddress.v4Netmask(ofBitLength: 16)
+    )
+    XCTAssertEqual(
+      IpAddress(Data([0b0000_0000, 0b1111_1111, 0b1111_1111, 0b1111_1111])),
+      ~IpAddress.v4Netmask(ofBitLength: 8)
+    )
+
+    XCTAssertEqual(
+      IpAddress(Data([
+                       0b0000_0000, 0b0000_0000, 0b1111_1111, 0b1111_1111,
+                       0b1111_1111, 0b1111_1111, 0b1111_1111, 0b1111_1111,
+                       0b1111_1111, 0b1111_1111, 0b1111_1111, 0b1111_1111,
+                       0b1111_1111, 0b1111_1111, 0b1111_1111, 0b1111_1111
+                     ])),
+      ~IpAddress.v6Netmask(ofBitLength: 16)
+    )
+    XCTAssertEqual(
+      IpAddress(Data([
+                       0b0000_0000, 0b1111_1111, 0b1111_1111, 0b1111_1111,
+                       0b1111_1111, 0b1111_1111, 0b1111_1111, 0b1111_1111,
+                       0b1111_1111, 0b1111_1111, 0b1111_1111, 0b1111_1111,
+                       0b1111_1111, 0b1111_1111, 0b1111_1111, 0b1111_1111
+                     ])),
+      ~IpAddress.v6Netmask(ofBitLength: 8)
+    )
+    XCTAssertEqual(
+      IpAddress(Data([
+                       0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+                       0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+                       0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_1111,
+                       0b1111_1111, 0b1111_1111, 0b1111_1111, 0b1111_1111
+                     ])),
+      ~IpAddress.v6Netmask(ofBitLength: 92)
+    )
+  }
+
+  func testBitwiseAnd() {
+    XCTAssertEqual(
+      IpAddress(Data([0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0101_1111])),
+      IpAddress(Data([0b1100_0000, 0b1010_1000, 0b0000_0000, 0b0101_1111])) &
+      IpAddress(Data([0b0011_1111, 0b0101_0111, 0b1111_1111, 0b0101_1111]))
+    )
+  }
+
+  func testBitwiseOr() {
+    XCTAssertEqual(
+      IpAddress(Data([0b1111_1111, 0b1111_1111, 0b1111_1111, 0b0101_1111])),
+      IpAddress(Data([0b1100_0000, 0b1010_1000, 0b0000_0000, 0b0101_1111])) |
+      IpAddress(Data([0b0011_1111, 0b0101_0111, 0b1111_1111, 0b0101_1111]))
+    )
+  }
+
+  func testBitwiseXor() {
+    XCTAssertEqual(
+      IpAddress(Data([0b1111_1111, 0b1111_1111, 0b1111_1111, 0b0000_0000])),
+      IpAddress(Data([0b1100_0000, 0b1010_1000, 0b0000_0000, 0b0101_1111])) ^
+      IpAddress(Data([0b0011_1111, 0b0101_0111, 0b1111_1111, 0b0101_1111]))
+    )
+  }
+
 }
