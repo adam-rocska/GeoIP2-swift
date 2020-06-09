@@ -215,3 +215,33 @@ extension IpAddress: Comparable {
     return false
   }
 }
+
+extension IpAddress {
+
+  private static func createMaskBytes(_ data: Data, _ bits: UInt8) -> Data {
+    var unsetBitsCount = bits
+    return Data(data.map({ _ -> UInt8 in
+      switch unsetBitsCount {
+        case 0:
+          return 0
+        case _ where unsetBitsCount > 8:
+          unsetBitsCount -= 8
+          return 0b1111_1111
+        default:
+          let bitsToFlipOff = 8 - unsetBitsCount
+          unsetBitsCount = 0
+          return 0b1111_1111 &<< bitsToFlipOff
+      }
+    }))
+  }
+
+  static func v4Netmask(ofBitLength bits: UInt8) -> IpAddress {
+    precondition(bits <= 32, "A v4 netmask can only have at most 32 mask bits.")
+    return IpAddress(createMaskBytes(Data(repeating: 0, count: 4), bits))
+  }
+
+  static func v6Netmask(ofBitLength bits: UInt8) -> IpAddress {
+    precondition(bits <= 128, "A v6 netmask can only have at most 128 mask bits.")
+    return IpAddress(createMaskBytes(Data(repeating: 0, count: 16), bits))
+  }
+}

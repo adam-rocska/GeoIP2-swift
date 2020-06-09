@@ -251,4 +251,49 @@ class IpAddressTest: XCTestCase {
     XCTAssertLessThan(IpAddress("80.99.18.166"), IpAddress("0000:0000:0000:0000:0000:ffff:5063:12a7"))
   }
 
+  func testV4Netmask() {
+    XCTAssertEqual(
+      IpAddress(Data([0b1111_1111, 0b1111_1111, 0b1111_1100, 0b0000_0000])),
+      IpAddress.v4Netmask(ofBitLength: 22)
+    )
+    XCTAssertEqual(
+      IpAddress(Data([0b1111_1111, 0b1110_0000, 0b0000_0000, 0b0000_0000])),
+      IpAddress.v4Netmask(ofBitLength: 11)
+    )
+    XCTAssertEqual(
+      IpAddress(Data([0b1111_1111, 0b1110_0000, 0b0000_0000, 0b0000_0000])),
+      IpAddress.v4Netmask(ofBitLength: 11)
+    )
+  }
+
+  func testV6Netmask() {
+    XCTAssertEqual(
+      IpAddress(Data([
+                       0b1111_1111, 0b1111_1111, 0b1111_1100, 0b0000_0000,
+                       0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+                       0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+                       0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000
+                     ])),
+      IpAddress.v6Netmask(ofBitLength: 22)
+    )
+    XCTAssertEqual(
+      IpAddress(Data([
+                       0b1111_1111, 0b1110_0000, 0b0000_0000, 0b0000_0000,
+                       0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+                       0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+                       0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000
+                     ])),
+      IpAddress.v6Netmask(ofBitLength: 11)
+    )
+    XCTAssertEqual(
+      IpAddress(Data([
+                       0b1111_1111, 0b1111_1111, 0b1111_1111, 0b1111_1111,
+                       0b1111_1111, 0b1111_1111, 0b1111_1111, 0b1111_1111,
+                       0b1111_1111, 0b1111_1111, 0b1111_1111, 0b1111_0000,
+                       0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000
+                     ])),
+      IpAddress.v6Netmask(ofBitLength: 92)
+    )
+  }
+
 }
