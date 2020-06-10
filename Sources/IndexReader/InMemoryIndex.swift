@@ -25,7 +25,6 @@ public class InMemoryIndex<Pointer>: Index where Pointer: UnsignedInteger, Point
 
     buffer.deallocate()
     stream.close()
-//    precondition(tree.count == metadata.nodeCount)
     self.init(metadata: metadata, tree: Data(
       bytesNoCopy: buffer,
       count: read,
@@ -33,19 +32,28 @@ public class InMemoryIndex<Pointer>: Index where Pointer: UnsignedInteger, Point
     ))
   }
 
-  public func lookup(_ ip: IpAddress) -> Pointer? {
+  public func lookup(_ ip: IpAddress) -> LookupResult? {
     var stack: [LookupDirection]
+
+    var netmaskBitCount: Int8 = 1
     if ip.version == metadata.ipVersion {
       stack = LookupDirection.createLookupStack(of: ip.data)
     } else if metadata.ipVersion == 6 {
       stack = LookupDirection.createLookupStack(of: IpAddress.v6(ip).data)
+      netmaskBitCount -= 96 // 128 - 32
     } else {
       preconditionFailure("Can't look up IPv6 in an IPv4 database.")
+    }
+    let netmaskFactory: (UInt8) -> IpAddress
+    switch ip {
+      case .v4: netmaskFactory = IpAddress.v4Netmask
+      case .v6: netmaskFactory = IpAddress.v6Netmask
     }
     var pointer: Pointer = 0
 
     let nodeByteSize = Pointer.init(metadata.nodeByteSize)
     while pointer < metadata.nodeCount {
+      netmaskBitCount += 1
       guard let direction = stack.popLast() else { break }
       let pointerInTree = pointer * nodeByteSize
       let nodeCandidate = tree[pointerInTree..<pointerInTree + nodeByteSize]
@@ -59,7 +67,7 @@ public class InMemoryIndex<Pointer>: Index where Pointer: UnsignedInteger, Point
       if pointer == metadata.nodeCount {
         return nil
       } else if pointer > metadata.nodeCount {
-        return pointer
+        return (pointer, netmaskFactory(UInt8(netmaskBitCount)))
       }
     }
     return nil

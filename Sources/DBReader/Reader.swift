@@ -5,8 +5,10 @@ import struct MetadataReader.Metadata
 
 public protocol Reader {
 
+  typealias LookupResult = (record: [String: Payload], netmask: IpAddress)
+
   var metadata: Metadata { get }
 
-  func get(_ ip: IpAddress) -> [String: Payload]?
+  func get(_ ip: IpAddress) -> LookupResult?
 
 }

@@ -17,11 +17,11 @@ class Mediator<SearchIndex>: Reader where SearchIndex: IndexReader.Index {
     self.dataSection = dataSection
   }
 
-  public func get(_ ip: IpAddress) -> [String: Payload]? {
-    guard let pointer = index.lookup(ip) else { return nil }
-    let dataSectionPointer = pointer - SearchIndex.Pointer(metadata.nodeCount) - 16
-    guard let lookupResult = dataSection.lookup(pointer: Int(dataSectionPointer)) else { return nil }
-    return lookupResult
+  public func get(_ ip: IpAddress) -> LookupResult? {
+    guard let indexLookupResult = index.lookup(ip) else { return nil }
+    let dataSectionPointer = indexLookupResult.pointer - SearchIndex.Pointer(metadata.nodeCount) - 16
+    guard let dataLookupResult = dataSection.lookup(pointer: Int(dataSectionPointer)) else { return nil }
+    return (dataLookupResult, indexLookupResult.netmask)
   }
 
 }

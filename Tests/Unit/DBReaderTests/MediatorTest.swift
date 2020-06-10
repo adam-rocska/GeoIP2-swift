@@ -45,7 +45,7 @@ class MediatorTest: XCTestCase {
     let mockSearchIndex = MockSearchIndex { ip in
       XCTAssertEqual(expectedIp, ip)
       mockSearchIndexLookupCalled = true
-      return pointerToSeek
+      return (pointerToSeek, IpAddress.v4(255, 255, 0, 0))
     }
     var mockDataSectionCalled = false
     let mockDataSection = MockDataSection { pointer in
@@ -65,10 +65,11 @@ class MediatorTest: XCTestCase {
     let expectedIp:      IpAddress  = .v4("192.168.0.1")
     let expectedLookupResult        = ["test": Payload.utf8String("Test String")]
     var mockSearchIndexLookupCalled = false
+    let expectedNetmask             = IpAddress.v4(255, 128, 0, 0)
     let mockSearchIndex = MockSearchIndex { ip in
       XCTAssertEqual(expectedIp, ip)
       mockSearchIndexLookupCalled = true
-      return pointerToSeek
+      return (pointerToSeek, expectedNetmask)
     }
     var mockDataSectionCalled = false
     let mockDataSection = MockDataSection { pointer in
@@ -77,7 +78,8 @@ class MediatorTest: XCTestCase {
       return expectedLookupResult
     }
     let reader = Mediator(index: mockSearchIndex, dataSection: mockDataSection, metadata: stubMetadata)
-    XCTAssertEqual(expectedLookupResult, reader.get(expectedIp))
+    XCTAssertEqual(expectedLookupResult, reader.get(expectedIp)?.record)
+    XCTAssertEqual(expectedNetmask, reader.get(expectedIp)?.netmask)
     XCTAssertTrue(mockSearchIndexLookupCalled)
     XCTAssertTrue(mockDataSectionCalled)
   }
@@ -88,17 +90,17 @@ internal class MockSearchIndex: Index {
 
   typealias Pointer = UInt
 
-  private let mockLookup: (IpAddress) -> Pointer?
+  private let mockLookup: (IpAddress) -> (Pointer, IpAddress)?
 
   required convenience init(metadata: Metadata, stream: @autoclosure () -> InputStream) {
     self.init({ _ in nil })
   }
 
-  init(_ mockLookup: @escaping (IpAddress) -> Pointer?) { self.mockLookup = mockLookup }
+  init(_ mockLookup: @escaping (IpAddress) -> (Pointer, IpAddress)?) { self.mockLookup = mockLookup }
 
   convenience init() { self.init { _ in nil } }
 
-  func lookup(_ ip: IpAddress) -> Pointer? { return mockLookup(ip) }
+  func lookup(_ ip: IpAddress) -> LookupResult? { return mockLookup(ip) }
 }
 
 internal class MockDataSection: DataSection {
