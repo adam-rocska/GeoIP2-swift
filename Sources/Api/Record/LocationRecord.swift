@@ -14,7 +14,7 @@ public struct LocationRecord {
   let timeZone:          String?
 }
 
-extension LocationRecord: DictionaryInitialisable {
+extension LocationRecord: DictionaryInitialisableRecord {
   public init(_ dictionary: [String: Payload]?) {
     self.init(
       averageIncome: dictionary?["average_income"]?.unwrap(),

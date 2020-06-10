@@ -6,7 +6,7 @@ public struct MaxMindRecord {
   let queriesRemaining: UInt16?
 }
 
-extension MaxMindRecord: DictionaryInitialisable {
+extension MaxMindRecord: DictionaryInitialisableRecord {
   public init(_ dictionary: [String: Payload]?) {
     self.init(queriesRemaining: dictionary?["queries_remaining"]?.unwrap())
   }

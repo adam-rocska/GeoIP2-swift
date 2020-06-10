@@ -8,7 +8,7 @@ public struct ContinentRecord {
   var name:      String? { get { return names?["en"] } }
 }
 
-extension ContinentRecord: DictionaryInitialisable {
+extension ContinentRecord: DictionaryInitialisableRecord {
   public init(_ dictionary: [String: Payload]?) {
     self.init(
       code: dictionary?["code"]?.unwrap(),

@@ -10,7 +10,7 @@ public struct SubdivisionRecord {
   var name:       String? { get { return names?["en"] } }
 }
 
-extension SubdivisionRecord: DictionaryInitialisable {
+extension SubdivisionRecord: DictionaryInitialisableRecord {
   public init(_ dictionary: [String: Payload]?) {
     self.init(
       confidence: dictionary?["confidence"]?.unwrap(),

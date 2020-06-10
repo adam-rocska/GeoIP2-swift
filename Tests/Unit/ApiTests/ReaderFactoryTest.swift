@@ -9,7 +9,7 @@ import enum IndexReader.IpAddress
 import class Api.Reader
 import protocol DBReader.Reader
 import protocol DBReader.ReaderFactory
-import protocol Api.DictionaryInitialisable
+import protocol Api.DictionaryInitialisableModel
 
 fileprivate typealias ApiReader = Api.Reader
 fileprivate typealias ApiReaderFactory = Api.ReaderFactory
@@ -71,12 +71,12 @@ class ReaderFactoryTest: XCTestCase {
   }
 
   func testMakeReader_makesAndReturnsReaderOfExpectedType() {
-    let mockDBReader = MockDBReader { _ in nil }
     let url = URL(fileURLWithPath: #file)
-    let mockDBReaderFactory = MockDBReaderFactory { _ in mockDBReader }
-    let apiReaderFactory = ApiReaderFactory(fileReaderFactory: mockDBReaderFactory)
     for databaseType in databaseTypes {
-      let apiReader = try! apiReaderFactory.makeReader(source: url, type: databaseType) as? ApiReader<StubModel>
+      let mockDBReader = MockDBReader(databaseType: databaseType.rawValue) { _ in nil }
+      let mockDBReaderFactory = MockDBReaderFactory { _ in mockDBReader }
+      let apiReaderFactory = ApiReaderFactory(fileReaderFactory: mockDBReaderFactory)
+      let apiReader        = try! apiReaderFactory.makeReader(source: url, type: databaseType) as? ApiReader<StubModel>
       XCTAssertNotNil(apiReader)
     }
   }
@@ -99,32 +99,39 @@ fileprivate class MockDBReaderFactory: DBReaderFactory {
 enum StubDbError: Error, Equatable { case stubError }
 
 fileprivate class MockDBReader: DBReaderReader {
-  var metadata = Metadata(
-    nodeCount: 0,
-    recordSize: 0,
-    ipVersion: 0,
-    databaseType: "",
-    languages: [],
-    binaryFormatMajorVersion: 0,
-    binaryFormatMinorVersion: 0,
-    buildEpoch: 0,
-    description: [:],
-    metadataSectionSize: 0,
-    databaseSize: 0
-  )
+  var metadata: Metadata
 
-  private let stubGet: (IpAddress) -> [String: Payload]?
+  private let stubGet: (IpAddress) -> LookupResult?
 
-  init(stubGet: @escaping (IpAddress) -> [String: Payload]?) {
+  init(databaseType: String, stubGet: @escaping (IpAddress) -> LookupResult?) {
     self.stubGet = stubGet
+    self.metadata = Metadata(
+      nodeCount: 0,
+      recordSize: 0,
+      ipVersion: 0,
+      databaseType: databaseType,
+      languages: [],
+      binaryFormatMajorVersion: 0,
+      binaryFormatMinorVersion: 0,
+      buildEpoch: 0,
+      description: [:],
+      metadataSectionSize: 0,
+      databaseSize: 0
+    )
   }
 
-  func get(_ ip: IpAddress) -> [String: Payload]? {
+  func get(_ ip: IpAddress) -> LookupResult? {
     return stubGet(ip)
   }
 
 }
 
-struct StubModel: DictionaryInitialisable {
-  init(_ dictionary: [String: Payload]?) {}
+struct StubModel: DictionaryInitialisableModel {
+  let ipAddress: IpAddress
+  let netmask:   IpAddress
+
+  init(ip: IpAddress, netmask: IpAddress, _ dictionary: [String: Payload]?) {
+    self.ipAddress = ip
+    self.netmask = netmask
+  }
 }

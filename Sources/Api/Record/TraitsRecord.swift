@@ -24,7 +24,7 @@ public struct TraitsRecord {
   let userType:                     String?
 }
 
-extension TraitsRecord: DictionaryInitialisable {
+extension TraitsRecord: DictionaryInitialisableRecord {
   public init(_ dictionary: [String: Payload]?) {
     self.init(
       autonomousSystemNumber: dictionary?["autonomous_system_number"]?.unwrap(),

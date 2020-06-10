@@ -7,7 +7,7 @@ public struct PostalRecord {
   let confidence: UInt8?
 }
 
-extension PostalRecord: DictionaryInitialisable {
+extension PostalRecord: DictionaryInitialisableRecord {
   public init(_ dictionary: [String: Payload]?) {
     self.init(
       code: dictionary?["code"]?.unwrap(),

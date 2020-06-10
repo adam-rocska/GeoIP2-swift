@@ -10,7 +10,7 @@ public struct CountryRecord {
   var name:              String? { get { return names?["en"] } }
 }
 
-extension CountryRecord: DictionaryInitialisable {
+extension CountryRecord: DictionaryInitialisableRecord {
   public init(_ dictionary: [String: Payload]?) {
     self.init(
       confidence: dictionary?["confidence"]?.unwrap(),
