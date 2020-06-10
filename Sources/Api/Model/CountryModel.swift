@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct CountryModel {
+public struct CountryModel: Equatable {
   public let continent:          ContinentRecord
   public let country:            CountryRecord
   public let maxmind:            MaxMindRecord

@@ -35,7 +35,7 @@ public class InMemoryIndex<Pointer>: Index where Pointer: UnsignedInteger, Point
   public func lookup(_ ip: IpAddress) -> LookupResult? {
     var stack: [LookupDirection]
 
-    var netmaskBitCount: Int8 = 1
+    var netmaskBitCount: Int8 = 0
     if ip.version == metadata.ipVersion {
       stack = LookupDirection.createLookupStack(of: ip.data)
     } else if metadata.ipVersion == 6 {

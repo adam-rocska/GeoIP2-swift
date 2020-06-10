@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct ConnectionTypeModel {
+public struct ConnectionTypeModel: Equatable {
   public let connectionType: String?
   public let ipAddress:      IpAddress
   public let netmask:        IpAddress

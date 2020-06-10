@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct TraitsRecord {
+public struct TraitsRecord: Equatable {
   let autonomousSystemNumber:       Int?
   let autonomousSystemOrganization: String?
   let connectionType:               String?

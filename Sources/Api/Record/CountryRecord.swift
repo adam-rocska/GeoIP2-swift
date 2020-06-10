@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct CountryRecord {
+public struct CountryRecord: Equatable {
   let confidence:        UInt8?
   let geonameId:         UInt32?
   let isInEuropeanUnion: Bool

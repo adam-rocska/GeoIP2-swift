@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct AnonymousIpModel {
+public struct AnonymousIpModel: Equatable {
   public let isAnonymous:       Bool
   public let isAnonymousVpn:    Bool
   public let isHostingProvider: Bool

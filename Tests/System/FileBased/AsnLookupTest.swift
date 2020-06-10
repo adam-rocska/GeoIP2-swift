@@ -3,7 +3,8 @@ import XCTest
 import TestResources
 import class Api.Reader
 import class Api.ReaderFactory
-import struct Api.AsnModel
+import enum Api.IpAddress
+@testable import struct Api.AsnModel
 
 class AsnLookupTest: XCTestCase {
 
@@ -30,7 +31,61 @@ class AsnLookupTest: XCTestCase {
   }
 
   func testSuccessfulLookup() {
-    print(reader.lookup(.v4("80.99.18.166")))
+    XCTAssertEqual(
+      AsnModel(
+        autonomousSystemNumber: 6830,
+        autonomousSystemOrganization: "Liberty Global B.V.",
+        ipAddress: .v4(80, 99, 18, 166),
+        netmask: IpAddress.v4Netmask(ofBitLength: 15)
+      ),
+      reader.lookup(.v4(80, 99, 18, 166))
+    )
+    XCTAssertEqual(
+      AsnModel(
+        autonomousSystemNumber: 1221,
+        autonomousSystemOrganization: "Telstra Corporation Ltd",
+        ipAddress: .v6("::1.128.0.0"),
+        netmask: IpAddress.v6Netmask(ofBitLength: 107)
+      ),
+      reader.lookup(.v6("::1.128.0.0"))
+    )
+    XCTAssertEqual(
+      AsnModel(
+        autonomousSystemNumber: 7018,
+        autonomousSystemOrganization: "ATT-INTERNET4",
+        ipAddress: .v6("::12.81.92.0"),
+        netmask: IpAddress.v6Netmask(ofBitLength: 118)
+      ),
+      reader.lookup(.v6("::12.81.92.0"))
+    )
+    XCTAssertEqual(
+      AsnModel(
+        autonomousSystemNumber: 7018,
+        autonomousSystemOrganization: "ATT-INTERNET4",
+        ipAddress: .v6("::12.81.96.0"),
+        netmask: IpAddress.v6Netmask(ofBitLength: 116)
+      ),
+      reader.lookup(.v6("::12.81.96.0"))
+    )
+    XCTAssertEqual(
+      AsnModel(
+        autonomousSystemNumber: 12271,
+        autonomousSystemOrganization: "TWC-12271-NYC",
+        ipAddress: .v6("2600:6000::"),
+        netmask: IpAddress.v6Netmask(ofBitLength: 33)
+      ),
+      reader.lookup(.v6("2600:6000::"))
+    )
+    XCTAssertEqual(
+      AsnModel(
+        autonomousSystemNumber: 6939,
+        autonomousSystemOrganization: "HURRICANE",
+        ipAddress: .v6("2600:7000::"),
+        netmask: IpAddress.v6Netmask(ofBitLength: 24)
+      ),
+      reader.lookup(.v6("2600:7000::"))
+    )
+    XCTAssertNil(reader.lookup(.v6("2600:7100::")))
   }
 
 }

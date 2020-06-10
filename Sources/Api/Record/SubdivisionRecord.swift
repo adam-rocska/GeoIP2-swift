@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct SubdivisionRecord {
+public struct SubdivisionRecord: Equatable {
   // Assumed
   let confidence: UInt8?
   let geonameId:  UInt32?

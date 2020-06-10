@@ -30,7 +30,7 @@ class CountryLookupTest: XCTestCase {
   }
 
   func testSuccessfulLookup() {
-
+    print(reader.lookup(.v4(80, 99, 18, 166)))
   }
 
 }

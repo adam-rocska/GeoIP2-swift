@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct CityModel {
+public struct CityModel: Equatable {
   public let city:                    CityRecord
   public let location:                LocationRecord
   public let postal:                  PostalRecord

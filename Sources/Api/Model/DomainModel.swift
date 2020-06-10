@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct DomainModel {
+public struct DomainModel: Equatable {
   public let domain:    String?
   public let ipAddress: IpAddress
   public let netmask:   IpAddress

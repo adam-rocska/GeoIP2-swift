@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct MaxMindRecord {
+public struct MaxMindRecord: Equatable {
   // assumed
   let queriesRemaining: UInt16?
 }

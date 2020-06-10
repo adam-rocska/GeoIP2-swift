@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct RepresentedCountryRecord {
+public struct RepresentedCountryRecord: Equatable {
   let type: String?
 }
 

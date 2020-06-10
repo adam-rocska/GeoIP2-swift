@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct IspModel {
+public struct IspModel: Equatable {
   public let autonomousSystemNumber:       Int?
   public let autonomousSystemOrganization: String?
   public let isp:                          String?

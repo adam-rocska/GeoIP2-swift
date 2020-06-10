@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct ContinentRecord {
+public struct ContinentRecord: Equatable {
   let code:      String?
   let geonameId: UInt32?
   let names:     [String: String]?

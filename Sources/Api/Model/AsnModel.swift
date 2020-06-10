@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct AsnModel {
+public struct AsnModel: Equatable {
   public let autonomousSystemNumber:       UInt32?
   public let autonomousSystemOrganization: String?
   public let ipAddress:                    IpAddress

@@ -216,7 +216,7 @@ extension IpAddress: Comparable {
   }
 }
 
-extension IpAddress {
+public extension IpAddress {
 
   private static func createMaskBytes(_ data: Data, _ bits: UInt8) -> Data {
     var unsetBitsCount = bits

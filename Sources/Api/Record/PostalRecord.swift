@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct PostalRecord {
+public struct PostalRecord: Equatable {
   let code:       String?
   // assumed
   let confidence: UInt8?

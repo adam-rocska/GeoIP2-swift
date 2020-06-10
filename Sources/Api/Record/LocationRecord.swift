@@ -1,7 +1,7 @@
 import Foundation
 import enum Decoder.Payload
 
-public struct LocationRecord {
+public struct LocationRecord: Equatable {
   // assumed
   let averageIncome:     UInt32?
   let accuracyRadius:    UInt16?
