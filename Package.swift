@@ -57,6 +57,13 @@ let package = Package(
       name: "GeoIP2_FileBased",
       dependencies: ["TestResources", "Api"],
       path: "Tests/System/FileBased"
+    ),
+
+    // MARK : Performance tests
+    .testTarget(
+      name: "GeoIP2_PerformanceTests",
+      dependencies: ["TestResources", "Api"],
+      path: "Tests/Performance"
     )
   ]
 )
