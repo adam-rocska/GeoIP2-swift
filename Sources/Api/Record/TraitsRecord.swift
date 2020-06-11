@@ -6,8 +6,6 @@ public struct TraitsRecord: Equatable {
   let autonomousSystemOrganization: String?
   let connectionType:               String?
   let domain:                       String?
-  // todo
-//  let ipAddress:                    IpAddress
   let isAnonymous:                  Bool
   let isAnonymousProxy:             Bool
   let isAnonymousVpn:               Bool
@@ -17,7 +15,6 @@ public struct TraitsRecord: Equatable {
   let isSatelliteProvider:          Bool
   let isTorExitNode:                Bool
   let isp:                          String?
-  let network:                      String
   let organization:                 String?
   let staticIPScore:                Float?
   let userCount:                    Int?
@@ -31,8 +28,6 @@ extension TraitsRecord: DictionaryInitialisableRecord {
       autonomousSystemOrganization: dictionary?["autonomous_system_organization"]?.unwrap(),
       connectionType: dictionary?["connection_type"]?.unwrap(),
       domain: dictionary?["domain"]?.unwrap(),
-      // TODO
-//      ipAddress: dictionary?["ipAddress"]?.unwrap(),
       isAnonymous: dictionary?["is_anonymous"]?.unwrap() ?? false,
       isAnonymousProxy: dictionary?["is_anonymous_proxy"]?.unwrap() ?? false,
       isAnonymousVpn: dictionary?["is_anonymous_vpn"]?.unwrap() ?? false,
@@ -42,8 +37,6 @@ extension TraitsRecord: DictionaryInitialisableRecord {
       isSatelliteProvider: dictionary?["is_satellite_provider"]?.unwrap() ?? false,
       isTorExitNode: dictionary?["is_tor_exit_node"]?.unwrap() ?? false,
       isp: dictionary?["isp"]?.unwrap(),
-      // TODO
-      network: dictionary?["network"]?.unwrap() ?? "",
       organization: dictionary?["organization"]?.unwrap(),
       staticIPScore: dictionary?["static_ip_score"]?.unwrap(),
       userCount: dictionary?["user_count"]?.unwrap(),

@@ -6,19 +6,6 @@ sound like to plan for a breaking change befor the first initial version's
 release, but hey, there's a time pressure on my shoulder right now + MaxMind's 
 "binary format" "desgined" by its script kiddos slowed things down baadly._
 
-## Replace CIDR Strings with proper intelligence
-
-[Wikipedia](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing)
-
-At the time of writing I just had to port the dumbass php style "String 
-representation" of networks. That's bad. That's so bad, that normally I wouldn't
-permit such a crap in my company.
-
-What I want is to create a unit (most probably it'll be a struct?) that not only
-represents the network, but also provides utilities that can check whether an 
-`IpAddress` belongs to that network for example. Should be representable in many 
-different forms, etc.
-
 ## Error handling
 
 There used to be an original concept of how to do proper error handling & 
@@ -42,3 +29,14 @@ bit of fun.
 
 I'll do my best to massage things out. Once the public API is stable, and neat,
 the underlying crap can be cleaned up.
+
+## Redesign the retarded modeling
+
+At the library's initial stage the decision was to reproduce in a somewhat 
+similar state what MaxMind's php scritpers made with their PHP, Java, and C# 
+libraries. 
+
+That modeling is awful.
+
+The way the API will return models will definitely change, so there will be a 
+2.0.0 API break at some point.

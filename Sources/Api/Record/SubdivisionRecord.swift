@@ -15,7 +15,7 @@ extension SubdivisionRecord: DictionaryInitialisableRecord {
     self.init(
       confidence: dictionary?["confidence"]?.unwrap(),
       geonameId: dictionary?["geoname_id"]?.unwrap(),
-      isoCode: dictionary?["iso_cod"]?.unwrap(),
+      isoCode: dictionary?["iso_code"]?.unwrap(),
       names: (dictionary?["names"]?.unwrap() ?? [:] as [String: Payload]).compactMapValues({ $0.unwrap() })
     )
   }
